@@ -2,7 +2,7 @@
 
 extern "C" {
 
-jint Java_NativeTest_testJNI(JNIEnv* env, jclass cls) {
+JNIEXPORT jint JNICALL Java_NativeTest_testJNI(JNIEnv* env, jclass cls) {
     return 42;
 }
 
