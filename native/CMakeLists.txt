@@ -11,7 +11,7 @@ message("GRAAL_LIB_PATH: ${GRAAL_LIB_PATH}")
 
 link_directories(${GRAAL_LIB_PATH})
 
-find_library(GRAAL_LIB NAMES GraalSample libGraalSample PATHS ${GRAAL_LIB_PATH})
+find_library(GRAAL_LIB NAMES GraalSample libGraalSample GraalSample.dylib PATHS ${GRAAL_LIB_PATH})
 message("Graal lib: ${GRAAL_LIB}")
 
 add_executable(${PROJECT_NAME} main.cpp)
