@@ -38,9 +38,3 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
     target_compile_options(NativeTest PRIVATE /EHsc /MTd /W2 /c)
 endif()
-
-add_custom_command(
-    TARGET ${PROJECT_NAME}  POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}
-    ${CMAKE_CURRENT_BINARY_DIR}/../${LIB_NAME})
