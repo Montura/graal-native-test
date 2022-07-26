@@ -8,6 +8,7 @@ set(JNI_COMMON_INCLUDE ${PROJECT_SOURCE_DIR}/../graal/jni/include)
 message("JNI_PATH: ${JNI_COMMON_INCLUDE}")
 
 if (WIN32)
+    # Set the DLLEXPORT variable to export symbols
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
     set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/win32)
     set(LIB_EXT dll)
@@ -27,11 +28,16 @@ endif ()
 
 
 include_directories(${target} INTERFACE ${JNI_INCLUDE})
-set(SOURCE_FILES lib.cc)
 
 message("-- Linking native_lib")
 add_library(NativeTest SHARED lib.cc)
 set_target_properties(NativeTest PROPERTIES PREFIX "")
+
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+    target_compile_options(NativeTest PRIVATE -Wall -Wextra)
+elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
+    target_compile_options(NativeTest PRIVATE /EHsc /MTd /W2 /c)
+endif()
 
 add_custom_command(
     TARGET ${PROJECT_NAME}  POST_BUILD
