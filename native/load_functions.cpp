@@ -20,22 +20,29 @@ void test_ptr_and_log(const char* symbol_name, void* func_ptr) {
 }
 
 #ifdef _WIN64
-    #include <windows.h>
+    #include <Windows.h>
 
-    static HMODULE handle = GetModuleHandleW(GRAAL_LIB_NAME);
+    struct Lib {
+        Lib() : handle(GetModuleHandleW(GRAAL_LIB_NAME)) {}
+        ~Lib() {
+            if (handle) {
+                HRESULT hr = FreeLibrary(handle);
+                if (FAILED(hr)) {
+                    printf("Error on closing shared lib!");
+                }
+            }
+        }
+        const HMODULE handle;
+    };
 
     test_ptr get_test_ptr() {
-    return handle ? (test_ptr)GetProcAddress(handle, SYMBOL_TEST) : 0;
+        Lib lib;
+        return lib.handle ? (test_ptr)GetProcAddress(lib.handle, SYMBOL_TEST) : nullptr;
     }
 
     test_c_ptr get_test_c_ptr() {
-    return handle ? (test_c_ptr)GetProcAddress(handle, SYMBOL_TEST) : 0;
-    }
-
-    void unload() {
-        if (handle) {
-            HRESULT hr = FreeLibrary(handle);
-        }
+        Lib lib;
+        return lib.handle ? (test_c_ptr)GetProcAddress(lib.handle, SYMBOL_TEST_C) : nullptr;
     }
 
 #else
@@ -60,7 +67,4 @@ void testLib() {
 
     auto test_c_func_ptr = get_test_c_ptr();
     test_ptr_and_log(SYMBOL_TEST_C, (void*)test_c_func_ptr);
-#ifdef _WIN64
-    unloadLib()
-#endif
 }
