@@ -11,11 +11,18 @@ message("GRAAL_LIB_PATH: ${GRAAL_LIB_PATH}")
 
 link_directories(${GRAAL_LIB_PATH})
 
-find_library(GRAAL_LIB NAMES GraalSample libGraalSample GraalSample.dylib PATHS ${GRAAL_LIB_PATH})
-message("Graal lib: ${GRAAL_LIB}")
+add_library(GRAAL_LIB SHARED IMPORTED)
+if (WIN32)
+    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.dll)
+    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_IMPLIB ${GRAAL_LIB_PATH}/GraalSample.lib)
+elseif (APPLE)
+    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.dylib)
+elseif (UNIX)
+    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.so)
+endif()
 
 add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME} "${GRAAL_LIB}" NativeTest)
+target_link_libraries(${PROJECT_NAME} GRAAL_LIB NativeTest)
 
 if (WIN32)
     add_custom_command(
