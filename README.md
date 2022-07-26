@@ -13,9 +13,11 @@ export JAVA_HOME=`path_to_graalvm_ce_build_22.1.0`
 ~$ cd graal-native-test
 ~/graal-native-test$ mvn clean package -Pgraal-win|graal-linux|graal-mac
 ~/graal-native-test$ cd native
-~/graal-native-test/native$ cmake .
-~/graal-native-test/native$ make
-~/graal-native-test/native$ cd bin
+~/graal-native-test$ mkdir build
+~/graal-native-test$ cd build
+~/graal-native-test/native$ cmake ../
+~/graal-native-test/native$ cmake --build .
+~/graal-native-test/native$ cd ../bin
 ~/graal-native-test/native/bin$ ./native
 ```
 
