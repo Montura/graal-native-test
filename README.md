@@ -35,3 +35,19 @@ cmake .
 make
 ./native
 ```
+
+Expected output (digits are not valuable):
+```
+OS name: windows 10
+JNI time = 20
+C time = 6
+dummy time = 6
+native time = 1
+```
+
+Actual output:
+```
+OS name: windows 10
+JNI time = 20
+```
+"Exception thrown at 0x00007FFA0F6F0000 (GraalSample.dll) in native.exe: 0xC0000005: Access violation executing location 0x00007FFA0F6F0000."
