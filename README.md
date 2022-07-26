@@ -2,7 +2,7 @@
 
 There is a problem with annotation @CFunction on Windows platform.
 
-"Exception thrown at 0x00007FFA0F6F0000 (GraalSample.dll) in native.exe: 0xC0000005: Access violation executing location 0x00007FFA0F6F0000."
+_"Exception thrown at 0x00007FFA0F6F0000 (GraalSample.dll) in native.exe: 0xC0000005: Access violation executing location 0x00007FFA0F6F0000."_
 
 ### Steps to reproduce:
 1. Download GraalVM CE Build v22.1.0 on Apr 26 (https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-22.1.0)
@@ -32,4 +32,4 @@ native time = 1
 OS name: windows 10
 JNI time = 20
 ```
-"Exception thrown at 0x00007FFA0F6F0000 (GraalSample.dll) in native.exe: 0xC0000005: Access violation executing location 0x00007FFA0F6F0000."
+_"Exception thrown at 0x00007FFA0F6F0000 (GraalSample.dll) in native.exe: 0xC0000005: Access violation executing location 0x00007FFA0F6F0000."_
