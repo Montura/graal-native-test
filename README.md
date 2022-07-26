@@ -38,7 +38,7 @@ JNI time = 20
 _"Exception thrown at 0x00007FFA0F6F0000 (GraalSample.dll) in native.exe: 0xC0000005: Access violation executing location 0x00007FFA0F6F0000."_
 
 ### Windows issue
-* To build native-image on Windows with @CFunction annotation I used native-image option [```-H:NativeLinkerOption="/FORCE:UNRESOLVED"```](pom.xml#L70) to avoid linkage error during the build:
+* To build native-image on Windows with @CFunction annotation I used native-image option [```-H:NativeLinkerOption="/FORCE:UNRESOLVED"```](pom.xml#L143) to avoid linkage error during the build:
 
 ```
    Creating library D:\work\graal-tutorial\target\tmp-windows\SVM-1658827308388\GraalSample.lib and object D:\work\graal-tutorial\target\tmp-windows\SVM-1658827308388\GraalSample.exp
