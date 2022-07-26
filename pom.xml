@@ -140,7 +140,7 @@
                             <buildArgs>
                                 ${native.image.common.options}
                                 <!-- Temp to fix "unresolved external symbol" link error-->
-                                -H:NativeLinkerOption="/FORCE:UNRESOLVED"
+                                    -H:NativeLinkerOption="/FORCE:UNRESOLVED"
                                 <!-- ${msvc.compiler.args} -->
                             </buildArgs>
                         </configuration>
