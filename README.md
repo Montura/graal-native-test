@@ -9,31 +9,13 @@ There is a problem with annotation @CFunction on Windows platform.
 2. 
 ```
 export JAVA_HOME=`path_to_graalvm_ce_build_22.1.0`
-```
-3. 
-```
-git clone https://github.com/Montura/graal-native-test
-cd graal-native-test
-```
-4. 
-* Windows
-```
-mvn clean package -Pgraal-win 
-```
-* Linux 
-```
-mvn clean package -Pgraal-linux
-```
-* MacOS
-```
-mvn clean package -Pgraal-mac 
-```
-5. 
-```
-cd native
-cmake .
-make
-./native
+~$ git clone https://github.com/Montura/graal-native-test
+~$ cd graal-native-test
+~/graal-native-test$ mvn clean package -Pgraal-win|graal-linux|graal-mac
+~/graal-native-test$ cd native
+~/graal-native-test/native$ cmake .
+~/graal-native-test/native$ make
+~/graal-native-test/native$ ./native
 ```
 
 ### Expected output (digits are not valuable):
