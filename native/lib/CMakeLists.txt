@@ -21,7 +21,7 @@ elseif (APPLE)
 elseif (UNIX)
     set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/linux)
     set(LIB_EXT so)
-    set(LIB_NAME lib${PROJECT_NAME}.dll)
+    set(LIB_NAME ${PROJECT_NAME}.so)
     message("Target lib name: ${LIB_NAME}")
 endif ()
 
@@ -31,6 +31,7 @@ set(SOURCE_FILES lib.cc)
 
 message("-- Linking native_lib")
 add_library(NativeTest SHARED lib.cc)
+set_target_properties(NativeTest PROPERTIES PREFIX "")
 
 add_custom_command(
     TARGET ${PROJECT_NAME}  POST_BUILD
