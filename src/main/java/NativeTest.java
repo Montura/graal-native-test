@@ -5,7 +5,26 @@ import org.graalvm.nativeimage.c.function.CFunction;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.IsolateThread;
 
+import java.util.Locale;
+
 public class NativeTest {
+
+    static String libExt() {
+        String osName = System.getProperty("os.name");
+        if (osName == null) {
+            System.err.println("Unknown OS name");
+            return "";
+        }
+        String osNameTemplate = osName.toLowerCase(Locale.ROOT);
+        System.out.println("OS name: " + osNameTemplate);
+        if (osNameTemplate.contains("win")) {
+            return ".dll";
+        } else if (osNameTemplate.contains("mac")) {
+            return ".dylib";
+        } else {
+            return ".so";
+        }
+    }
 
     public static void main(String[] args) {
 
@@ -27,7 +46,8 @@ public class NativeTest {
 
     @CEntryPoint(name = "test")
     public static void test(IsolateThread thread) {
-        System.load(System.getProperty("user.dir") + "/libNativeTest.so");
+
+        System.load(System.getProperty("user.dir") + "/NativeTest" + libExt());
 
         int n = 10000000;
 
