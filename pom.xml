@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <artifactId>graal-tutorial</artifactId>
+    <groupId>com.devexperts.qd</groupId>
+    <version>1.1-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <!-- Common -->
+        <graalvm.version>22.1.0</graalvm.version>
+        <graalvm.maven.version>21.2.0</graalvm.maven.version>
+        <native.image.path>native-image</native.image.path>
+        <graal.compiler.log.file>${project.basedir}/target/graal_compiler.log</graal.compiler.log.file>
+        <java.main.class>NativeTest</java.main.class>
+        <native.image.name>GraalSample</native.image.name>
+
+        <!-- Are overridden by profiles -->
+        <temp.dir></temp.dir>
+        <cap.cache.dir></cap.cache.dir>
+        <graavm.capcache>-H:+UseCAPCache -H:CAPCacheDir=${cap.cache.dir}</graavm.capcache>
+
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+
+        <native.image.common.options>
+<!--            -H:ReflectionConfigurationFiles=${reflection.config}-->
+            --no-fallback
+            --native-image-info
+            --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
+            -Djdk.internal.lambda.disableEagerInitialization=true <!-- https://bugs.openjdk.org/browse/JDK-8236186 -->
+            -Djdk.internal.lambda.eagerlyInitialize=false
+            -Djava.lang.invoke.InnerClassLambdaMetafactory.initializeLambdas=false
+            -Djava.awt.headless=true
+            -Djava.system.class.loader=com.oracle.svm.hosted.NativeImageSystemClassLoader
+            -H:+SharedLibrary
+            -H:Optimize=2
+<!--            -H:Features=com.dxfeed.JNIRegistrationFeature-->
+            -H:-DeadlockWatchdogExitOnTimeout   <!--Exit the image builder VM after printing call stacks -->
+            -H:DeadlockWatchdogInterval=0
+            -H:+ReportExceptionStackTraces
+            -H:TempDirectory=${temp.dir}
+            ${graavm.capcache}
+            -Dgraal.ShowConfiguration=verbose
+            -Dgraal.LogFile=${graal.compiler.log.file}
+            -H:Path=${native.image.path}
+            -H:Class=${java.main.class}
+            -H:Name=${native.image.name}
+        </native.image.common.options>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.graalvm.sdk</groupId>
+            <artifactId>graal-sdk</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.graalvm.nativeimage</groupId>
+            <artifactId>svm</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Compile at Java 1.8 level -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                    <encoding>UTF-8</encoding>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                    <compilerVersion>11</compilerVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>graal-win</id>
+            <properties>
+                <cap.cache.dir>${project.basedir}/capcache-win</cap.cache.dir>
+                <temp.dir>tmp-windows</temp.dir>
+                <!--                <msvc.compiler.dir>c:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\</msvc.compiler.dir>-->
+                <!--                <windows.sdk.dir>c:\Program Files (x86)\Windows Kits\10\Lib\10.0.19041.0\</windows.sdk.dir>-->
+                <!--                <msvc.compiler.args>-->
+                <!--                    &#45;&#45;native-compiler-path="${msvc.compiler.dir}\bin\HostX64\x64\cl.exe"-->
+                <!--                    -H:CLibraryPath="${windows.sdk.dir}\um\x64"-->
+                <!--                    -H:CLibraryPath="${windows.sdk.dir}\ucrt\x64"-->
+                <!--                    -H:CLibraryPath="${msvc.compiler.dir}\lib\onecore\x64"-->
+                <!--                </msvc.compiler.args>-->
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>delete-old-SVM</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <executable>${project.basedir}/deleteOldSvm.cmd</executable>
+                                    <arguments>
+                                        <argument>${project.build.directory}\${temp.dir}</argument>
+                                        <argument>${project.build.directory}\${native.image.path}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.graalvm.nativeimage</groupId>
+                        <artifactId>native-image-maven-plugin</artifactId>
+                        <version>${graalvm.maven.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>native-image</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>false</skip>
+                            <buildArgs>
+                                ${native.image.common.options}
+                                <!-- Temp to fix "unresolved external symbol" link error-->
+                                -H:NativeLinkerOption="/FORCE:UNRESOLVED"
+                                <!-- ${msvc.compiler.args} -->
+                            </buildArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>graal-mac</id>
+            <properties>
+                <cap.cache.dir>${project.basedir}/capcache-mac</cap.cache.dir>
+                <temp.dir>tmp-macos</temp.dir>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>delete-old-SVM</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <executable>/bin/rm</executable>
+                                    <arguments>
+                                        <argument>-rf</argument>
+                                        <argument>${project.build.directory}/${temp.dir}</argument>
+                                        <argument>${project.build.directory}/${native.image.path}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.graalvm.nativeimage</groupId>
+                        <artifactId>native-image-maven-plugin</artifactId>
+                        <version>${graalvm.maven.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>native-image</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>false</skip>
+                            <buildArgs> ${native.image.common.options} </buildArgs>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>gen-cap-cache</id>
+            <properties>
+                <c.library.path>${project.basedir}/native/extern/graal/</c.library.path>
+                <graavm.capcache>
+                    -H:-UseCAPCache
+                    -H:+NewCAPCache
+                    -H:-CheckToolchain
+                    -H:CAPCacheDir=${project.basedir}/newCapCacheDir
+                    -H:CLibraryPath=${c.library.path}
+                </graavm.capcache>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>macos-aarch64</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <properties>
+                <cap.cache.dir>${project.basedir}/capcache-mac-arm64</cap.cache.dir>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>graal-linux</id>
+            <properties>
+                <cap.cache.dir>${project.basedir}/capcache-linux</cap.cache.dir>
+                <temp.dir>tmp-linux</temp.dir>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>delete-old-SVM</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <executable>/bin/rm</executable>
+                                    <arguments>
+                                        <argument>-rf</argument>
+                                        <argument>${project.build.directory}/${temp.dir}</argument>
+                                        <argument>${project.build.directory}/${native.image.path}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.graalvm.nativeimage</groupId>
+                        <artifactId>native-image-maven-plugin</artifactId>
+                        <version>${graalvm.maven.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>native-image</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>false</skip>
+                            <buildArgs>
+                                ${native.image.common.options}
+                            </buildArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
+
+</project>
