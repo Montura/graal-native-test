@@ -62,4 +62,4 @@ D:\work\graal-tutorial\target\native-image\GraalSample.dll : fatal error LNK1120
     * **Windows** can't export _undefined symbol_ _**testC**_ : [windows_symbols](symbols_windows.txt) 
         * I used ["/FORCE:UNRESOLVED"](https://docs.microsoft.com/en-us/cpp/build/reference/force-force-file-output?view=msvc-170) linker option to build shared lib for Windows (so the symbol  _**testC**_ isn't imported)
         * I tried ["/OPT:NOREF"](https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-6.0/aa278533(v=vs.60)?redirectedfrom=MSDN) and ["/INCLUDE:testC"](https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-6.0/aa278363(v=vs.60)?redirectedfrom=MSDN), but it doens't help me at all.
-    * **GetProcAddress** and **dlsym** proved my assumption.
+    * **GetProcAddress** and **dlsym** proved my assumption: [load_functions](native/load_functions.cpp).
