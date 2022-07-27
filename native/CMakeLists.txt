@@ -32,7 +32,7 @@ elseif (UNIX)
     set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.so)
 endif()
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cpp load_functions.cpp)
 target_link_libraries(${PROJECT_NAME} GRAAL_LIB NativeTest)
 
 if (WIN32)

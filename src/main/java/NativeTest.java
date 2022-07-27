@@ -1,13 +1,26 @@
-// ./javac NativeTest.java
-// ./native-image java.com.com.dxfeed.NativeTest --shared
-
+import org.graalvm.nativeimage.c.CContext;
 import org.graalvm.nativeimage.c.function.CFunction;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.IsolateThread;
+import com.oracle.svm.core.c.ProjectHeaderFile;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
+@CContext(NativeTest.CApiDirectives.class)
 public class NativeTest {
+
+    static class CApiDirectives implements CContext.Directives {
+        @Override
+        public List<String> getHeaderFiles() {
+            /*
+             * The header file with the C declarations that are imported. We use a helper class that
+             * locates the file in our project structure.
+             */
+            return Collections.singletonList(ProjectHeaderFile.resolve("", "c_api.h"));
+        }
+    }
 
     static String libExt() {
         String osName = System.getProperty("os.name");
