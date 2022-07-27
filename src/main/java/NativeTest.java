@@ -1,8 +1,8 @@
-import org.graalvm.nativeimage.c.CContext;
-import org.graalvm.nativeimage.c.function.CFunction;
-import org.graalvm.nativeimage.c.function.CEntryPoint;
-import org.graalvm.nativeimage.IsolateThread;
 import com.oracle.svm.core.c.ProjectHeaderFile;
+import org.graalvm.nativeimage.IsolateThread;
+import org.graalvm.nativeimage.c.CContext;
+import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.graalvm.nativeimage.c.function.CFunction;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,15 +39,12 @@ public class NativeTest {
         }
     }
 
-    public static void main(String[] args) {
-
-    }
-    public native static int testJNI();
+    private static native int testJNI();
 
     @CFunction
     public native static int testC();
 
-    static interface DummyInterface {
+    interface DummyInterface {
         int test();
     }
     static class DummyClass implements DummyInterface {

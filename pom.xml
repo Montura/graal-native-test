@@ -14,7 +14,7 @@
         <graalvm.maven.version>21.2.0</graalvm.maven.version>
         <native.image.path>native-image</native.image.path>
         <graal.compiler.log.file>${project.basedir}/target/graal_compiler.log</graal.compiler.log.file>
-        <java.main.class>NativeTest</java.main.class>
+        <java.main.class>NativeTestMain</java.main.class>
         <native.image.name>GraalSample</native.image.name>
 
         <!-- Are overridden by profiles -->
@@ -25,7 +25,13 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
+        <static.system.properties>
+            -Dstatic_key=MY_STATIC_VALUE
+            --initialize-at-build-time=SystemProperties
+        </static.system.properties>
+
         <native.image.common.options>
+            ${static.system.properties}
 <!--            -H:ReflectionConfigurationFiles=${reflection.config}-->
             --no-fallback
             --native-image-info
@@ -64,6 +70,11 @@
             <artifactId>svm</artifactId>
             <version>${graalvm.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.devexperts.mdd</groupId>
+            <artifactId>auther-api</artifactId>
+            <version>438-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

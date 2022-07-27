@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(native)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 set(OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_PATH})
@@ -16,6 +16,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${OUTPUT_PATH})
 
 include_directories("${PROJECT_SOURCE_DIR}/lib")
 add_subdirectory(lib)
+
+set(RELATIVE_GRAAL_PATH ".")
+include("graal/FindJNI.cmake")
 
 set(GRAAL_LIB_PATH "${PROJECT_SOURCE_DIR}/../target/native-image")
 message("GRAAL_LIB_PATH: ${GRAAL_LIB_PATH}")
@@ -32,7 +35,7 @@ elseif (UNIX)
     set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.so)
 endif()
 
-add_executable(${PROJECT_NAME} main.cpp load_functions.cpp)
+add_executable(${PROJECT_NAME} main.cpp load_functions.cpp system_properties.cpp)
 target_link_libraries(${PROJECT_NAME} GRAAL_LIB NativeTest)
 
 if (WIN32)
