@@ -140,7 +140,7 @@
                             <buildArgs>
                                 ${native.image.common.options}
                                 <!-- Temp to fix "unresolved external symbol" link error-->
-                                -H:NativeLinkerOption="/FORCE:UNRESOLVED"
+                                    -H:NativeLinkerOption="/FORCE:UNRESOLVED"
                                 <!-- ${msvc.compiler.args} -->
                             </buildArgs>
                         </configuration>
@@ -205,7 +205,7 @@
         <profile>
             <id>gen-cap-cache</id>
             <properties>
-                <c.library.path>${project.basedir}/native/extern/graal/</c.library.path>
+                <c.library.path>${project.basedir}/native/graal/</c.library.path>
                 <graavm.capcache>
                     -H:-UseCAPCache
                     -H:+NewCAPCache
