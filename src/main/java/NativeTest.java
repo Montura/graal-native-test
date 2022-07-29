@@ -4,6 +4,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.IsolateThread;
 import com.oracle.svm.core.c.ProjectHeaderFile;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -32,7 +33,7 @@ public class NativeTest {
         System.out.println("OS name: " + osNameTemplate);
         if (osNameTemplate.contains("win")) {
             return ".dll";
-        } else if (osNameTemplate.contains("mac")) {
+        } else if (osNameTemplate.contains("mac") || osNameTemplate.contains("ios")) {
             return ".dylib";
         } else {
             return ".so";
@@ -59,7 +60,8 @@ public class NativeTest {
 
     @CEntryPoint(name = "test")
     public static void test(IsolateThread thread) {
-
+        // todo: "user.dir" returns: "/" - root, so we can't load NativeTest.dylib
+        //   -- to fix: look at the labs-openjdk11 repo
         System.load(System.getProperty("user.dir") + "/NativeTest" + libExt());
 
         int n = 10000000;

@@ -1,5 +1,5 @@
-#include "graal/graal_isolate.h"
 #include <cstdio>
+#include "graal_isolate.h"
 
 const wchar_t* GRAAL_LIB_NAME = L"GraalSample";
 const char* SYMBOL_TEST = "test";

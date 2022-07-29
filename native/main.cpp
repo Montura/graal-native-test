@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <ctime>
-#include "graal/graal_isolate.h"
+
+#include "graal_isolate.h"
 
 void testLib();
 extern "C" void test(graal_isolatethread_t*);

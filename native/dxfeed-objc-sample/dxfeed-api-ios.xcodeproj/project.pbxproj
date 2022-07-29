@@ -1,0 +1,574 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2386E45B2886BAE20013BD16 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AA84E0C28731FA700888673 /* main.cpp */; };
+		2386E45D2886BAE20013BD16 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A45770227B64C84002C1EA3 /* Foundation.framework */; };
+		2386E45E2886BAE20013BD16 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A45770027B64C7E002C1EA3 /* MobileCoreServices.framework */; };
+		2386E45F2886BAE20013BD16 /* GraalSample.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576F727B64C3E002C1EA3 /* GraalSample.o */; };
+		2386E4602886BAE20013BD16 /* graal-svm-arm64-ios-r.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576FC27B64C70002C1EA3 /* graal-svm-arm64-ios-r.a */; };
+		2386E4622886BAE20013BD16 /* jdk-arm64-ios-r.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A45770B27B64F86002C1EA3 /* jdk-arm64-ios-r.a */; };
+		2386E4642886BAE20013BD16 /* launchscreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A4576F227B64C12002C1EA3 /* launchscreen.storyboard */; };
+		2386E4652886BAE20013BD16 /* Info.plist.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5A45770627B64E19002C1EA3 /* Info.plist.xml */; };
+		5A4576F427B64C12002C1EA3 /* launchscreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A4576F227B64C12002C1EA3 /* launchscreen.storyboard */; };
+		5A4576F927B64C3E002C1EA3 /* GraalSample.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576F727B64C3E002C1EA3 /* GraalSample.o */; };
+		5A45770127B64C7E002C1EA3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A45770027B64C7E002C1EA3 /* MobileCoreServices.framework */; };
+		5A45770327B64C84002C1EA3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A45770227B64C84002C1EA3 /* Foundation.framework */; };
+		5A45770727B64E19002C1EA3 /* Info.plist.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5A45770627B64E19002C1EA3 /* Info.plist.xml */; };
+		5AA84E0A28731E4000888673 /* jdk-arm64-ios-r.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A45770B27B64F86002C1EA3 /* jdk-arm64-ios-r.a */; };
+		5AA84E0B28731EF200888673 /* graal-svm-arm64-ios-r.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576FC27B64C70002C1EA3 /* graal-svm-arm64-ios-r.a */; };
+		5AA84E0E28731FA700888673 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AA84E0C28731FA700888673 /* main.cpp */; };
+		5AB4769F28940F35007CCC24 /* load_functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4769E28940F35007CCC24 /* load_functions.cpp */; };
+		5AB476A028940F35007CCC24 /* load_functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4769E28940F35007CCC24 /* load_functions.cpp */; };
+		5AB476F328941E49007CCC24 /* NativeTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AB476F228941E49007CCC24 /* NativeTest.framework */; };
+		5AB476F428941E52007CCC24 /* NativeTest.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5AB476F228941E49007CCC24 /* NativeTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5AB476F5289427D8007CCC24 /* llvm.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576F827B64C3E002C1EA3 /* llvm.o */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5AB476E4289417BC007CCC24 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5AB476F428941E52007CCC24 /* NativeTest.framework in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5AB476E62894180B007CCC24 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2386E4692886BAE20013BD16 /* dxfeed-api-mac-m1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "dxfeed-api-mac-m1.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A4576D527B64B4D002C1EA3 /* dxfeed-api-mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "dxfeed-api-mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A4576F227B64C12002C1EA3 /* launchscreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = launchscreen.storyboard; sourceTree = "<group>"; };
+		5A4576F727B64C3E002C1EA3 /* GraalSample.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; name = GraalSample.o; path = "../../target/native-image/GraalSample.o"; sourceTree = "<group>"; };
+		5A4576F827B64C3E002C1EA3 /* llvm.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; name = llvm.o; path = "../../target/native-image/llvm.o"; sourceTree = "<group>"; };
+		5A4576FC27B64C70002C1EA3 /* graal-svm-arm64-ios-r.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "graal-svm-arm64-ios-r.a"; path = "../extern/graal/ios-libs/graal-svm-arm64-ios-r.a"; sourceTree = "<group>"; };
+		5A45770027B64C7E002C1EA3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		5A45770227B64C84002C1EA3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		5A45770627B64E19002C1EA3 /* Info.plist.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist.xml; sourceTree = "<group>"; };
+		5A45770B27B64F86002C1EA3 /* jdk-arm64-ios-r.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "jdk-arm64-ios-r.a"; path = "../extern/graal/ios-libs/jdk-arm64-ios-r.a"; sourceTree = "<group>"; };
+		5AA84E0C28731FA700888673 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../main.cpp; sourceTree = "<group>"; };
+		5AA84E0D28731FA700888673 /* dxfeed_c_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dxfeed_c_api.h; path = ../extern/graal/dxfeed_c_api.h; sourceTree = "<group>"; };
+		5AB4769E28940F35007CCC24 /* load_functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = load_functions.cpp; path = ../load_functions.cpp; sourceTree = "<group>"; };
+		5AB476D528941506007CCC24 /* shared-lib-sample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "shared-lib-sample.xcodeproj"; path = "../lib/shaderLib/shared-lib-sample.xcodeproj"; sourceTree = "<group>"; };
+		5AB476F228941E49007CCC24 /* NativeTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NativeTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2386E45C2886BAE20013BD16 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2386E45D2886BAE20013BD16 /* Foundation.framework in Frameworks */,
+				2386E45E2886BAE20013BD16 /* MobileCoreServices.framework in Frameworks */,
+				2386E45F2886BAE20013BD16 /* GraalSample.o in Frameworks */,
+				2386E4602886BAE20013BD16 /* graal-svm-arm64-ios-r.a in Frameworks */,
+				2386E4622886BAE20013BD16 /* jdk-arm64-ios-r.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A4576D227B64B4D002C1EA3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AB476F328941E49007CCC24 /* NativeTest.framework in Frameworks */,
+				5A45770327B64C84002C1EA3 /* Foundation.framework in Frameworks */,
+				5A45770127B64C7E002C1EA3 /* MobileCoreServices.framework in Frameworks */,
+				5A4576F927B64C3E002C1EA3 /* GraalSample.o in Frameworks */,
+				5AA84E0B28731EF200888673 /* graal-svm-arm64-ios-r.a in Frameworks */,
+				5AA84E0A28731E4000888673 /* jdk-arm64-ios-r.a in Frameworks */,
+				5AB476F5289427D8007CCC24 /* llvm.o in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5A4576CC27B64B4D002C1EA3 = {
+			isa = PBXGroup;
+			children = (
+				5AB476D528941506007CCC24 /* shared-lib-sample.xcodeproj */,
+				5AB4769E28940F35007CCC24 /* load_functions.cpp */,
+				5AA84E0C28731FA700888673 /* main.cpp */,
+				5AA84E0D28731FA700888673 /* dxfeed_c_api.h */,
+				5A45770627B64E19002C1EA3 /* Info.plist.xml */,
+				5A4576F227B64C12002C1EA3 /* launchscreen.storyboard */,
+				5A4576D627B64B4D002C1EA3 /* Products */,
+				5A4576FB27B64C6F002C1EA3 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		5A4576D627B64B4D002C1EA3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A4576D527B64B4D002C1EA3 /* dxfeed-api-mac.app */,
+				2386E4692886BAE20013BD16 /* dxfeed-api-mac-m1.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5A4576FB27B64C6F002C1EA3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5AB476F228941E49007CCC24 /* NativeTest.framework */,
+				5A4576FC27B64C70002C1EA3 /* graal-svm-arm64-ios-r.a */,
+				5A45770B27B64F86002C1EA3 /* jdk-arm64-ios-r.a */,
+				5A4576F727B64C3E002C1EA3 /* GraalSample.o */,
+				5A4576F827B64C3E002C1EA3 /* llvm.o */,
+				5A45770227B64C84002C1EA3 /* Foundation.framework */,
+				5A45770027B64C7E002C1EA3 /* MobileCoreServices.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2386E4582886BAE20013BD16 /* dxfeed-api-mac-m1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2386E4662886BAE20013BD16 /* Build configuration list for PBXNativeTarget "dxfeed-api-mac-m1" */;
+			buildPhases = (
+				2386E4592886BAE20013BD16 /* Sources */,
+				2386E45C2886BAE20013BD16 /* Frameworks */,
+				2386E4632886BAE20013BD16 /* Resources */,
+				5AB476E62894180B007CCC24 /* Embed Libraries */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "dxfeed-api-mac-m1";
+			productName = "ios-graalvm";
+			productReference = 2386E4692886BAE20013BD16 /* dxfeed-api-mac-m1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5A4576D427B64B4D002C1EA3 /* dxfeed-api-mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A4576EE27B64B4F002C1EA3 /* Build configuration list for PBXNativeTarget "dxfeed-api-mac" */;
+			buildPhases = (
+				5A4576D127B64B4D002C1EA3 /* Sources */,
+				5A4576D227B64B4D002C1EA3 /* Frameworks */,
+				5A4576D327B64B4D002C1EA3 /* Resources */,
+				5AB476E4289417BC007CCC24 /* Embed Libraries */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "dxfeed-api-mac";
+			productName = "ios-graalvm";
+			productReference = 5A4576D527B64B4D002C1EA3 /* dxfeed-api-mac.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5A4576CD27B64B4D002C1EA3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1300;
+				TargetAttributes = {
+					5A4576D427B64B4D002C1EA3 = {
+						CreatedOnToolsVersion = 13.0;
+					};
+				};
+			};
+			buildConfigurationList = 5A4576D027B64B4D002C1EA3 /* Build configuration list for PBXProject "dxfeed-api-ios" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5A4576CC27B64B4D002C1EA3;
+			productRefGroup = 5A4576D627B64B4D002C1EA3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5A4576D427B64B4D002C1EA3 /* dxfeed-api-mac */,
+				2386E4582886BAE20013BD16 /* dxfeed-api-mac-m1 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2386E4632886BAE20013BD16 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2386E4642886BAE20013BD16 /* launchscreen.storyboard in Resources */,
+				2386E4652886BAE20013BD16 /* Info.plist.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A4576D327B64B4D002C1EA3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A4576F427B64C12002C1EA3 /* launchscreen.storyboard in Resources */,
+				5A45770727B64E19002C1EA3 /* Info.plist.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2386E4592886BAE20013BD16 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2386E45B2886BAE20013BD16 /* main.cpp in Sources */,
+				5AB476A028940F35007CCC24 /* load_functions.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A4576D127B64B4D002C1EA3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AA84E0E28731FA700888673 /* main.cpp in Sources */,
+				5AB4769F28940F35007CCC24 /* load_functions.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2386E4672886BAE20013BD16 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PLQ4TN99DJ;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../extern/graal/jni/include/darwin",
+					"$(PROJECT_DIR)/../extern/graal/jni/include",
+					"$(PROJECT_DIR)/../extern/graal",
+				);
+				INFOPLIST_FILE = Info.plist.xml;
+				INFOPLIST_KEY_CFBundleDisplayName = "dxfeed-api";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = launchscreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arm64;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dxfeed.api.graalvm;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2386E4682886BAE20013BD16 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PLQ4TN99DJ;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../extern/graal/jni/include/darwin",
+					"$(PROJECT_DIR)/../extern/graal/jni/include",
+					"$(PROJECT_DIR)/../extern/graal",
+				);
+				INFOPLIST_FILE = Info.plist.xml;
+				INFOPLIST_KEY_CFBundleDisplayName = "dxfeed-api";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = launchscreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arm64;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dxfeed.api.graalvm;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		5A4576EC27B64B4F002C1EA3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SYMROOT = "$(PROJECT_DIR)/build";
+			};
+			name = Debug;
+		};
+		5A4576ED27B64B4F002C1EA3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SYMROOT = "$(PROJECT_DIR)/build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5A4576EF27B64B4F002C1EA3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PLQ4TN99DJ;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../extern/graal/jni/include/darwin",
+					"$(PROJECT_DIR)/../extern/graal/jni/include",
+					"$(PROJECT_DIR)/../extern/graal/",
+				);
+				INFOPLIST_FILE = Info.plist.xml;
+				INFOPLIST_KEY_CFBundleDisplayName = "dxfeed-api";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = launchscreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arm64;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path",
+				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dxfeed.api.graalvm;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5A4576F027B64B4F002C1EA3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PLQ4TN99DJ;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../extern/graal/jni/include/darwin",
+					"$(PROJECT_DIR)/../extern/graal/jni/include",
+					"$(PROJECT_DIR)/../extern/graal/",
+				);
+				INFOPLIST_FILE = Info.plist.xml;
+				INFOPLIST_KEY_CFBundleDisplayName = "dxfeed-api";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = launchscreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arm64;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path",
+				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dxfeed.api.graalvm;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2386E4662886BAE20013BD16 /* Build configuration list for PBXNativeTarget "dxfeed-api-mac-m1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2386E4672886BAE20013BD16 /* Debug */,
+				2386E4682886BAE20013BD16 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A4576D027B64B4D002C1EA3 /* Build configuration list for PBXProject "dxfeed-api-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A4576EC27B64B4F002C1EA3 /* Debug */,
+				5A4576ED27B64B4F002C1EA3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A4576EE27B64B4F002C1EA3 /* Build configuration list for PBXNativeTarget "dxfeed-api-mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A4576EF27B64B4F002C1EA3 /* Debug */,
+				5A4576F027B64B4F002C1EA3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5A4576CD27B64B4D002C1EA3 /* Project object */;
+}

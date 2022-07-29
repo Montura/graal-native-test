@@ -20,13 +20,13 @@
         <!-- Are overridden by profiles -->
         <temp.dir></temp.dir>
         <cap.cache.dir></cap.cache.dir>
+        <native.image.ios.llvm.options></native.image.ios.llvm.options>
         <graavm.capcache>-H:+UseCAPCache -H:CAPCacheDir=${cap.cache.dir}</graavm.capcache>
 
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
         <native.image.common.options>
-<!--            -H:ReflectionConfigurationFiles=${reflection.config}-->
             --no-fallback
             --native-image-info
             --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
@@ -37,7 +37,6 @@
             -Djava.system.class.loader=com.oracle.svm.hosted.NativeImageSystemClassLoader
             -H:+SharedLibrary
             -H:Optimize=2
-<!--            -H:Features=com.dxfeed.JNIRegistrationFeature-->
             -H:-DeadlockWatchdogExitOnTimeout   <!--Exit the image builder VM after printing call stacks -->
             -H:DeadlockWatchdogInterval=0
             -H:+ReportExceptionStackTraces
@@ -203,6 +202,90 @@
         </profile>
 
         <profile>
+            <id>graal-ios</id>
+            <properties>
+                <cap.cache.dir>${project.basedir}/capcache-ios</cap.cache.dir>
+                <copy.script>${project.basedir}/copy.sh</copy.script>
+                <ios.arch>arm64-ios</ios.arch>
+                <ios.target.arch>arm64</ios.target.arch>
+                <ios.graal.platform>IOS_AARCH64</ios.graal.platform>
+                <temp.dir>tmp${ios.arch}</temp.dir>
+                <native.image.ios.options>
+                    ${native.image.ios.llvm.options}
+                    -H:+ExitAfterRelocatableImageWrite
+                    -H:PageSize=16384
+                    -Dsvm.targetName=iOS
+                    -Dsvm.targetArch=${ios.target.arch}
+                    -Dsvm.platform=org.graalvm.nativeimage.Platform$${ios.graal.platform}
+                </native.image.ios.options>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.nativeimage</groupId>
+                        <artifactId>native-image-maven-plugin</artifactId>
+                        <version>${graalvm.maven.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>native-image</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>false</skip>
+                            <buildArgs>
+                                ${native.image.common.options}
+                                ${native.image.ios.options}
+                            </buildArgs>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>delete-old-SVM</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <executable>/bin/rm</executable>
+                                    <arguments>
+                                        <argument>-rf</argument>
+                                        <argument>${project.build.directory}/${temp.dir}</argument>
+                                        <argument>${project.build.directory}/${native.image.path}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>copy-ios-artifacts</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <executable>/bin/bash</executable>
+                                    <arguments>
+                                        <argument>${copy.script}</argument>
+                                        <argument>${project.basedir}/target/${temp.dir}</argument>
+                                        <argument>${project.basedir}/target/${native.image.path}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>gen-cap-cache</id>
             <properties>
                 <c.library.path>${project.basedir}/native/graal/</c.library.path>
@@ -280,6 +363,23 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+
+        <profile>
+            <id>cross-compile-macos-x86-to-ios</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                    <arch>x86_64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.image.ios.llvm.options>
+                    -H:CompilerBackend=llvm
+                    -H:-SpawnIsolates
+                    -H:LLVMMaxFunctionsPerBatch=0
+                </native.image.ios.llvm.options>
+            </properties>
         </profile>
     </profiles>
 
