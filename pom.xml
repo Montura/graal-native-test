@@ -30,7 +30,7 @@
         <!-- 2. https://chriswhocodes.com/graalvm_native_image_ce_jdk11_options.html -->
         <!-- 3. Unofficial: https://gist.github.com/happylynx/ce642816411ee5c98f04fedd80f4c417 -->
         <native.image.common.options>
-<!--            todo: check on Windows, Linux and remove cause they are set by default -->
+<!--            todo: check on Windows, Linux and remove cause they are set by default (see target/graal_compiler.log) -->
 <!--            -Djdk.internal.lambda.disableEagerInitialization=true &lt;!&ndash; https://bugs.openjdk.org/browse/JDK-8236186 &ndash;&gt;-->
 <!--            -Djdk.internal.lambda.eagerlyInitialize=false-->
 <!--            -Djava.lang.invoke.InnerClassLambdaMetafactory.initializeLambdas=false-->
