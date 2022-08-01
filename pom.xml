@@ -30,19 +30,12 @@
         <!-- 2. https://chriswhocodes.com/graalvm_native_image_ce_jdk11_options.html -->
         <!-- 3. Unofficial: https://gist.github.com/happylynx/ce642816411ee5c98f04fedd80f4c417 -->
         <native.image.common.options>
-<!--            todo: check on Windows, Linux and remove cause they are set by default (see target/graal_compiler.log) -->
-<!--            -Djdk.internal.lambda.disableEagerInitialization=true &lt;!&ndash; https://bugs.openjdk.org/browse/JDK-8236186 &ndash;&gt;-->
-<!--            -Djdk.internal.lambda.eagerlyInitialize=false-->
-<!--            -Djava.lang.invoke.InnerClassLambdaMetafactory.initializeLambdas=false-->
-<!--            -Djava.awt.headless=true-->
-<!--            -Djava.system.class.loader=com.oracle.svm.hosted.NativeImageSystemClassLoader-->
             --no-fallback                             <!-- build a standalone native executable or report a failure -->
             --native-image-info       <!-- show native toolchain information and native executable’s build settings -->
             --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED  <!-- to allow using jdk.unsupported.sun.misc.Unsafe -->
             -H:+SharedLibrary                          <!-- To build native-image as shared library -->
-            -H:Optimize=2                              <!-- Optimize level (maybe is set by default)  -->
             -H:-DeadlockWatchdogExitOnTimeout          <!--Exit the image builder VM after printing call stacks -->
-            -H:DeadlockWatchdogInterval=0
+            -H:DeadlockWatchdogInterval=0              <!-- The interval in minutes between watchdog checks (0 disables the watchdog) -->
             -H:+ReportExceptionStackTraces                 <!-- target/tempDirectory for temporary files -->
             -H:TempDirectory=${temp.dir}                   <!-- target/tempDirectory for temporary files -->
             ${graavm.capcache}                             <!-- Args for generating C Annotation Processor caches -->
