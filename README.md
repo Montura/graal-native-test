@@ -11,8 +11,7 @@
      * _@CConstant_
      * etc.
 2. Add `CLibraryPath` that point to dir with `c_interface.h` to MVN profile `gen-cap-caphe`:
-   * 
-       ```
+   *   ```
        <id>gen-cap-cache</id>
        <properties>
            <c.library.path>${project.basedir}/native/graal/</c.library.path>
