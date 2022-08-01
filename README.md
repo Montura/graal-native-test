@@ -1,6 +1,9 @@
 # graal-native-test
 
-## CInterface tutorial
+## CInterface tutorial based on
+* https://github.com/oracle/graal/blob/master/substratevm/src/com.oracle.svm.tutorial/src/com/oracle/svm/tutorial/CInterfaceTutorial.java
+* https://github.com/oracle/graal/blob/master/substratevm/src/com.oracle.svm.tutorial/native/cinterfacetutorial.c
+
 
 ### If there is no `CInterfaceTutorial_CInterfaceTutorialDirectives.cap`
 1. Add file `native/graal/c_interface.h`:
