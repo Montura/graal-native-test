@@ -45,6 +45,18 @@ $ mvn clean package -Pgraal-win,gen-cap-cache
     * `target/native-image/GraalSample.h`
     * `newCapCacheDir/*.cap`
 
+#### Run native executable
+```
+~/graal-native-test$ cd native
+~/graal-native-test$ mkdir build
+~/graal-native-test$ cd build
+~/graal-native-test/native$ cmake ../
+~/graal-native-test/native$ cmake --build .
+~/graal-native-test/native$ cd ../bin
+~/graal-native-test/native/bin$ ./native
+```
+
+
 ### For next steps:
 * Add to VCS `newCapCacheDir/*.cap`
 * In other branches cap-caches have been already added to 
