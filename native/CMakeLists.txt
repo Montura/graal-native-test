@@ -14,9 +14,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_PATH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${OUTPUT_PATH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${OUTPUT_PATH})
 
-include_directories("${PROJECT_SOURCE_DIR}/lib")
-add_subdirectory(lib)
-
 set(GRAAL_LIB_PATH "${PROJECT_SOURCE_DIR}/../target/native-image")
 message("GRAAL_LIB_PATH: ${GRAAL_LIB_PATH}")
 
@@ -32,8 +29,8 @@ elseif (UNIX)
     set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.so)
 endif()
 
-add_executable(${PROJECT_NAME} main.cpp load_functions.cpp)
-target_link_libraries(${PROJECT_NAME} GRAAL_LIB NativeTest)
+add_executable(${PROJECT_NAME} main.cpp)
+target_link_libraries(${PROJECT_NAME} GRAAL_LIB)
 
 if (WIN32)
     add_custom_command(

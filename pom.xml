@@ -201,13 +201,13 @@
         <profile>
             <id>gen-cap-cache</id>
             <properties>
-                <c.library.path>${project.basedir}/native/graal/</c.library.path>
+<!--                <c.library.path>${project.basedir}/native/graal/</c.library.path>-->
                 <graavm.capcache>
                     -H:-UseCAPCache
                     -H:+NewCAPCache
                     -H:-CheckToolchain
                     -H:CAPCacheDir=${project.basedir}/newCapCacheDir
-                    -H:CLibraryPath=${c.library.path}
+<!--                    -H:CLibraryPath=${c.library.path}-->
                 </graavm.capcache>
             </properties>
         </profile>
