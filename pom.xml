@@ -36,7 +36,7 @@
             -H:+SharedLibrary                          <!-- To build native-image as shared library -->
             -H:-DeadlockWatchdogExitOnTimeout          <!--Exit the image builder VM after printing call stacks -->
             -H:DeadlockWatchdogInterval=0              <!-- The interval in minutes between watchdog checks (0 disables the watchdog) -->
-            -H:+ReportExceptionStackTraces                 <!-- target/tempDirectory for temporary files -->
+            -H:+ReportExceptionStackTraces             <!-- Show exception stack traces for exceptions during image building. -->
             -H:TempDirectory=${temp.dir}                   <!-- target/tempDirectory for temporary files -->
             ${graavm.capcache}                             <!-- Args for generating C Annotation Processor caches -->
             -Dgraal.ShowConfiguration=verbose              <!-- To show graal configuration -->
