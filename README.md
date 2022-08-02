@@ -1,4 +1,4 @@
-# graal-native-test
+# graal-native-test (System properties example)
 
 ## Experiments with system properties based on docs:
 * https://www.graalvm.org/22.1/reference-manual/native-image/Properties/
