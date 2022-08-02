@@ -1,8 +1,15 @@
 # graal-native-test
 
-## Experiments with ```System.getProperties()```
+## Experiments with system properties based on docs:
+* https://www.graalvm.org/22.1/reference-manual/native-image/Properties/
 
-* We'd like to pass Java props using ```-Dproperty_key=PROPERTY_VALUE``` from native executable to java "backend"  
+### System properties
+* Passing `-D<key>=<value>` as an argument to **_native-image_** affects properties 
+seen at **_executable build time_**:
+  * `native-image -Dfoo=bar App`
+* Passing `-D<key>=<value>` as an argument to a **_native executable_** affects properties
+seen at **_executable runtime_**:
+  * `./app -Dfoo=bar` 
 
 ```
 ---- begin [Java MAIN] NativeTest:::main(String[] args) ---
