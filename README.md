@@ -24,7 +24,7 @@ extern "C" JNIEXPORT void JNICALL Java_NativeTest_testJNI(JNIEnv* env, jclass cl
 ```
 
 * Artifacts:
-  * `native/bin/NativeTest.*`
+  * `native/bin/NativeTest.dll|dylib|so`
 
 #### Run java main
 ```java
