@@ -44,11 +44,6 @@ $ mvn clean package -Pgraal-ios, gen-cap-cache
 $ mvn clean package -Pgraal-ios
 ```
 
-#### Mac OS x86-64 with llvm backend (by default)
-* Artifacts:
-    * `target/native-image/GraalSample.o`
-    * `target/native-image/llvm.o`
-
 #### Mac OS x86-64 and aarch64 with defualt graal backend
 * Artifacts:
   * `target/native-image/GraalSample.o`
