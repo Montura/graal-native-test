@@ -1,6 +1,6 @@
 # graal-native-test (System properties example)
 
-## Tutorial based on docs:
+## Tutorial based on:
 * https://www.graalvm.org/22.1/reference-manual/native-image/Properties/
 
 ### System properties
