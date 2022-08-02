@@ -3,7 +3,6 @@
 ### How to run
 
 ```
-$ [set | export] JAVA_HOME=`path_to_graalvm_ce_build_22.1.0`
 $ git clone https://github.com/dxFeed/graal-native-test.git
 $ cd graal-native-test
 ```
