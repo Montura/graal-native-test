@@ -147,6 +147,11 @@
 
         <profile>
             <id>graal-mac</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
             <properties>
                 <cap.cache.dir>${project.basedir}/capcache-mac</cap.cache.dir>
                 <temp.dir>tmp-macos</temp.dir>
@@ -227,6 +232,11 @@
 
         <profile>
             <id>graal-linux</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                </os>
+            </activation>
             <properties>
                 <cap.cache.dir>${project.basedir}/capcache-linux</cap.cache.dir>
                 <temp.dir>tmp-linux</temp.dir>
