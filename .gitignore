@@ -1,4 +1,5 @@
-./idea/**
-./native/.idea/**
-./native/bin/**
-./native/build/**
+.idea/**/*.*
+native/.idea/**/*.*
+native/bin/*.*
+native/build/**/**
+target/**
