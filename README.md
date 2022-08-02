@@ -1,6 +1,6 @@
-# graal-native-test
+# graal-native-test (CInterface example)
 
-## CInterface tutorial based on
+## Tutorial based on
 * https://github.com/oracle/graal/blob/master/substratevm/src/com.oracle.svm.tutorial/src/com/oracle/svm/tutorial/CInterfaceTutorial.java
 * https://github.com/oracle/graal/blob/master/substratevm/src/com.oracle.svm.tutorial/native/cinterfacetutorial.c
 
