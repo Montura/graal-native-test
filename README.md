@@ -27,17 +27,24 @@ $ git clone https://github.com/dxFeed/graal-native-test.git
 $ cd graal-native-test
 ```
 
-#### Mac OS x86-64
+#### Mac OS generating CAP caches for iOS:
 ```
-$ mvn clean package -Pgraal-ios,gen-cap-cache
+$ mvn clean package -Pgraal-ios
 ```
+* Add an option `EXIT_AFTER_...` 
+
 * You will get en errors report about compilation failure for:
   * `tmparm64-ios/SVM-.../AMD64LibCHelperDirectives.c`
   * `tmparm64-ios/SVM-.../PosixDirectives.c`
 
 
 
-#### Mac OS x86-64 with llvm backend
+#### Mac OS
+```
+$ mvn clean package -Pgraal-ios
+```
+
+#### Mac OS x86-64 with llvm backend (by default)
 * Artifacts:
     * `target/native-image/GraalSample.o`
     * `target/native-image/llvm.o`
