@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(native)
+project(NativeTest)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -14,28 +14,38 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_PATH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${OUTPUT_PATH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${OUTPUT_PATH})
 
-set(GRAAL_LIB_PATH "${PROJECT_SOURCE_DIR}/../target/native-image")
-message("GRAAL_LIB_PATH: ${GRAAL_LIB_PATH}")
+set(JNI_COMMON_INCLUDE ${PROJECT_SOURCE_DIR}/jni/include)
 
-link_directories(${GRAAL_LIB_PATH})
+message("JNI_PATH: ${JNI_COMMON_INCLUDE}")
 
-add_library(GRAAL_LIB SHARED IMPORTED)
 if (WIN32)
-    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.dll)
-    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_IMPLIB ${GRAAL_LIB_PATH}/GraalSample.lib)
+    # Set the DLLEXPORT variable to export symbols
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/win32)
+    set(LIB_EXT dll)
+    set(LIB_NAME ${PROJECT_NAME}.dll)
+    message("Target lib name: ${LIB_NAME}")
 elseif (APPLE)
-    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.dylib)
+    set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/darwin)
+    set(LIB_EXT dylib)
+    set(LIB_NAME ${PROJECT_NAME}.dylib)
+    message("Target lib name: ${LIB_NAME}")
 elseif (UNIX)
-    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.so)
-endif()
+    set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/linux)
+    set(LIB_EXT so)
+    set(LIB_NAME ${PROJECT_NAME}.so)
+    message("Target lib name: ${LIB_NAME}")
+endif ()
 
-add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME} GRAAL_LIB)
 
-if (WIN32)
-    add_custom_command(
-        TARGET ${PROJECT_NAME}  POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${GRAAL_LIB_PATH}/GraalSample.dll
-        ${OUTPUT_PATH}/${LIB_NAME})
+include_directories(${target} INTERFACE ${JNI_INCLUDE})
+
+message("-- Linking native_lib")
+add_library(NativeTest SHARED lib.cc)
+set_target_properties(NativeTest PROPERTIES PREFIX "")
+
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+    target_compile_options(NativeTest PRIVATE -Wall -Wextra)
+elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
+    target_compile_options(NativeTest PRIVATE /EHsc /MTd /W2 /c)
 endif()
