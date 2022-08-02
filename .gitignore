@@ -2,3 +2,4 @@
 native/.idea/**/*.*
 native/bin/*.*
 native/build/**/**
+target/**
