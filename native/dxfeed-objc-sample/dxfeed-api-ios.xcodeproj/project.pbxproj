@@ -30,6 +30,16 @@
 		5AB476F5289427D8007CCC24 /* llvm.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576F827B64C3E002C1EA3 /* llvm.o */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		5A0DF18E28990E01006F9F15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5AB476D528941506007CCC24 /* shared-lib-sample.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5AB476C9289412F0007CCC24;
+			remoteInfo = NativeTest;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		5AB476E4289417BC007CCC24 /* Embed Libraries */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -60,16 +70,16 @@
 		5A4576F227B64C12002C1EA3 /* launchscreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = launchscreen.storyboard; sourceTree = "<group>"; };
 		5A4576F727B64C3E002C1EA3 /* GraalSample.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; name = GraalSample.o; path = "../../target/native-image/GraalSample.o"; sourceTree = "<group>"; };
 		5A4576F827B64C3E002C1EA3 /* llvm.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; name = llvm.o; path = "../../target/native-image/llvm.o"; sourceTree = "<group>"; };
-		5A4576FC27B64C70002C1EA3 /* graal-svm-arm64-ios-r.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "graal-svm-arm64-ios-r.a"; path = "../extern/graal/ios-libs/graal-svm-arm64-ios-r.a"; sourceTree = "<group>"; };
+		5A4576FC27B64C70002C1EA3 /* graal-svm-arm64-ios-r.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "graal-svm-arm64-ios-r.a"; path = "../graal/ios-libs/graal-svm-arm64-ios-r.a"; sourceTree = "<group>"; };
 		5A45770027B64C7E002C1EA3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		5A45770227B64C84002C1EA3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5A45770627B64E19002C1EA3 /* Info.plist.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist.xml; sourceTree = "<group>"; };
-		5A45770B27B64F86002C1EA3 /* jdk-arm64-ios-r.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "jdk-arm64-ios-r.a"; path = "../extern/graal/ios-libs/jdk-arm64-ios-r.a"; sourceTree = "<group>"; };
+		5A45770B27B64F86002C1EA3 /* jdk-arm64-ios-r.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "jdk-arm64-ios-r.a"; path = "../graal/ios-libs/jdk-arm64-ios-r.a"; sourceTree = "<group>"; };
 		5AA84E0C28731FA700888673 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../main.cpp; sourceTree = "<group>"; };
-		5AA84E0D28731FA700888673 /* dxfeed_c_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dxfeed_c_api.h; path = ../extern/graal/dxfeed_c_api.h; sourceTree = "<group>"; };
+		5AA84E0D28731FA700888673 /* c_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = c_api.h; path = ../graal/c_api.h; sourceTree = "<group>"; };
 		5AB4769E28940F35007CCC24 /* load_functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = load_functions.cpp; path = ../load_functions.cpp; sourceTree = "<group>"; };
 		5AB476D528941506007CCC24 /* shared-lib-sample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "shared-lib-sample.xcodeproj"; path = "../lib/shaderLib/shared-lib-sample.xcodeproj"; sourceTree = "<group>"; };
-		5AB476F228941E49007CCC24 /* NativeTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NativeTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5AB476F228941E49007CCC24 /* NativeTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = NativeTest.framework; path = "../../../lib/shaderLib/build/Debug-iphoneos/NativeTest.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,13 +112,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A0DF18B28990E01006F9F15 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A0DF18F28990E01006F9F15 /* NativeTest.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		5A4576CC27B64B4D002C1EA3 = {
 			isa = PBXGroup;
 			children = (
 				5AB476D528941506007CCC24 /* shared-lib-sample.xcodeproj */,
 				5AB4769E28940F35007CCC24 /* load_functions.cpp */,
 				5AA84E0C28731FA700888673 /* main.cpp */,
-				5AA84E0D28731FA700888673 /* dxfeed_c_api.h */,
+				5AA84E0D28731FA700888673 /* c_api.h */,
 				5A45770627B64E19002C1EA3 /* Info.plist.xml */,
 				5A4576F227B64C12002C1EA3 /* launchscreen.storyboard */,
 				5A4576D627B64B4D002C1EA3 /* Products */,
@@ -203,6 +221,12 @@
 			mainGroup = 5A4576CC27B64B4D002C1EA3;
 			productRefGroup = 5A4576D627B64B4D002C1EA3 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5A0DF18B28990E01006F9F15 /* Products */;
+					ProjectRef = 5AB476D528941506007CCC24 /* shared-lib-sample.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				5A4576D427B64B4D002C1EA3 /* dxfeed-api-mac */,
@@ -210,6 +234,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		5A0DF18F28990E01006F9F15 /* NativeTest.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = NativeTest.framework;
+			remoteRef = 5A0DF18E28990E01006F9F15 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		2386E4632886BAE20013BD16 /* Resources */ = {
@@ -264,11 +298,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PLQ4TN99DJ;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../lib/shaderLib/build/Debug-iphoneos/";
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../extern/graal/jni/include/darwin",
-					"$(PROJECT_DIR)/../extern/graal/jni/include",
-					"$(PROJECT_DIR)/../extern/graal",
+					"$(PROJECT_DIR)/../graal/jni/include/darwin",
+					"$(PROJECT_DIR)/../graal/jni/include",
+					"$(PROJECT_DIR)/../graal",
 				);
 				INFOPLIST_FILE = Info.plist.xml;
 				INFOPLIST_KEY_CFBundleDisplayName = "dxfeed-api";
@@ -306,11 +341,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PLQ4TN99DJ;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../lib/shaderLib/build/Debug-iphoneos/";
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../extern/graal/jni/include/darwin",
-					"$(PROJECT_DIR)/../extern/graal/jni/include",
-					"$(PROJECT_DIR)/../extern/graal",
+					"$(PROJECT_DIR)/../graal/jni/include/darwin",
+					"$(PROJECT_DIR)/../graal/jni/include",
+					"$(PROJECT_DIR)/../graal",
 				);
 				INFOPLIST_FILE = Info.plist.xml;
 				INFOPLIST_KEY_CFBundleDisplayName = "dxfeed-api";
@@ -462,11 +498,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PLQ4TN99DJ;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../lib/shaderLib/build/Debug-iphoneos/";
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../extern/graal/jni/include/darwin",
-					"$(PROJECT_DIR)/../extern/graal/jni/include",
-					"$(PROJECT_DIR)/../extern/graal/",
+					"$(PROJECT_DIR)/../graal/jni/include/darwin",
+					"$(PROJECT_DIR)/../graal/jni/include",
+					"$(PROJECT_DIR)/../graal/",
 				);
 				INFOPLIST_FILE = Info.plist.xml;
 				INFOPLIST_KEY_CFBundleDisplayName = "dxfeed-api";
@@ -505,11 +542,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PLQ4TN99DJ;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../lib/shaderLib/build/Debug-iphoneos/";
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../extern/graal/jni/include/darwin",
-					"$(PROJECT_DIR)/../extern/graal/jni/include",
-					"$(PROJECT_DIR)/../extern/graal/",
+					"$(PROJECT_DIR)/../graal/jni/include/darwin",
+					"$(PROJECT_DIR)/../graal/jni/include",
+					"$(PROJECT_DIR)/../graal/",
 				);
 				INFOPLIST_FILE = Info.plist.xml;
 				INFOPLIST_KEY_CFBundleDisplayName = "dxfeed-api";
