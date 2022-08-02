@@ -19,7 +19,11 @@ public class NativeTest {
     }
 
     public static void main(String[] args) {
+        // comment and you'll see the crash
         System.load(System.getProperty("user.dir") + "/native/bin/NativeTest" + libExt());
+        // Exception in thread "main" java.lang.UnsatisfiedLinkError: 'void NativeTest.testJNI()'
+        //	  at NativeTest.testJNI(Native Method)
+        //    at NativeTest.main(NativeTest.java:25)
 
         System.out.println("Hello from Java!");
         testJNI();
