@@ -29,7 +29,7 @@ $ cd graal-native-test
 
 #### Mac OS generating CAP caches for iOS:
 ```
-$ mvn clean package -Pgraal-ios, gen-cap-cache
+$ mvn clean package -Pgraal-ios,gen-cap-cache
 ```
 * Add an option `EXIT_AFTER_...` 
 
