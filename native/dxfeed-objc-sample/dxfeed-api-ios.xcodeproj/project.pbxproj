@@ -10,13 +10,13 @@
 		2386E45B2886BAE20013BD16 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AA84E0C28731FA700888673 /* main.cpp */; };
 		2386E45D2886BAE20013BD16 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A45770227B64C84002C1EA3 /* Foundation.framework */; };
 		2386E45E2886BAE20013BD16 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A45770027B64C7E002C1EA3 /* MobileCoreServices.framework */; };
-		2386E45F2886BAE20013BD16 /* GraalSample.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576F727B64C3E002C1EA3 /* GraalSample.o */; };
 		2386E4602886BAE20013BD16 /* graal-svm-arm64-ios-r.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576FC27B64C70002C1EA3 /* graal-svm-arm64-ios-r.a */; };
 		2386E4622886BAE20013BD16 /* jdk-arm64-ios-r.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A45770B27B64F86002C1EA3 /* jdk-arm64-ios-r.a */; };
 		2386E4642886BAE20013BD16 /* launchscreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A4576F227B64C12002C1EA3 /* launchscreen.storyboard */; };
 		2386E4652886BAE20013BD16 /* Info.plist.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5A45770627B64E19002C1EA3 /* Info.plist.xml */; };
+		5A0DF19028992C0E006F9F15 /* GraalSample.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576F727B64C3E002C1EA3 /* GraalSample.o */; };
+		5A0DF19128992C10006F9F15 /* GraalSample.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576F727B64C3E002C1EA3 /* GraalSample.o */; };
 		5A4576F427B64C12002C1EA3 /* launchscreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A4576F227B64C12002C1EA3 /* launchscreen.storyboard */; };
-		5A4576F927B64C3E002C1EA3 /* GraalSample.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576F727B64C3E002C1EA3 /* GraalSample.o */; };
 		5A45770127B64C7E002C1EA3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A45770027B64C7E002C1EA3 /* MobileCoreServices.framework */; };
 		5A45770327B64C84002C1EA3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A45770227B64C84002C1EA3 /* Foundation.framework */; };
 		5A45770727B64E19002C1EA3 /* Info.plist.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5A45770627B64E19002C1EA3 /* Info.plist.xml */; };
@@ -27,7 +27,6 @@
 		5AB476A028940F35007CCC24 /* load_functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4769E28940F35007CCC24 /* load_functions.cpp */; };
 		5AB476F328941E49007CCC24 /* NativeTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AB476F228941E49007CCC24 /* NativeTest.framework */; };
 		5AB476F428941E52007CCC24 /* NativeTest.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5AB476F228941E49007CCC24 /* NativeTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5AB476F5289427D8007CCC24 /* llvm.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4576F827B64C3E002C1EA3 /* llvm.o */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +68,6 @@
 		5A4576D527B64B4D002C1EA3 /* dxfeed-api-mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "dxfeed-api-mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A4576F227B64C12002C1EA3 /* launchscreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = launchscreen.storyboard; sourceTree = "<group>"; };
 		5A4576F727B64C3E002C1EA3 /* GraalSample.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; name = GraalSample.o; path = "../../target/native-image/GraalSample.o"; sourceTree = "<group>"; };
-		5A4576F827B64C3E002C1EA3 /* llvm.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; name = llvm.o; path = "../../target/native-image/llvm.o"; sourceTree = "<group>"; };
 		5A4576FC27B64C70002C1EA3 /* graal-svm-arm64-ios-r.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "graal-svm-arm64-ios-r.a"; path = "../graal/ios-libs/graal-svm-arm64-ios-r.a"; sourceTree = "<group>"; };
 		5A45770027B64C7E002C1EA3 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		5A45770227B64C84002C1EA3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -87,9 +85,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A0DF19128992C10006F9F15 /* GraalSample.o in Frameworks */,
 				2386E45D2886BAE20013BD16 /* Foundation.framework in Frameworks */,
 				2386E45E2886BAE20013BD16 /* MobileCoreServices.framework in Frameworks */,
-				2386E45F2886BAE20013BD16 /* GraalSample.o in Frameworks */,
 				2386E4602886BAE20013BD16 /* graal-svm-arm64-ios-r.a in Frameworks */,
 				2386E4622886BAE20013BD16 /* jdk-arm64-ios-r.a in Frameworks */,
 			);
@@ -102,10 +100,9 @@
 				5AB476F328941E49007CCC24 /* NativeTest.framework in Frameworks */,
 				5A45770327B64C84002C1EA3 /* Foundation.framework in Frameworks */,
 				5A45770127B64C7E002C1EA3 /* MobileCoreServices.framework in Frameworks */,
-				5A4576F927B64C3E002C1EA3 /* GraalSample.o in Frameworks */,
+				5A0DF19028992C0E006F9F15 /* GraalSample.o in Frameworks */,
 				5AA84E0B28731EF200888673 /* graal-svm-arm64-ios-r.a in Frameworks */,
 				5AA84E0A28731E4000888673 /* jdk-arm64-ios-r.a in Frameworks */,
-				5AB476F5289427D8007CCC24 /* llvm.o in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,7 +147,6 @@
 				5A4576FC27B64C70002C1EA3 /* graal-svm-arm64-ios-r.a */,
 				5A45770B27B64F86002C1EA3 /* jdk-arm64-ios-r.a */,
 				5A4576F727B64C3E002C1EA3 /* GraalSample.o */,
-				5A4576F827B64C3E002C1EA3 /* llvm.o */,
 				5A45770227B64C84002C1EA3 /* Foundation.framework */,
 				5A45770027B64C7E002C1EA3 /* MobileCoreServices.framework */,
 			);

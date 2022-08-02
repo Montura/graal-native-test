@@ -211,7 +211,6 @@
                 <ios.graal.platform>IOS_AARCH64</ios.graal.platform>
                 <temp.dir>tmp${ios.arch}</temp.dir>
                 <native.image.ios.options>
-                    ${native.image.ios.llvm.options}
                     -H:+ExitAfterRelocatableImageWrite
                     -H:PageSize=16384
                     -Dsvm.targetName=iOS
@@ -363,23 +362,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-
-        <profile>
-            <id>cross-compile-macos-x86-to-ios</id>
-            <activation>
-                <os>
-                    <family>mac</family>
-                    <arch>x86_64</arch>
-                </os>
-            </activation>
-            <properties>
-                <native.image.ios.llvm.options>
-                    -H:CompilerBackend=llvm
-                    -H:-SpawnIsolates
-                    -H:LLVMMaxFunctionsPerBatch=0
-                </native.image.ios.llvm.options>
-            </properties>
         </profile>
     </profiles>
 
