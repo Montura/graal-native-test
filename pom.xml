@@ -20,7 +20,6 @@
         <!-- Are overridden by profiles -->
         <temp.dir></temp.dir>
         <cap.cache.dir></cap.cache.dir>
-        <native.image.ios.llvm.options></native.image.ios.llvm.options>
         <graavm.capcache>-H:+UseCAPCache -H:CAPCacheDir=${cap.cache.dir}</graavm.capcache>
 
         <maven.compiler.source>11</maven.compiler.source>
@@ -37,7 +36,7 @@
             -H:+SharedLibrary                          <!-- To build native-image as shared library -->
             -H:-DeadlockWatchdogExitOnTimeout          <!--Exit the image builder VM after printing call stacks -->
             -H:DeadlockWatchdogInterval=0              <!-- The interval in minutes between watchdog checks (0 disables the watchdog) -->
-            -H:+ReportExceptionStackTraces                 <!-- target/tempDirectory for temporary files -->
+            -H:+ReportExceptionStackTraces             <!-- Show exception stack traces for exceptions during image building. -->
             -H:TempDirectory=${temp.dir}                   <!-- target/tempDirectory for temporary files -->
             ${graavm.capcache}                             <!-- Args for generating C Annotation Processor caches -->
             -Dgraal.ShowConfiguration=verbose              <!-- To show graal configuration -->
@@ -148,11 +147,6 @@
 
         <profile>
             <id>graal-mac</id>
-            <activation>
-                <os>
-                    <family>mac</family>
-                </os>
-            </activation>
             <properties>
                 <cap.cache.dir>${project.basedir}/capcache-mac</cap.cache.dir>
                 <temp.dir>tmp-macos</temp.dir>
