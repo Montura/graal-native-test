@@ -26,27 +26,25 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
+        <!-- NativeImage options links: -->
+        <!-- 1. https://www.graalvm.org/22.1/reference-manual/native-image/Options/ -->
+        <!-- 2. https://chriswhocodes.com/graalvm_native_image_ce_jdk11_options.html -->
+        <!-- 3. Unofficial: https://gist.github.com/happylynx/ce642816411ee5c98f04fedd80f4c417 -->
         <native.image.common.options>
-            --no-fallback
-            --native-image-info
-            --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
-            -Djdk.internal.lambda.disableEagerInitialization=true <!-- https://bugs.openjdk.org/browse/JDK-8236186 -->
-            -Djdk.internal.lambda.eagerlyInitialize=false
-            -Djava.lang.invoke.InnerClassLambdaMetafactory.initializeLambdas=false
-            -Djava.awt.headless=true
-            -Djava.system.class.loader=com.oracle.svm.hosted.NativeImageSystemClassLoader
-            -H:+SharedLibrary
-            -H:Optimize=2
-            -H:-DeadlockWatchdogExitOnTimeout   <!--Exit the image builder VM after printing call stacks -->
-            -H:DeadlockWatchdogInterval=0
-            -H:+ReportExceptionStackTraces
-            -H:TempDirectory=${temp.dir}
-            ${graavm.capcache}
-            -Dgraal.ShowConfiguration=verbose
-            -Dgraal.LogFile=${graal.compiler.log.file}
-            -H:Path=${native.image.path}
-            -H:Class=${java.main.class}
-            -H:Name=${native.image.name}
+            --no-fallback                             <!-- build a standalone native executable or report a failure -->
+            --native-image-info       <!-- show native toolchain information and native executable’s build settings -->
+            --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED  <!-- to allow using jdk.unsupported.sun.misc.Unsafe -->
+            -H:+SharedLibrary                          <!-- To build native-image as shared library -->
+            -H:-DeadlockWatchdogExitOnTimeout          <!--Exit the image builder VM after printing call stacks -->
+            -H:DeadlockWatchdogInterval=0              <!-- The interval in minutes between watchdog checks (0 disables the watchdog) -->
+            -H:+ReportExceptionStackTraces                 <!-- target/tempDirectory for temporary files -->
+            -H:TempDirectory=${temp.dir}                   <!-- target/tempDirectory for temporary files -->
+            ${graavm.capcache}                             <!-- Args for generating C Annotation Processor caches -->
+            -Dgraal.ShowConfiguration=verbose              <!-- To show graal configuration -->
+            -Dgraal.LogFile=${graal.compiler.log.file}     <!-- Log file -->
+            -H:Path=${native.image.path}                   <!-- Target native-image path -->
+            -H:Class=${java.main.class}                    <!-- Java class that contains public static void main() method -->
+            -H:Name=${native.image.name}                   <!-- Result native-image name -->
         </native.image.common.options>
     </properties>
 
@@ -150,6 +148,11 @@
 
         <profile>
             <id>graal-mac</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
             <properties>
                 <cap.cache.dir>${project.basedir}/capcache-mac</cap.cache.dir>
                 <temp.dir>tmp-macos</temp.dir>
@@ -313,6 +316,11 @@
 
         <profile>
             <id>graal-linux</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                </os>
+            </activation>
             <properties>
                 <cap.cache.dir>${project.basedir}/capcache-linux</cap.cache.dir>
                 <temp.dir>tmp-linux</temp.dir>
