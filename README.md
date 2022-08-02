@@ -6,9 +6,11 @@ See the repository branches for Graal examples.
 
 [GraalVM CE 22.1](https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-22.1.0)
 
+```
 openjdk 11.0.15 2022-04-19
 OpenJDK Runtime Environment GraalVM 22.1.1.0-dev (build 11.0.15+10-jvmci-22.1-b06)
 OpenJDK 64-Bit Server VM GraalVM 22.1.1.0-dev (build 11.0.15+10-jvmci-22.1-b06, mixed mode, sharing)
+```
 
 ### How to run
 
