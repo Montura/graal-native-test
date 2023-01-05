@@ -28,7 +28,6 @@ $ mvn clean package -P graal-mac
 * Artifacts:
   * `target/native-image/GraalSample.dylib`
   * `target/native-image/GraalSample.h`
-  * `newCapCacheDir/*.cap`
 
 #### Linux
 ```
@@ -38,7 +37,6 @@ $ mvn clean package -P graal-linux
 * Artifacts:
     * `target/native-image/GraalSample.so`
     * `target/native-image/GraalSample.h`
-    * `newCapCacheDir/*.cap`
 
 #### Windows 
 ```
@@ -49,7 +47,6 @@ $ mvn clean package -P graal-win
     * `target/native-image/GraalSample.dll`
     * `target/native-image/GraalSample.lib`
     * `target/native-image/GraalSample.h`
-    * `newCapCacheDir/*.cap`
 
 #### Run native executable
 ```
