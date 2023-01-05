@@ -60,10 +60,10 @@ public class NativeTest {
     }
 
 
-    private static void logMsg(double time1, double time2, long totalSize, int chunkSize) {
+    private static void logMsg(String allocatorName, double time1, double time2, long totalSize, int chunkSize) {
         final double nanosToMillis = 1e6;
-        System.out.println("allocJava time = " + (time2 - time1) / nanosToMillis + " ms, allocated " + totalSize
-                + " bytes by " + chunkSize + " byte chunks");
+        System.out.println("alloc " + allocatorName + " time = " + (time2 - time1) / nanosToMillis + " ms, allocated "
+                + totalSize + " bytes by " + chunkSize + " byte chunks");
     }
 
     private static void testAlloc(int chunkSize) {
@@ -75,7 +75,7 @@ public class NativeTest {
             totalSize += getJavaSize(allocJava(chunkSize));
         }
         double time2 = System.nanoTime();
-        logMsg(time1, time2, totalSize, chunkSize);
+        logMsg("Java", time1, time2, totalSize, chunkSize);
 
         totalSize = 0;
         time1 = System.nanoTime();
@@ -85,7 +85,7 @@ public class NativeTest {
             dealloc(ptr);
         }
         time2 = System.nanoTime();
-        logMsg(time1, time2, totalSize, chunkSize);
+        logMsg("Native", time1, time2, totalSize, chunkSize);
     }
 
     @CEntryPoint(name = "test")
