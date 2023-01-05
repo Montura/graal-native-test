@@ -1,8 +1,9 @@
+import org.graalvm.nativeimage.UnmanagedMemory;
 import org.graalvm.nativeimage.c.CContext;
-import org.graalvm.nativeimage.c.function.CFunction;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.IsolateThread;
 import com.oracle.svm.core.c.ProjectHeaderFile;
+import org.graalvm.word.PointerBase;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,59 +40,62 @@ public class NativeTest {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {}
 
+    private static byte[] allocJava(int size) {
+        return new byte[size];
     }
-    public native static int testJNI();
 
-    @CFunction
-    public native static int testC();
-
-    static interface DummyInterface {
-        int test();
+    private static int getJavaSize(byte[] array) {
+        array[array.length / 2] = 1;
+        return array.length;
     }
-    static class DummyClass implements DummyInterface {
-        public int test() {
-            return testC();
+
+    private static PointerBase allocNative(int size) {
+        return UnmanagedMemory.calloc(size);
+    }
+
+    private static void dealloc(PointerBase ptr) {
+        UnmanagedMemory.free(ptr);
+    }
+
+
+    private static void logMsg(double time1, double time2, long totalSize, int chunkSize) {
+        final double nanosToMillis = 1e6;
+        System.out.println("allocJava time = " + (time2 - time1) / nanosToMillis + " ms, allocated " + totalSize
+                + " bytes by " + chunkSize + " byte chunks");
+    }
+
+    private static void testAlloc(int chunkSize) {
+        final int n = 10000000;
+
+        long totalSize = 0;
+        double time1 = System.nanoTime();
+        for (int i = 0; i < n; i++) {
+            totalSize += getJavaSize(allocJava(chunkSize));
         }
+        double time2 = System.nanoTime();
+        logMsg(time1, time2, totalSize, chunkSize);
+
+        totalSize = 0;
+        time1 = System.nanoTime();
+        for (int i = 0; i < n; i++) {
+            PointerBase ptr = allocNative(chunkSize);
+            totalSize += chunkSize;
+            dealloc(ptr);
+        }
+        time2 = System.nanoTime();
+        logMsg(time1, time2, totalSize, chunkSize);
     }
-    static DummyInterface dummy = new DummyClass();
 
     @CEntryPoint(name = "test")
     public static void test(IsolateThread thread) {
-
         System.load(System.getProperty("user.dir") + "/NativeTest" + libExt());
 
-        int n = 10000000;
-
-        for (int i = 0; i < n; i++) {
-            testJNI();
-        }
-        long time1 = System.nanoTime();
-        for (int i = 0; i < n; i++) {
-            testJNI();
-        }
-        long time2 = System.nanoTime();
-        System.out.println("JNI time = " + (time2 - time1) / n);
-
-        for (int i = 0; i < n; i++) {
-            testC();
-        }
-        long time3 = System.nanoTime();
-        for (int i = 0; i < n; i++) {
-            testC();
-        }
-        long time4 = System.nanoTime();
-        System.out.println("C time = " + (time4 - time3) / n);
-
-        for (int i = 0; i < n; i++) {
-            dummy.test();
-        }
-        long time5 = System.nanoTime();
-        for (int i = 0; i < n; i++) {
-            dummy.test();
-        }
-        long time6 = System.nanoTime();
-        System.out.println("dummy time = " + (time6 - time5) / n);
+        testAlloc(1);
+        testAlloc(2);
+        testAlloc(4);
+        testAlloc(8);
+        testAlloc(16);
     }
 }
