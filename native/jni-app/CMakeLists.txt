@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(NativeTest)
+project(native_app)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -14,7 +14,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_PATH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${OUTPUT_PATH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${OUTPUT_PATH})
 
-set(JNI_COMMON_INCLUDE ${PROJECT_SOURCE_DIR}/jni/include)
+set(JAVA_HOME /Users/Andrey.Mikhalev/Documents/Tools/labsjdk-ce-11.0.15-jvmci-22.1-b06/Contents/Home)
+set(JNI_COMMON_INCLUDE ${JAVA_HOME}/include)
 
 message("JNI_PATH: ${JNI_COMMON_INCLUDE}")
 
@@ -37,15 +38,22 @@ elseif (UNIX)
     message("Target lib name: ${LIB_NAME}")
 endif ()
 
-
 include_directories(${target} INTERFACE ${JNI_INCLUDE})
 
-message("-- Linking native_lib")
-add_library(NativeTest SHARED lib.cc)
-set_target_properties(NativeTest PROPERTIES PREFIX "")
+set(JAVA_LIB_PATH "${JAVA_HOME}/lib/server")
+message("JAVA_LIB_PATH: ${JAVA_LIB_PATH}")
 
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    target_compile_options(NativeTest PRIVATE -Wall -Wextra)
-elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
-    target_compile_options(NativeTest PRIVATE /EHsc /MTd /W2 /c)
+link_directories(${JAVA_LIB_PATH})
+
+add_library(JVM_LIB SHARED IMPORTED)
+if (WIN32)
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_LOCATION ${JAVA_LIB_PATH}/jvm.dll)
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_IMPLIB ${JAVA_LIB_PATH}/jvm.lib)
+elseif (APPLE)
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_LOCATION ${JAVA_LIB_PATH}/libjvm.dylib)
+elseif (UNIX)
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_LOCATION ${JAVA_LIB_PATH}/jvm.so)
 endif()
+
+add_executable(${PROJECT_NAME} main.cpp)
+target_link_libraries(${PROJECT_NAME} JVM_LIB)
