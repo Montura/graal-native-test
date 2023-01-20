@@ -14,31 +14,46 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_PATH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${OUTPUT_PATH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${OUTPUT_PATH})
 
-include_directories("${PROJECT_SOURCE_DIR}/lib")
-add_subdirectory(lib)
+set(JAVA_HOME /Users/Andrey.Mikhalev/Documents/Tools/labsjdk-ce-11.0.15-jvmci-22.1-b06/Contents/Home)
+set(JNI_COMMON_INCLUDE ${JAVA_HOME}/include)
 
-set(GRAAL_LIB_PATH "${PROJECT_SOURCE_DIR}/../target/native-image")
-message("GRAAL_LIB_PATH: ${GRAAL_LIB_PATH}")
+message("JNI_PATH: ${JNI_COMMON_INCLUDE}")
 
-link_directories(${GRAAL_LIB_PATH})
-
-add_library(GRAAL_LIB SHARED IMPORTED)
 if (WIN32)
-    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.dll)
-    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_IMPLIB ${GRAAL_LIB_PATH}/GraalSample.lib)
+    # Set the DLLEXPORT variable to export symbols
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/win32)
+    set(LIB_EXT dll)
+    set(LIB_NAME ${PROJECT_NAME}.dll)
+    message("Target lib name: ${LIB_NAME}")
 elseif (APPLE)
-    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.dylib)
+    set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/darwin)
+    set(LIB_EXT dylib)
+    set(LIB_NAME ${PROJECT_NAME}.dylib)
+    message("Target lib name: ${LIB_NAME}")
 elseif (UNIX)
-    set_property(TARGET GRAAL_LIB PROPERTY IMPORTED_LOCATION ${GRAAL_LIB_PATH}/GraalSample.so)
-endif()
+    set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/linux)
+    set(LIB_EXT so)
+    set(LIB_NAME ${PROJECT_NAME}.so)
+    message("Target lib name: ${LIB_NAME}")
+endif ()
 
-add_executable(${PROJECT_NAME} main.cpp load_functions.cpp)
-target_link_libraries(${PROJECT_NAME} GRAAL_LIB NativeTest)
+include_directories(${target} INTERFACE ${JNI_INCLUDE})
 
+set(JAVA_LIB_PATH "${JAVA_HOME}/lib/server")
+message("JAVA_LIB_PATH: ${JAVA_LIB_PATH}")
+
+link_directories(${JAVA_LIB_PATH})
+
+add_library(JVM_LIB SHARED IMPORTED)
 if (WIN32)
-    add_custom_command(
-        TARGET ${PROJECT_NAME}  POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${GRAAL_LIB_PATH}/GraalSample.dll
-        ${OUTPUT_PATH}/${LIB_NAME})
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_LOCATION ${JAVA_LIB_PATH}/jvm.dll)
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_IMPLIB ${JAVA_LIB_PATH}/jvm.lib)
+elseif (APPLE)
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_LOCATION ${JAVA_LIB_PATH}/libjvm.dylib)
+elseif (UNIX)
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_LOCATION ${JAVA_LIB_PATH}/jvm.so)
 endif()
+
+add_executable(${PROJECT_NAME} main.cpp)
+target_link_libraries(${PROJECT_NAME} JVM_LIB)

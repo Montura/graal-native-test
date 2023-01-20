@@ -1,29 +1,39 @@
-#include <cstdio>
-#include <ctime>
-#include "graal/graal_isolate.h"
-
-void testLib();
-extern "C" void test(graal_isolatethread_t*);
-extern "C" int testC();
-
+#include <iostream>
+#include <jni.h>
 
 int main() {
-    graal_isolate_t* isolate;
-    graal_isolatethread_t* thread;
-    graal_create_isolate(nullptr, &isolate, &thread);
-    testLib();
-    test(thread);
+    const char* classpath = "-Djava.class.path=/Users/Andrey.Mikhalev/Documents/work/graal-native-test/target/classes";
+    JavaVMOption jvmopt[1];
+    jvmopt[0].optionString = const_cast<char*>(classpath);
 
-    int n = 10000000;
-    for (int i = 0; i < n; i++) {
-        testC();
+    JavaVMInitArgs vmArgs;
+    vmArgs.version = JNI_VERSION_1_8;
+    vmArgs.nOptions = 1;
+    vmArgs.options = jvmopt;
+    vmArgs.ignoreUnrecognized = JNI_TRUE;
+
+    // Create the JVM
+    JavaVM *javaVM;
+    JNIEnv *env;
+    long flag = JNI_CreateJavaVM(&javaVM, (void**)&env, &vmArgs);
+    if (flag == JNI_ERR) {
+        std::cout << "Error creating VM. Exiting...n";
+        return 1;
     }
-    timespec time1;
-    timespec_get(&time1, TIME_UTC);
-    for (int i = 0; i < n; i++) {
-        testC();
+    jclass pJclass = env->FindClass("Test");
+    if (pJclass != nullptr) {
+        jmethodID methodId = env->GetStaticMethodID(pJclass, "main", "([Ljava/lang/String;)V");
+        if (methodId != nullptr) {
+            jstring hello = env->NewStringUTF("Hello");
+            jstring world = env->NewStringUTF("World");
+            jclass clazz = env->FindClass("Ljava/lang/String;");
+            jobjectArray pArray = env->NewObjectArray(3, clazz, nullptr);
+            env->SetObjectArrayElement(pArray, 0, hello);
+            env->SetObjectArrayElement(pArray, 1, world);
+            env->CallStaticVoidMethod(pJclass, methodId, pArray);
+        }
     }
-    timespec time2;
-    timespec_get(&time2, TIME_UTC);
-    printf("native time = %ld\n", ((time2.tv_sec - time1.tv_sec) * 1000000000 + (time2.tv_nsec - time1.tv_nsec)) / n);
+
+    javaVM->DestroyJavaVM();
+    return 0;
 }
