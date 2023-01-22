@@ -1,10 +1,11 @@
 #include <iostream>
 #include <jni.h>
 
+#include "classpath.h"
+
 int main() {
-    const char* classpath = "-Djava.class.path=/Users/Andrey.Mikhalev/Documents/work/graal-native-test/target/classes";
     JavaVMOption jvmopt[1];
-    jvmopt[0].optionString = const_cast<char*>(classpath);
+    jvmopt[0].optionString = const_cast<char*>(QD_CLASS_PATH.c_str());
 
     JavaVMInitArgs vmArgs;
     vmArgs.version = JNI_VERSION_1_8;
@@ -20,16 +21,14 @@ int main() {
         std::cout << "Error creating VM. Exiting...n";
         return 1;
     }
-    jclass pJclass = env->FindClass("NativeTest");
+    jclass pJclass = env->FindClass("com/dxfeed/sample/api/DXFeedSample");
     if (pJclass != nullptr) {
         jmethodID methodId = env->GetStaticMethodID(pJclass, "main", "([Ljava/lang/String;)V");
         if (methodId != nullptr) {
-            jstring hello = env->NewStringUTF("Hello");
-            jstring world = env->NewStringUTF("World");
+            jstring hello = env->NewStringUTF("ETH/USD:GDAX");
             jclass clazz = env->FindClass("Ljava/lang/String;");
-            jobjectArray pArray = env->NewObjectArray(3, clazz, nullptr);
+            jobjectArray pArray = env->NewObjectArray(1, clazz, nullptr);
             env->SetObjectArrayElement(pArray, 0, hello);
-            env->SetObjectArrayElement(pArray, 1, world);
             env->CallStaticVoidMethod(pJclass, methodId, pArray);
         }
     } else {
