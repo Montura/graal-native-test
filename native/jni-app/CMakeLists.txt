@@ -39,6 +39,7 @@ elseif (UNIX)
 endif ()
 
 include_directories(${target} INTERFACE ${JNI_INCLUDE})
+include_directories(${target} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../jni-lib)
 
 set(JAVA_LIB_PATH "${JAVA_HOME}/lib/server")
 message("JAVA_LIB_PATH: ${JAVA_LIB_PATH}")
@@ -57,3 +58,4 @@ endif()
 
 add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries(${PROJECT_NAME} JVM_LIB)
+#target_link_libraries(${PROJECT_NAME} JVM_LIB /Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/jni-lib/bin/native_jni.dylib)

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(NativeTest)
+project(native_jni)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -41,11 +41,11 @@ endif ()
 include_directories(${target} INTERFACE ${JNI_INCLUDE})
 
 message("-- Linking native_lib")
-add_library(NativeTest SHARED lib.cc)
-set_target_properties(NativeTest PROPERTIES PREFIX "")
+add_library(${PROJECT_NAME} SHARED lib.cc)
+set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    target_compile_options(NativeTest PRIVATE -Wall -Wextra)
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
-    target_compile_options(NativeTest PRIVATE /EHsc /MTd /W2 /c)
+    target_compile_options(${PROJECT_NAME} PRIVATE /EHsc /MTd /W2 /c)
 endif()

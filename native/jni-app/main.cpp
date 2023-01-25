@@ -3,6 +3,11 @@
 
 #include "classpath.h"
 
+void callMainMethod(JNIEnv* env);
+
+//extern "C" JNIEXPORT
+//jlong JNICALL Java_com_dxfeed_api_JniTest_nCreateDxFeedSubscription(JNIEnv*, jclass, jobject dxFeedSub);
+
 int main() {
     JavaVMOption jvmopt[1];
     jvmopt[0].optionString = const_cast<char*>(QD_CLASS_PATH.c_str());
@@ -13,7 +18,7 @@ int main() {
     vmArgs.options = jvmopt;
     vmArgs.ignoreUnrecognized = JNI_TRUE;
 
-    // Create the JVM
+  // Create the JVM
     JavaVM *javaVM;
     JNIEnv *env;
     long flag = JNI_CreateJavaVM(&javaVM, (void**)&env, &vmArgs);
@@ -21,16 +26,14 @@ int main() {
         std::cout << "Error creating VM. Exiting...n";
         return 1;
     }
-    jclass pJclass = env->FindClass("com/dxfeed/sample/api/DXFeedSample");
+//    callMainMethod(env);
+
+    jclass pJclass = env->FindClass("com/dxfeed/api/JniTest");
     if (pJclass != nullptr) {
-        jmethodID methodId = env->GetStaticMethodID(pJclass, "main", "([Ljava/lang/String;)V");
-        if (methodId != nullptr) {
-            jstring hello = env->NewStringUTF("ETH/USD:GDAX");
-            jclass clazz = env->FindClass("Ljava/lang/String;");
-            jobjectArray pArray = env->NewObjectArray(1, clazz, nullptr);
-            env->SetObjectArrayElement(pArray, 0, hello);
-            env->CallStaticVoidMethod(pJclass, methodId, pArray);
-        }
+        jmethodID methodId = env->GetStaticMethodID(pJclass, "createSubscription", "()J");
+        jlong i = env->CallStaticLongMethod(pJclass, methodId);
+        std::cout << i;
+
     } else {
         std::cout << "Can't find class NativeTest!";
         return 1;
@@ -38,4 +41,16 @@ int main() {
 
     javaVM->DestroyJavaVM();
     return 0;
+}
+
+void callMainMethod(JNIEnv* env) {
+  jclass pJclass = env->FindClass("com/dxfeed/api/JniTest");
+  jmethodID methodId = env->GetStaticMethodID(pJclass, "main", "([Ljava/lang/String;)V");
+  if (methodId != nullptr) {
+    jstring hello = env->NewStringUTF("ETH/USD:GDAX");
+    jclass clazz = env->FindClass("Ljava/lang/String;");
+    jobjectArray pArray = env->NewObjectArray(1, clazz, nullptr);
+    env->SetObjectArrayElement(pArray, 0, hello);
+    env->CallStaticVoidMethod(pJclass, methodId, pArray);
+  }
 }

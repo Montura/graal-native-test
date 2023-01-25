@@ -1,11 +1,16 @@
 #include <jni.h>
-#include <iostream>
-
 
 extern "C" {
 
-JNIEXPORT void JNICALL Java_NativeTest_testJNI(JNIEnv* env, jclass cls) {
-    std::cout << "Hello from Java_NativeTest_testJNI" << std::endl;
+JNIEXPORT
+jlong JNICALL Java_com_dxfeed_api_JniTest_nCreateDxFeedSubscription(JNIEnv*, jclass, jobject dxFeedSub) {
+  return 1;
 }
 
+JNIEXPORT
+void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListener(JNIEnv* env, jclass, jlong dxFeedSub, jint size,
+                                                               jobject list, jlong userCallback) {
+
+
+}
 }
