@@ -9,7 +9,7 @@ import java.util.Map;
 public class JniTest {
     private static final Map<Long, DXFeedSubscription<TimeAndSale>> nativeSubToDxFeedSub = new HashMap<>();
 
-    public static long createSubscription() {
+    private static long createSubscription() {
         System.load("/Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/jni-lib/bin/native_jni.dylib");
         DXEndpoint endpoint = DXEndpoint.newBuilder()
                 .build()
@@ -18,9 +18,9 @@ public class JniTest {
         final DXFeedSubscription<TimeAndSale> sub = feed.createSubscription(TimeAndSale.class);
         System.out.println("sub = " + sub);
         long l = nCreateDxFeedSubscription(sub);
-        System.out.println("l = " + l);
         nativeSubToDxFeedSub.put(l, sub);
-        return 0;
+        System.out.println("l = " + l);
+        return l;
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -30,9 +30,12 @@ public class JniTest {
 
 
     // callback from native
-    private void addEventListener(long dxFeedSub, long userCallback) {
+    private static void addEventListener(long dxFeedSub, long userCallback) {
+        System.out.println("addEventListener, dxFeedSub = " + dxFeedSub + "; userCallback = " + userCallback);
         DXFeedSubscription<TimeAndSale> sub = nativeSubToDxFeedSub.get(dxFeedSub);
+        System.out.println("addEventListener, sub = " + sub);
         sub.addEventListener(eventList -> nOnQuoteEventListener(dxFeedSub, eventList.size(), eventList, userCallback));
+        sub.addSymbols("ETH/USD:GDAX");
     }
 
     private static native long nCreateDxFeedSubscription(DXFeedSubscription<?> subscription);

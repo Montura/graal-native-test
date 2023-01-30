@@ -3,7 +3,7 @@
 #include <string>
 
 const std::string QD_CLASS_PATH = "-Djava.class.path=" \
-     "/Users/Andrey.Mikhalev/Documents/work/devex/dxfeed-graal-native-api/target/classes:" \
+     "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/target/classes:" \
      "/Users/Andrey.Mikhalev/.m2/repository/com/devexperts/qd/qds/3.313/qds-3.313.jar:" \
      "/Users/Andrey.Mikhalev/.m2/repository/com/devexperts/qd/dxlib/3.313/dxlib-3.313.jar:" \
      "/Users/Andrey.Mikhalev/.m2/repository/com/devexperts/qd/dxfeed-api/3.313/dxfeed-api-3.313.jar:" \
