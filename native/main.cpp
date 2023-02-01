@@ -1,5 +1,6 @@
 #include <iostream>
 #include <jni.h>
+#include <memory>
 
 #include "classpath.h"
 #include "include/api/TimeAndSale.h"
@@ -14,13 +15,13 @@ void callback(const TimeAndSale* timeAndSale, int size) {
 }
 
 int main() {
-  JavaVMOption* pVmOption = new JavaVMOption;
-  pVmOption->optionString = const_cast<char*>(QD_CLASS_PATH.c_str());
+  std::unique_ptr<JavaVMOption> javaVmOption(new JavaVMOption);
+  javaVmOption->optionString = const_cast<char*>(QD_CLASS_PATH.c_str());
 
   JavaVMInitArgs vmArgs;
   vmArgs.version = JNI_VERSION_1_8;
   vmArgs.nOptions = 1;
-  vmArgs.options = pVmOption;
+  vmArgs.options = javaVmOption.get();
   vmArgs.ignoreUnrecognized = JNI_TRUE;
 
   // Create the JVM
@@ -31,7 +32,6 @@ int main() {
     std::cout << "Error creating VM. Exiting...n";
     return 1;
   }
-  delete pVmOption;
 
 //    callMainMethod(env);
 
