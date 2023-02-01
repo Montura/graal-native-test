@@ -45,7 +45,7 @@ set(API_INCLUDE ${API_INCLUDE} PARENT_SCOPE)
 include_directories(${PROJECT_NAME} INTERFACE ${API_INCLUDE})
 
 message("-- Linking native_lib")
-add_library(${PROJECT_NAME} SHARED lib.cc src/Api.cpp src/DxFeed.cpp include/api/TimeAndSale.h)
+add_library(${PROJECT_NAME} SHARED lib.cc src/Api.cpp src/DxFeed.cpp)
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
