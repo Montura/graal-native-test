@@ -4,7 +4,7 @@
 #include "jniUtils.h"
 
 struct ListMapper {
-  explicit ListMapper(JNIEnv_* env, dxfeed::OnCloseHandler onClose) {
+  ListMapper(JNIEnv* env, dxfeed::OnCloseHandler onClose) {
     onClose_ = onClose;
     clazz_ = reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("java/util/List")));
     idGet_ = env->GetMethodID(clazz_, "get", "(I)Ljava/lang/Object;");
@@ -14,7 +14,7 @@ struct ListMapper {
     onClose_(clazz_);
   }
 
-  jobject get(JNIEnv_* env, jobject object, size_t index) {
+  jobject get(JNIEnv_* env, jobject object, size_t index) const {
     return env->CallObjectMethod(object, idGet_, index);
   }
 

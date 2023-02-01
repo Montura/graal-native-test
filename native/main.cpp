@@ -2,8 +2,9 @@
 #include <jni.h>
 #include <memory>
 
-#include "classpath.h"
 #include "include/api/TimeAndSale.h"
+#include "include/api/Api.h"
+#include "include/api/Subscription.h"
 
 void callMainMethod(JNIEnv* env);
 
@@ -15,41 +16,28 @@ void callback(const TimeAndSale* timeAndSale, int size) {
 }
 
 int main() {
-  std::unique_ptr<JavaVMOption> javaVmOption(new JavaVMOption);
-  javaVmOption->optionString = const_cast<char*>(QD_CLASS_PATH.c_str());
-
-  JavaVMInitArgs vmArgs;
-  vmArgs.version = JNI_VERSION_1_8;
-  vmArgs.nOptions = 1;
-  vmArgs.options = javaVmOption.get();
-  vmArgs.ignoreUnrecognized = JNI_TRUE;
-
-  // Create the JVM
-  JavaVM* javaVM;
-  JNIEnv* env;
-  long flag = JNI_CreateJavaVM(&javaVM, (void**) &env, &vmArgs);
-  if (flag == JNI_ERR) {
-    std::cout << "Error creating VM. Exiting...n";
-    return 1;
-  }
-
 //    callMainMethod(env);
+  void* dxFeed = dxfeed_get_instance();
+  auto connection = dxfeed_create_connection(dxFeed, "demo.dxfeed.com:7300");
+  auto subscription = dxfeed_create_subscription(connection, 0);
+  std::cout << "dx subscription wrapper: " << static_cast<dxfeed::Subscription*>(subscription) << std::endl;
+  std::cout << "dx subscription jobject: " << static_cast<dxfeed::Subscription*>(subscription)->getSub() << std::endl;
 
-  jclass pJclass = env->FindClass("com/dxfeed/api/JniTest");
-  if (pJclass != nullptr) {
-    jmethodID methodId = env->GetStaticMethodID(pJclass, "createSubscription", "()J");
-    jlong dxSub = env->CallStaticLongMethod(pJclass, methodId);
-    std::cout << dxSub;
+//  jclass pJclass = env->FindClass("com/dxfeed/api/JniTest");
+//  if (pJclass != nullptr) {
+//    jmethodID methodId = env->GetStaticMethodID(pJclass, "createSubscription", "()J");
+//    jlong dxSub = env->CallStaticLongMethod(pJclass, methodId);
+//    std::cout << dxSub;
 
-    jmethodID addEventListenerMethodId = env->GetStaticMethodID(pJclass, "addEventListener", "(JJ)V");
-    env->CallStaticVoidMethod(pJclass, addEventListenerMethodId, dxSub, callback);
-  } else {
-    std::cout << "Can't find class NativeTest!";
-    return 1;
-  }
+//    jmethodID addEventListenerMethodId = env->GetStaticMethodID(pJclass, "addEventListener", "(JJ)V");
+//    env->CallStaticVoidMethod(pJclass, addEventListenerMethodId, dxSub, callback);
+//  } else {
+//    std::cout << "Can't find class NativeTest!";
+//    return 1;
+//  }
   while (true) {}
 
-  javaVM->DestroyJavaVM();
+//  javaVM->DestroyJavaVM();
   return 0;
 }
 

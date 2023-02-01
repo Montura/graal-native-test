@@ -39,7 +39,7 @@ struct TimeAndSaleMapper {
     onClose_(clazz_);
   }
 
-  TimeAndSale toNative(JNIEnv_* env, jobject object) {
+  TimeAndSale toNative(JNIEnv_* env, jobject object) const {
     TimeAndSale quote{};
     quote.eventSymbol = getEventSymbol(env, object);
     quote.eventTime = getEventTime(env, object);
@@ -59,65 +59,65 @@ struct TimeAndSaleMapper {
     return quote;
   }
 
-  std::string getEventSymbol(JNIEnv_* env, jobject object) {
+  std::string getEventSymbol(JNIEnv_* env, jobject object) const {
     return getStringFromJava(env, object, idGetEventSymbol_);
   }
 
-  std::int64_t getEventTime(JNIEnv_* env, jobject object) {
+  std::int64_t getEventTime(JNIEnv_* env, jobject object) const {
     return env->CallLongMethod(object, idGetEventTime_);
   }
 
-  std::int32_t getEventFlags(JNIEnv_* env, jobject object) {
+  std::int32_t getEventFlags(JNIEnv_* env, jobject object) const {
     return env->CallIntMethod(object, idGetEventFlags_);
   }
 
-  std::int64_t getTime(JNIEnv_* env, jobject object) {
+  std::int64_t getTime(JNIEnv_* env, jobject object) const {
     return env->CallLongMethod(object, idGetTime_);
   }
 
-  std::int64_t getTimeNanos(JNIEnv_* env, jobject object) {
+  std::int64_t getTimeNanos(JNIEnv_* env, jobject object) const {
     return env->CallLongMethod(object, idGetTimeNanos_);
   }
 
-  std::int32_t getTimeNanoPart(JNIEnv_* env, jobject object) {
+  std::int32_t getTimeNanoPart(JNIEnv_* env, jobject object) const {
     return env->CallIntMethod(object, idGetTimeNanoPart_);
   }
 
-  std::uint16_t getExchangeCode(JNIEnv_* env, jobject object) {
+  std::uint16_t getExchangeCode(JNIEnv_* env, jobject object) const {
     static_assert(sizeof(char) == sizeof(jbyte), "sizeof(char) != sizeof(jbyte)");
     static_assert(sizeof(std::uint16_t) == sizeof(jchar), "sizeof(std::uint16_t) != sizeof(jchar)");
     return static_cast<std::uint16_t>(env->CallCharMethod(object, idGetExchangeCode_));
   }
 
-  double getPrice(JNIEnv_* env, jobject object) {
+  double getPrice(JNIEnv_* env, jobject object) const {
     return env->CallDoubleMethod(object, idGetPrice_);
   }
 
-  std::int64_t getSize(JNIEnv_* env, jobject object) {
+  std::int64_t getSize(JNIEnv_* env, jobject object) const {
     return env->CallLongMethod(object, idGetSize_);
   }
 
-  double getBidPrice(JNIEnv_* env, jobject object) {
+  double getBidPrice(JNIEnv_* env, jobject object) const {
     return env->CallDoubleMethod(object, idGetBidPrice_);
   }
 
-  double getAskPrice(JNIEnv_* env, jobject object) {
+  double getAskPrice(JNIEnv_* env, jobject object) const {
     return env->CallDoubleMethod(object, idGetAskPrice_);
   }
 
-  std::string getExchangeSaleConditions(JNIEnv_* env, jobject object) {
+  std::string getExchangeSaleConditions(JNIEnv_* env, jobject object) const {
     return getStringFromJava(env, object, idGetExchangeSaleConditions_);
   }
 
-  std::int32_t getFlags(JNIEnv_* env, jobject object) {
+  std::int32_t getFlags(JNIEnv_* env, jobject object) const {
     return env->CallIntMethod(object, idGetFlags_);
   }
 
-  std::string getBuyer(JNIEnv_* env, jobject object) {
+  std::string getBuyer(JNIEnv_* env, jobject object) const {
     return getStringFromJava(env, object, idGetBuyer_);
   }
 
-  std::string getSeller(JNIEnv_* env, jobject object) {
+  std::string getSeller(JNIEnv_* env, jobject object) const {
     return getStringFromJava(env, object, idGetSeller_);
   }
 

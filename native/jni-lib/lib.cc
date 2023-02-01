@@ -4,6 +4,7 @@
 
 #include "api/DxFeed.h"
 #include "api/jni_wrapper/TimeAndSaleMapper.h"
+#include "api/Subscription.h"
 
 extern "C" {
 
@@ -18,7 +19,7 @@ void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListener(JNIEnv* env, jcla
                                                                jobject eventList, jlong userCallback)
 {
 //  std::cout << "Java_com_dxfeed_api_JniTest_nOnQuoteEventListener" << std::endl;
-  dxfeed::DxFeed& feed = dxfeed::DxFeed::getInstance(env);
+  dxfeed::DxFeed& feed = dxfeed::DxFeed::getInstance();
   auto& listMapping = feed.getListMapper();
   auto& timeAndSaleMapper = feed.getTimeAndSaleMapper();
   std::vector<TimeAndSale> events;
@@ -26,6 +27,6 @@ void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListener(JNIEnv* env, jcla
   for (std::size_t i = 0; i < size; ++i) {
     events.emplace_back(timeAndSaleMapper.toNative(env, listMapping.get(env, eventList, i)));
   }
-  reinterpret_cast<dxfeed::SubscriptionListener *>(userCallback)(events.data(), size);
+  reinterpret_cast<dxfeed::Subscription::Listener *>(userCallback)(events.data(), size);
 }
 }

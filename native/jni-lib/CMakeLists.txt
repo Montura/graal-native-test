@@ -45,8 +45,24 @@ set(API_INCLUDE ${API_INCLUDE} PARENT_SCOPE)
 include_directories(${PROJECT_NAME} INTERFACE ${API_INCLUDE})
 
 message("-- Linking native_lib")
-add_library(${PROJECT_NAME} SHARED lib.cc src/Api.cpp src/DxFeed.cpp)
+add_library(${PROJECT_NAME} SHARED lib.cc src/Api.cpp src/DxFeed.cpp src/Connection.cpp src/Subscription.cpp)
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+
+set(JAVA_LIB_PATH "${JAVA_HOME}/lib/server")
+message("JAVA_LIB_PATH: ${JAVA_LIB_PATH}")
+
+link_directories(${JAVA_LIB_PATH})
+
+add_library(JVM_LIB SHARED IMPORTED)
+if (WIN32)
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_LOCATION ${JAVA_LIB_PATH}/jvm.dll)
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_IMPLIB ${JAVA_LIB_PATH}/jvm.lib)
+elseif (APPLE)
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_LOCATION ${JAVA_LIB_PATH}/libjvm.dylib)
+elseif (UNIX)
+    set_property(TARGET JVM_LIB PROPERTY IMPORTED_LOCATION ${JAVA_LIB_PATH}/jvm.so)
+endif()
+target_link_libraries(${PROJECT_NAME} JVM_LIB)
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)

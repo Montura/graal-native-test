@@ -7,8 +7,7 @@
 #include "api/jni_wrapper/ListMapper.h"
 
 namespace dxfeed {
-
-  typedef void(SubscriptionListener)(const void* events, std::size_t count);
+  struct Connection; // forward declaration
 
   struct DxFeed final {
     DxFeed(const DxFeed& other) = delete;
@@ -16,16 +15,17 @@ namespace dxfeed {
     DxFeed& operator=(const DxFeed& other) = delete;
     DxFeed& operator=(DxFeed&& other) = delete;
 
-    static DxFeed& getInstance(JNIEnv_* env);
-    TimeAndSaleMapper& getTimeAndSaleMapper();
-    ListMapper& getListMapper();
+    static DxFeed& getInstance();
+    const TimeAndSaleMapper& getTimeAndSaleMapper();
+    const ListMapper& getListMapper();
 
+    Connection* createConnection(const std::string &address);
   private:
     DxFeed();
 
     JNIEnv* env_;
-    TimeAndSaleMapper timeAndSalesMapper_;
-    ListMapper listMapper_;
+    const TimeAndSaleMapper timeAndSalesMapper_;
+    const ListMapper listMapper_;
 
     static void onClose(jobject);
   };
