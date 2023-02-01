@@ -9,7 +9,7 @@ extern "C" {
 
 JNIEXPORT
 jlong JNICALL Java_com_dxfeed_api_JniTest_nCreateDxFeedSubscription(JNIEnv*, jclass, jobject dxFeedSub) {
-  std::cout << "Java_com_dxfeed_api_JniTest_nCreateDxFeedSubscription" << std::endl;
+//  std::cout << "Java_com_dxfeed_api_JniTest_nCreateDxFeedSubscription" << std::endl;
   return 1;
 }
 
@@ -17,7 +17,7 @@ JNIEXPORT
 void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListener(JNIEnv* env, jclass, jlong dxFeedSub, jint size,
                                                                jobject eventList, jlong userCallback)
 {
-  std::cout << "Java_com_dxfeed_api_JniTest_nOnQuoteEventListener" << std::endl;
+//  std::cout << "Java_com_dxfeed_api_JniTest_nOnQuoteEventListener" << std::endl;
   dxfeed::DxFeed& feed = dxfeed::DxFeed::getInstance(env);
   auto& listMapping = feed.getListMapper();
   auto& timeAndSaleMapper = feed.getTimeAndSaleMapper();
