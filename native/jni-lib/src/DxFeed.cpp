@@ -22,12 +22,6 @@ namespace dxfeed {
       if (flag == JNI_ERR) {
         throw std::runtime_error("Error creating VM. Exiting...n");
       }
-
-      jclass pJclass = jniEnv->FindClass("Lcom/dxfeed/api/JniTest;");
-      jmethodID methodId = jniEnv->GetStaticMethodID(pJclass, "loadJNILib", "(Ljava/lang/String;)V");
-      jstring pJstring = jniEnv->NewStringUTF(
-        "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/jni-lib/bin/native_jni.dylib");
-      jniEnv->CallStaticVoidMethod(pJclass, methodId, pJstring);
     }
   }
 
@@ -45,7 +39,27 @@ namespace dxfeed {
   DxFeed::DxFeed() :
     env_{jniEnv},
     timeAndSalesMapper_{env_, onClose},
-    listMapper_{env_, onClose} {
+    listMapper_{env_, onClose},
+    javaHelperClass{jniEnv->FindClass("Lcom/dxfeed/api/JniTest;")},
+    addEventListenerHelperMethodId{jniEnv->GetStaticMethodID(javaHelperClass, "addEventListener",
+                                                                 "(Lcom/dxfeed/api/DXFeedSubscription;J)V")}
+  {
+      auto path = "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/jni-lib/bin/native_jni.dylib";
+      loadLibrary(path);
+  }
+
+  void DxFeed::loadLibrary(const char* path) {
+    jmethodID methodId = jniEnv->GetStaticMethodID(javaHelperClass, "loadJNILib", "(Ljava/lang/String;)V");
+    jstring pJstring = jniEnv->NewStringUTF(path);
+    jniEnv->CallStaticVoidMethod(javaHelperClass, methodId, pJstring);
+  }
+
+  jclass DxFeed::helperClass() {
+    return javaHelperClass;
+  }
+
+  jmethodID DxFeed::addEventListenerMethod() {
+    return addEventListenerHelperMethodId;
   }
 
   const TimeAndSaleMapper& DxFeed::getTimeAndSaleMapper() {

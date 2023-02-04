@@ -1,6 +1,7 @@
 #include <jni.h>
 
 #include "api/Subscription.h"
+#include "api/DxFeed.h"
 
 namespace dxfeed {
   const char* getEventClassType(EventType eventType) {
@@ -30,9 +31,9 @@ namespace dxfeed {
   }
 
   void Subscription::addListener(Listener listener) const {
-    jclass pJclass = env_->FindClass("com/dxfeed/api/JniTest");
-    jmethodID addListenerMethodId = env_->GetStaticMethodID(pJclass, "addEventListener", "(Lcom/dxfeed/api/DXFeedSubscription;J)V");
-    env_->CallStaticVoidMethod(pJclass, addListenerMethodId, subscription_, reinterpret_cast<jlong>(listener));
+    auto& feed = dxfeed::DxFeed::getInstance();
+    env_->CallStaticVoidMethod(feed.helperClass(), feed.addEventListenerMethod(),
+                               subscription_, reinterpret_cast<jlong>(listener));
   }
 
   void Subscription::addSymbol(const std::string &symbol) const {

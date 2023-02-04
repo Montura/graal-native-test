@@ -18,14 +18,19 @@ namespace dxfeed {
     static DxFeed& getInstance();
     const TimeAndSaleMapper& getTimeAndSaleMapper();
     const ListMapper& getListMapper();
+    jclass helperClass();
+    jmethodID addEventListenerMethod();
 
     Connection* createConnection(const std::string &address);
   private:
     DxFeed();
+    void loadLibrary(const char* path);
 
     JNIEnv* env_;
     const TimeAndSaleMapper timeAndSalesMapper_;
     const ListMapper listMapper_;
+    jclass javaHelperClass;
+    jmethodID addEventListenerHelperMethodId;
 
     static void onClose(jobject);
   };
