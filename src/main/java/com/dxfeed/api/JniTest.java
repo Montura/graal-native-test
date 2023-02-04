@@ -28,16 +28,27 @@ public class JniTest {
         Thread.sleep(10000);
     }
 
+    private static void loadJNILib(String libPath) {
+        System.out.println("loadJNILib: ");
+        System.load(libPath);
+    }
+
+    // callback from native
+    private static <E> void addEventListener(DXFeedSubscription<E> sub, long userCallback) {
+        System.out.println("addEventListener, dxFeedSub = " + sub + "; userCallback = " + userCallback);
+        sub.addEventListener(eventList -> nOnQuoteEventListener(eventList.size(), eventList, userCallback));
+    }
 
     // callback from native
     private static void addEventListener(long dxFeedSub, long userCallback) {
         System.out.println("addEventListener, dxFeedSub = " + dxFeedSub + "; userCallback = " + userCallback);
         DXFeedSubscription<TimeAndSale> sub = nativeSubToDxFeedSub.get(dxFeedSub);
         System.out.println("addEventListener, sub = " + sub);
-        sub.addEventListener(eventList -> nOnQuoteEventListener(dxFeedSub, eventList.size(), eventList, userCallback));
+        sub.addEventListener(eventList -> nOnQuoteEventListenerOld(dxFeedSub, eventList.size(), eventList, userCallback));
         sub.addSymbols("ETH/USD:GDAX");
     }
 
     private static native long nCreateDxFeedSubscription(DXFeedSubscription<?> subscription);
-    private static native void nOnQuoteEventListener(long dxFeedSub, int size, List<?> eventList, long userCallback);
+    private static native void nOnQuoteEventListenerOld(long dxFeedSub, int size, List<?> eventList, long userCallback);
+    private static native void nOnQuoteEventListener(int size, List<?> eventList, long userCallback);
 }

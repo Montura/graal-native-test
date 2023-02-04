@@ -16,8 +16,8 @@ namespace dxfeed {
     Subscription& operator=(const Subscription& other) = delete;
     Subscription& operator=(Subscription&& other) = delete;
 
-//    void addListener(Listener listener) const;
-//    void addSymbol(const std::string& symbol) const;
+    void addListener(Listener listener) const;
+    void addSymbol(const std::string& symbol) const;
 //    void addSymbols(const std::vector <std::string>& symbols) const;
     jobject getSub();
 

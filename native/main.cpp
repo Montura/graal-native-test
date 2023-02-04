@@ -1,6 +1,5 @@
 #include <iostream>
 #include <jni.h>
-#include <memory>
 
 #include "include/api/TimeAndSale.h"
 #include "include/api/Api.h"
@@ -23,22 +22,16 @@ int main() {
   std::cout << "dx subscription wrapper: " << static_cast<dxfeed::Subscription*>(subscription) << std::endl;
   std::cout << "dx subscription jobject: " << static_cast<dxfeed::Subscription*>(subscription)->getSub() << std::endl;
 
-//  jclass pJclass = env->FindClass("com/dxfeed/api/JniTest");
-//  if (pJclass != nullptr) {
-//    jmethodID methodId = env->GetStaticMethodID(pJclass, "createSubscription", "()J");
-//    jlong dxSub = env->CallStaticLongMethod(pJclass, methodId);
-//    std::cout << dxSub;
-
-//    jmethodID addEventListenerMethodId = env->GetStaticMethodID(pJclass, "addEventListener", "(JJ)V");
-//    env->CallStaticVoidMethod(pJclass, addEventListenerMethodId, dxSub, callback);
-//  } else {
-//    std::cout << "Can't find class NativeTest!";
-//    return 1;
-//  }
+  dxfeed_add_listener(subscription, [](const void *events, int count) {
+    auto timeAndSaleList = reinterpret_cast<const TimeAndSale*>(events);
+    std::cout << "Event count: " << count << std::endl;
+    for (int i = 0; i < count; ++i) {
+      TimeAndSale quote = timeAndSaleList[i];
+      std::cout << quote.toString() << std::endl;
+    }
+  });
+  dxfeed_add_symbol(subscription, "ETH/USD:GDAX");
   while (true) {}
-
-//  javaVM->DestroyJavaVM();
-  return 0;
 }
 
 void callMainMethod(JNIEnv* env) {

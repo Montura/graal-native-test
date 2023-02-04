@@ -22,6 +22,12 @@ namespace dxfeed {
       if (flag == JNI_ERR) {
         throw std::runtime_error("Error creating VM. Exiting...n");
       }
+
+      jclass pJclass = jniEnv->FindClass("Lcom/dxfeed/api/JniTest;");
+      jmethodID methodId = jniEnv->GetStaticMethodID(pJclass, "loadJNILib", "(Ljava/lang/String;)V");
+      jstring pJstring = jniEnv->NewStringUTF(
+        "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/jni-lib/bin/native_jni.dylib");
+      jniEnv->CallStaticVoidMethod(pJclass, methodId, pJstring);
     }
   }
 

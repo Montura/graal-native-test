@@ -28,4 +28,17 @@ namespace dxfeed {
   jobject Subscription::getSub() {
     return subscription_;
   }
+
+  void Subscription::addListener(Listener listener) const {
+    jclass pJclass = env_->FindClass("com/dxfeed/api/JniTest");
+    jmethodID addListenerMethodId = env_->GetStaticMethodID(pJclass, "addEventListener", "(Lcom/dxfeed/api/DXFeedSubscription;J)V");
+    env_->CallStaticVoidMethod(pJclass, addListenerMethodId, subscription_, reinterpret_cast<jlong>(listener));
+  }
+
+  void Subscription::addSymbol(const std::string &symbol) const {
+    jclass dxFeedSubscription = env_->GetObjectClass(subscription_);
+    jmethodID addSymbolsMethodId = env_->GetMethodID(dxFeedSubscription, "addSymbols", "(Ljava/lang/Object;)V");
+    jstring pSymbol = env_->NewStringUTF(symbol.c_str());
+    env_->CallVoidMethod(subscription_, addSymbolsMethodId, pSymbol);
+  }
 }
