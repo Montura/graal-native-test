@@ -20,6 +20,7 @@ struct TimeAndSaleMapper {
     onClose_ = handler;
     idGetEventSymbol_ = env->GetMethodID(clazz_, "getEventSymbol", "()Ljava/lang/String;");
     idGetEventTime_ = env->GetMethodID(clazz_, "getEventTime", "()J");
+    idGetIndex_ = env->GetMethodID(clazz_, "getIndex", "()J");
     idGetEventFlags_ = env->GetMethodID(clazz_, "getEventFlags", "()I");
     idGetTime_ = env->GetMethodID(clazz_, "getTime", "()J");
     idGetTimeNanos_ = env->GetMethodID(clazz_, "getTimeNanos", "()J");
@@ -41,17 +42,18 @@ struct TimeAndSaleMapper {
 
   TimeAndSale toNative(JNIEnv_* env, jobject object) const {
     TimeAndSale quote{};
-    quote.eventSymbol = getEventSymbol(env, object);
-    quote.eventTime = getEventTime(env, object);
-    quote.eventFlags = getEventFlags(env, object);
-    quote.time = getTime(env, object);
-    quote.timeNanos = getTimeNanos(env, object);
-    quote.timeNanoPart = getTimeNanoPart(env, object);
-    quote.exchangeCode = getExchangeCode(env, object);
+    quote.event_symbol = getEventSymbol(env, object);
+    quote.event_time = getEventTime(env, object);
+    quote.index = getIndex(env, object);
+    quote.event_flags = getEventFlags(env, object);
+//    quote.time = getTime(env, object);
+//    quote.timeNanos = getTimeNanos(env, object);
+    quote.time_nano_part = getTimeNanoPart(env, object);
+    quote.exchange_code = getExchangeCode(env, object);
     quote.price = getPrice(env, object);
     quote.size = getSize(env, object);
-    quote.bidPrice = getBidPrice(env, object);
-    quote.askPrice = getAskPrice(env, object);
+    quote.bid_price = getBidPrice(env, object);
+    quote.ask_price = getAskPrice(env, object);
     quote.exchangeSaleConditions = getExchangeSaleConditions(env, object);
     quote.flags = getFlags(env, object);
     quote.buyer = getBuyer(env, object);
@@ -65,6 +67,10 @@ struct TimeAndSaleMapper {
 
   std::int64_t getEventTime(JNIEnv_* env, jobject object) const {
     return env->CallLongMethod(object, idGetEventTime_);
+  }
+
+  std::int64_t getIndex(JNIEnv_* env, jobject object) const {
+    return env->CallLongMethod(object, idGetIndex_);
   }
 
   std::int32_t getEventFlags(JNIEnv_* env, jobject object) const {
@@ -124,6 +130,7 @@ struct TimeAndSaleMapper {
 private:
   jclass clazz_;
   jmethodID idGetEventSymbol_;
+  jmethodID idGetIndex_;
   jmethodID idGetEventTime_;
   jmethodID idGetEventFlags_;
   jmethodID idGetTime_;

@@ -4,15 +4,16 @@
 #include "include/api/TimeAndSale.h"
 #include "include/api/Api.h"
 #include "include/api/Subscription.h"
+#include "include/api/utils/TimeAndSaleFormatter.hpp"
 
 void callMainMethod(JNIEnv* env);
 
-void callback(const TimeAndSale* timeAndSale, int size) {
-//  std::cout << "new size = " << size << std::endl;
-  for (int i = 0; i < size; ++i) {
-    std::cout << timeAndSale[i].toString() << std::endl;
-  }
-}
+//void callback(const TimeAndSale* timeAndSale, int size) {
+////  std::cout << "new size = " << size << std::endl;
+//  for (int i = 0; i < size; ++i) {
+//    std::cout << timeAndSale[i].toString() << std::endl;
+//  }
+//}
 
 int main() {
 //    callMainMethod(env);
@@ -26,8 +27,8 @@ int main() {
     auto timeAndSaleList = reinterpret_cast<const TimeAndSale*>(events);
     std::cout << "Event count: " << count << std::endl;
     for (int i = 0; i < count; ++i) {
-      TimeAndSale quote = timeAndSaleList[i];
-      std::cout << quote.toString() << std::endl;
+      auto quote = std::make_shared<TimeAndSale>(timeAndSaleList[i]);
+      std::cout << dxfeed::TimeAndSaleFormatter::toString(quote.get()) << std::endl;
     }
   });
   dxfeed_add_symbol(subscription, "ETH/USD:GDAX");
