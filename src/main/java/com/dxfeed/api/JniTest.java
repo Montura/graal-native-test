@@ -29,7 +29,7 @@ public class JniTest {
     }
 
     private static void loadJNILib(String libPath) {
-        System.out.println("loadJNILib: ");
+        System.out.println("loadJNILib: " + libPath);
         System.load(libPath);
     }
 
