@@ -2,6 +2,25 @@
 #include <iostream>
 #include <jni.h>
 
+
+#if (! defined __x86_64__) && (defined __MINGW32__)
+#  define SYMBOL(x) binary_boot_jar_##x
+#else
+#  define SYMBOL(x) _binary_boot_jar_##x
+#endif
+
+extern "C"
+{
+	extern const uint8_t SYMBOL(start)[];
+	extern const uint8_t SYMBOL(end)[];
+
+	EXPORT const uint8_t* bootJar(unsigned* size) {
+		*size = SYMBOL(end) - SYMBOL(start);
+		return SYMBOL(start);
+	}
+
+} // extern "C"
+
 typedef jint(JNICALL *CreateJavaVM_t)(JavaVM **pvm, void **env, void *args);
 typedef jclass(JNICALL *FindClassFromBootLoader_t)(JNIEnv *env, const char *name);
 
@@ -42,11 +61,12 @@ void loadVmOnWindows() {
     JavaVMInitArgs vmArgs;
 //    JNI_GetDefaultJavaVMInitArgs(&vmArgs);
 
-    JavaVMOption options[4];
-    options[0].optionString = "-Djdk.module.main=com.dxfeed.api"; /* user classes */
-    options[1].optionString = "-Dsun.java.command=JniTest"; /* user classes */
-    options[2].optionString = "-Djava.class.path=D:\\work\\graal-native-test\\target\\classes"; /* user classes */
-    options[3].optionString = "-verbose:jni";                   /* print JNI-related messages */
+    JavaVMOption options[1];
+    options[0].optionString = const_cast<char*>("-Xbootclasspath:[bootJar]");
+//    options[0].optionString = "-Djdk.module.main=com.dxfeed.api"; /* user classes */
+//    options[1].optionString = "-Dsun.java.command=JniTest"; /* user classes */
+//    options[2].optionString = "-Djava.class.path=D:\\work\\graal-native-test\\target\\classes"; /* user classes */
+//    options[3].optionString = "-verbose:jni";                   /* print JNI-related messages */
 
     vmArgs.version = JNI_VERSION_1_8;
     vmArgs.options = options;

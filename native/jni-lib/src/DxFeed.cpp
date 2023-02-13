@@ -2,14 +2,47 @@
 #include "api/Connection.h"
 #include "classpath.h"
 
+
+#if (defined __MINGW32__)
+#  define EXPORT __declspec(dllexport)
+#else
+#  define EXPORT __attribute__ ((visibility("default"))) \
+  __attribute__ ((used))
+#endif
+
+#if (! defined __x86_64__) && (defined __MINGW32__)
+#  define SYMBOL(x) binary_boot_jar_##x
+#else
+#  define SYMBOL(x) _binary_boot_jar_##x
+#endif
+
+
+extern "C"
+{
+extern const uint8_t SYMBOL(start)[];
+extern const uint8_t SYMBOL(end)[];
+
+EXPORT const uint8_t* bootJar(unsigned* size) {
+  *size = SYMBOL(end) - SYMBOL(start);
+  return SYMBOL(start);
+}
+
+} // extern "C"
+
+
+struct Foo {
+  int a;
+};
+
 namespace dxfeed {
   static JNIEnv* jniEnv;
   static JavaVM* javaVM;
 
-  void initJavaVMAndJNI() {
+  void initJavaVMAndJNI(char *const  s)  {
     if (!jniEnv && !javaVM) {
       std::unique_ptr <JavaVMOption> javaVmOption(new JavaVMOption);
-      javaVmOption->optionString = const_cast<char*>(QD_CLASS_PATH.c_str());
+//      javaVmOption->optionString = const_cast<char*>(QD_CLASS_PATH.c_str());
+      javaVmOption->optionString = const_cast<char*>("-Xbootclasspath:[bootJar]");
 
       JavaVMInitArgs vmArgs;
       vmArgs.version = JNI_VERSION_1_8;
