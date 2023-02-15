@@ -1,33 +1,6 @@
+#include <stdexcept>
 #include "api/DxFeed.h"
 #include "api/Connection.h"
-#include "classpath.h"
-
-
-#if (defined __MINGW32__)
-#  define EXPORT __declspec(dllexport)
-#else
-#  define EXPORT __attribute__ ((visibility("default"))) \
-  __attribute__ ((used))
-#endif
-
-#if (! defined __x86_64__) && (defined __MINGW32__)
-#  define SYMBOL(x) binary_boot_jar_##x
-#else
-#  define SYMBOL(x) _binary_boot_jar_##x
-#endif
-
-
-extern "C"
-{
-extern const uint8_t SYMBOL(start)[];
-extern const uint8_t SYMBOL(end)[];
-
-EXPORT const uint8_t* bootJar(unsigned* size) {
-  *size = SYMBOL(end) - SYMBOL(start);
-  return SYMBOL(start);
-}
-
-} // extern "C"
 
 
 struct Foo {
@@ -51,7 +24,7 @@ namespace dxfeed {
       vmArgs.ignoreUnrecognized = JNI_TRUE;
 
       // Create the JVM
-      long flag = JNI_CreateJavaVM(&javaVM, (void**) &jniEnv, &vmArgs);
+      long flag = 0;;//JNI_CreateJavaVM(&javaVM, (void**) &jniEnv, &vmArgs);
       if (flag == JNI_ERR) {
         throw std::runtime_error("Error creating VM. Exiting...n");
       }
@@ -64,7 +37,7 @@ namespace dxfeed {
   }
 
   DxFeed& dxfeed::DxFeed::getInstance() {
-    initJavaVMAndJNI();
+//    initJavaVMAndJNI();
     static DxFeed instance;
     return instance;
   }

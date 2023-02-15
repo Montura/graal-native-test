@@ -10,17 +10,13 @@ public class JniTest {
     private static final Map<Long, DXFeedSubscription<TimeAndSale>> nativeSubToDxFeedSub = new HashMap<>();
 
     private static long createSubscription() {
-        System.load("/Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/jni-lib/bin/native_jni.dylib");
+//        System.load("/Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/jni-lib/bin/native_jni.dylib");
         DXEndpoint endpoint = DXEndpoint.newBuilder()
                 .build()
                 .connect("demo.dxfeed.com:7300");
         DXFeed feed = endpoint.getFeed();
         final DXFeedSubscription<TimeAndSale> sub = feed.createSubscription(TimeAndSale.class);
-        System.out.println("sub = " + sub);
-        long l = nCreateDxFeedSubscription(sub);
-        nativeSubToDxFeedSub.put(l, sub);
-        System.out.println("l = " + l);
-        return l;
+        return 0;
     }
 
     public static void main(String[] args) throws InterruptedException {

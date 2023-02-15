@@ -1,80 +1,62 @@
 #include <Windows.h>
 #include <iostream>
+#include <filesystem>
 #include <jni.h>
 
+namespace fs = std::filesystem;
 
-#if (! defined __x86_64__) && (defined __MINGW32__)
-#  define SYMBOL(x) binary_boot_jar_##x
-#else
-#  define SYMBOL(x) _binary_boot_jar_##x
-#endif
-
-extern "C"
-{
-	extern const uint8_t SYMBOL(start)[];
-	extern const uint8_t SYMBOL(end)[];
-
-	EXPORT const uint8_t* bootJar(unsigned* size) {
-		*size = SYMBOL(end) - SYMBOL(start);
-		return SYMBOL(start);
-	}
-
-} // extern "C"
+// todo: at least need
+//      server/jvm.dll
+//      java.dll
+//      jimage.dll
+//      jsvml.dll
+//      verify.dll
+//      lib/modules
+constexpr wchar_t JAVA_HOME[] = L"" JAVA_HOME_PATH; // get JAVA_HOME from
 
 typedef jint(JNICALL *CreateJavaVM_t)(JavaVM **pvm, void **env, void *args);
 typedef jclass(JNICALL *FindClassFromBootLoader_t)(JNIEnv *env, const char *name);
 
-static HINSTANCE JAVA_DLL;
-static HINSTANCE JVM_DLL;
-
-HRESULT loadLibrary(HINSTANCE* hinstance, const wchar_t* libPath) {
-    *hinstance = LoadLibraryW(libPath);
-    if (!JAVA_DLL) {
-        std::cerr << "Can't load lib from: " << libPath << "\n";
-        return S_FALSE;
-    }
-    return S_OK;
-}
-
-// https://docs.oracle.com/en/java/javase/12/docs/specs/jni/invocation.html#creating-the-vm
 void loadVmOnWindows() {
     CreateJavaVM_t createJavaVM;
     FindClassFromBootLoader_t findBootClass;
 
-    auto javaDllPath = L"D:\\work\\graal-native-test\\native\\cmake-build-debug\\java.dll";
-    HRESULT success = loadLibrary(&JAVA_DLL, javaDllPath);
-    if (FAILED(success)) return;
+    const auto java_home = std::wstring(JAVA_HOME);
+    auto javaDllPath = java_home + L"\\bin\\java.dll";
+    bool file_exists = fs::exists(javaDllPath);
+    auto size = file_exists ? static_cast<int64_t>(fs::file_size(javaDllPath)) : 0;
+    if (!size) {
+        std::cerr << "File don't exist: " << javaDllPath.c_str() << "\n";
+    }
 
-    auto jvmDllPath = L"D:\\work\\graal-native-test\\native\\cmake-build-debug\\jvm.dll";
-    success = loadLibrary(&JVM_DLL, jvmDllPath);
-    if (FAILED(success)) return;
+    auto jvmDllPath = java_home + L"\\bin\\server\\jvm.dll";
+    HINSTANCE JVM_DLL = LoadLibraryW(jvmDllPath.c_str());
+    if (!JVM_DLL) {
+        std::cerr << "Can't load lib from: " << jvmDllPath.c_str() << "\n";
+        return;
+    }
 
     createJavaVM = (CreateJavaVM_t)GetProcAddress(JVM_DLL, "JNI_CreateJavaVM");
     findBootClass = (FindClassFromBootLoader_t)GetProcAddress(JVM_DLL, "JVM_FindClassFromBootLoader");
-    if (createJavaVM == 0 || findBootClass == 0) {
-        std::cout << "GetProcAddress failed: " << createJavaVM << ", " << findBootClass << "\n";
-        JVM_DLL = 0;
+    if (createJavaVM == nullptr || findBootClass == nullptr) {
+        std::cout << "GetProcAddress failed: "
+            << reinterpret_cast<void*>(createJavaVM) << ", " << reinterpret_cast<void*>(findBootClass) << "\n";
     }
 
     JNIEnv* jniEnv = nullptr;
     JavaVM* javaVM = nullptr;
-    JavaVMInitArgs vmArgs;
-//    JNI_GetDefaultJavaVMInitArgs(&vmArgs);
 
     JavaVMOption options[1];
-    options[0].optionString = const_cast<char*>("-Xbootclasspath:[bootJar]");
-//    options[0].optionString = "-Djdk.module.main=com.dxfeed.api"; /* user classes */
-//    options[1].optionString = "-Dsun.java.command=JniTest"; /* user classes */
-//    options[2].optionString = "-Djava.class.path=D:\\work\\graal-native-test\\target\\classes"; /* user classes */
-//    options[3].optionString = "-verbose:jni";                   /* print JNI-related messages */
+    options[0].optionString = "-Djava.class.path=D:\\work\\graal-native-test\\target\\graal-tutorial-1.1-SNAPSHOT.jar";
 
+    JavaVMInitArgs vmArgs;
     vmArgs.version = JNI_VERSION_1_8;
     vmArgs.options = options;
-    vmArgs.nOptions = 4;
+    vmArgs.nOptions = 1;
     vmArgs.ignoreUnrecognized = JNI_FALSE;
-//
-//    // Create the JVM
-    long flag = JNI_CreateJavaVM(&javaVM, (void**) &jniEnv, &vmArgs);
+
+    // Create the JVM
+    jint flag = createJavaVM(&javaVM, (void**) &jniEnv, &vmArgs);
     if (flag == JNI_ERR) {
         throw std::runtime_error("Error creating VM. Exiting...n");
     }
