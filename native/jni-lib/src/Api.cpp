@@ -2,6 +2,10 @@
 #include "api/DxFeed.h"
 #include "api/Connection.h"
 
+void dxfeed_init(const char* javaHome) {
+  dxfeed::DxFeed::initJavaVM(javaHome);
+}
+
 void* dxfeed_get_instance() {
   auto& feed = dxfeed::DxFeed::getInstance();
   return &feed;

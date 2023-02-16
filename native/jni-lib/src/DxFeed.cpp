@@ -2,18 +2,12 @@
 #include "api/DxFeed.h"
 #include "api/Connection.h"
 
-
-struct Foo {
-  int a;
-};
-
 namespace dxfeed {
-  static JNIEnv* jniEnv;
-  static JavaVM* javaVM;
-
-  void initJavaVMAndJNI(char *const  s)  {
-    if (!jniEnv && !javaVM) {
-      std::unique_ptr <JavaVMOption> javaVmOption(new JavaVMOption);
+  void dxfeed::DxFeed::initJavaVM(const char* javaHome) {
+#if _MSC_VER && !__INTEL_COMPILER
+    dxfeed::DxFeed::loadVm(javaHome);
+#elif 0
+    std::unique_ptr <JavaVMOption> javaVmOption(new JavaVMOption);
 //      javaVmOption->optionString = const_cast<char*>(QD_CLASS_PATH.c_str());
       javaVmOption->optionString = const_cast<char*>("-Xbootclasspath:[bootJar]");
 
@@ -28,7 +22,9 @@ namespace dxfeed {
       if (flag == JNI_ERR) {
         throw std::runtime_error("Error creating VM. Exiting...n");
       }
-    }
+#else
+
+#endif
   }
 
   // todo: add dispose!!!!!!!!!!!!!
@@ -37,21 +33,20 @@ namespace dxfeed {
   }
 
   DxFeed& dxfeed::DxFeed::getInstance() {
-//    initJavaVMAndJNI();
     static DxFeed instance;
     return instance;
   }
 
   DxFeed::DxFeed() :
-    env_{jniEnv},
-    timeAndSalesMapper_{env_, onClose},
-    listMapper_{env_, onClose},
-    javaHelperClass{jniEnv->FindClass("Lcom/dxfeed/api/JniTest;")},
-    addEventListenerHelperMethodId{jniEnv->GetStaticMethodID(javaHelperClass, "addEventListener",
-                                                                 "(Lcom/dxfeed/api/DXFeedSubscription;J)V")}
-  {
-      auto path = "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/jni-lib/bin/native_jni.dylib";
-      loadLibrary(path);
+      env_{jniEnv},
+      timeAndSalesMapper_{env_, onClose},
+      listMapper_{env_, onClose},
+      javaHelperClass{jniEnv->FindClass("Lcom/dxfeed/api/JniTest;")},
+      addEventListenerHelperMethodId{jniEnv->GetStaticMethodID(javaHelperClass, "addEventListener",
+                                                               "(Lcom/dxfeed/api/DXFeedSubscription;J)V")} {
+    auto path = "D:\\work\\graal-native-test\\native\\cmake-build-debug\\native_jni.dll";
+    //  auto path = "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/jni-lib/bin/native_jni.dylib";
+    loadLibrary(path);
   }
 
   void DxFeed::loadLibrary(const char* path) {

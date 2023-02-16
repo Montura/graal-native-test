@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 project(native_jni)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
-set(OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+set(OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake-build-debug)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_PATH})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${OUTPUT_PATH})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${OUTPUT_PATH})
@@ -42,6 +42,7 @@ set(SOURCE_FILES
         src/DxFeed.cpp
         src/Connection.cpp
         src/Subscription.cpp
+        src/windows_jvm.cpp
         src/utils/StringUtils.cpp
         src/utils/TimeAndSaleFormatter.cpp
 )

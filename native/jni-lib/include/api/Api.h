@@ -4,6 +4,7 @@ extern "C" {
 
 typedef void(*dx_feed_listener)(const void *events, int count);
 
+void dxfeed_init(const char* javaHome);
 void* dxfeed_get_instance();
 void* dxfeed_create_connection(void* feed, const char* address);
 void* dxfeed_create_subscription(void* connection, int eventType);
