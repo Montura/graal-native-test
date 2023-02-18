@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <string>
+#include <iostream>
 
 #include "api/utils/LoadLibrary.h"
 
@@ -8,19 +9,40 @@ namespace dxfeed {
   JavaVM* javaVM = nullptr;
 
   namespace internal {
+    constexpr char PATH_SEPARATOR = ':';
+    const char MY_JAR[] = "graal-tutorial-1.1-SNAPSHOT.jar";
+    const char* JARS[] = {
+      "auther-api-442.jar",
+      "dxfeed-api-3.313.jar",
+      "dxlib-3.313.jar",
+      "qds-3.313.jar",
+      "qds-file-3.313.jar",
+      "qds-tools-3.313.jar"
+    };
+
+    std::string buildClassPath() {
+      auto runtimePath = fs::current_path();
+      std::cout << "APP_RUNTIME_PATH: " <<  runtimePath << std::endl;
+      auto jarPath = runtimePath.parent_path().parent_path().string() + "/target/";
+      auto jarDxFeedPath = jarPath + "/libs/";
+      std::cout << "Custom JAR path: " <<  jarPath << std::endl;
+      std::cout << "DxFeed JAR path: " <<  jarPath << std::endl;
+
+      std::string result = jarPath + MY_JAR + PATH_SEPARATOR;
+      for (const auto jar : JARS) {
+        result += jarDxFeedPath + jar + PATH_SEPARATOR;
+      }
+      auto path = "-Djava.class.path=" + result;
+      std::cout << "classpath: " << path;
+      return path;
+    }
+
     void loadJavaVM(const char* javaHome) {
       internal::loadJVMLibrary(javaHome);
 
       JavaVMOption options[1];
-      options[0].optionString =
-        "-Djava.class.path=/Users/Andrey.Mikhalev/Documents/work/graal-native-test/target/graal-tutorial-1.1-SNAPSHOT.jar:" \
-          "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/target/libs/auther-api-442.jar:" \
-          "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/target/libs/dxfeed-api-3.313.jar:" \
-          "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/target/libs/dxlib-3.313.jar:" \
-          "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/target/libs/qds-3.313.jar:" \
-          "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/target/libs/qds-file-3.313.jar:" \
-          "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/target/libs/qds-tools-3.313.jar";
-
+      std::string string = buildClassPath();
+      options[0].optionString = string.data();
 
       JavaVMInitArgs vmArgs;
       vmArgs.version = JNI_VERSION_1_8;

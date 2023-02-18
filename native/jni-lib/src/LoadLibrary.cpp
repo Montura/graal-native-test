@@ -1,11 +1,8 @@
 #include <sstream>
 #include <iostream>
-#include <filesystem>
 #include <jni.h>
 
 #include "api/utils/LoadLibrary.h"
-
-namespace fs = std::filesystem;
 
 #if _MSC_VER && !__INTEL_COMPILER
 #include <Windows.h>

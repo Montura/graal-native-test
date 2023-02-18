@@ -1,7 +1,9 @@
 #pragma once
 
+#include <filesystem>
 #include <jni.h>
 
+namespace fs = std::filesystem;
 namespace dxfeed::internal {
 
   typedef jint(JNICALL* CreateJavaVM_t)(JavaVM** pvm, void** env, void* args);
