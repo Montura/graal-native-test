@@ -6,7 +6,7 @@
 struct ListMapper {
   ListMapper(JNIEnv* env, dxfeed::OnCloseHandler onClose) {
     onClose_ = onClose;
-    clazz_ = reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("java/util/List")));
+    clazz_ = reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("Ljava/util/List;")));
     idGet_ = env->GetMethodID(clazz_, "get", "(I)Ljava/lang/Object;");
   }
 

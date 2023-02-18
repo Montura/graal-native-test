@@ -3,7 +3,7 @@
 
 namespace dxfeed {
   jobject createDxEndpoint(JNIEnv* env) {
-    jclass dxEndpointClass = env->FindClass("com/dxfeed/api/DXEndpoint");
+    jclass dxEndpointClass = env->FindClass("Lcom/dxfeed/api/DXEndpoint;");
     jmethodID newBuilderMethodId = env->GetStaticMethodID(dxEndpointClass, "newBuilder", "()Lcom/dxfeed/api/DXEndpoint$Builder;");
     jobject dxEndpointBuilder = env->CallStaticObjectMethod(dxEndpointClass, newBuilderMethodId);
 

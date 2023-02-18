@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 }
 
 //void callMainMethod(JNIEnv* env) {
-//  jclass pJclass = env->FindClass("com/dxfeed/api/JniTest");
+//  jclass pJclass = env->FindClass("Lcom/dxfeed/api/JniTest;");
 //  jmethodID methodId = env->GetStaticMethodID(pJclass, "main", "([Ljava/lang/String;)V");
 //  if (methodId != nullptr) {
 //    jstring hello = env->NewStringUTF("ETH/USD:GDAX");
