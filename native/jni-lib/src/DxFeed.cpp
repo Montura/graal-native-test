@@ -1,15 +1,11 @@
 #include <stdexcept>
 #include "api/DxFeed.h"
 #include "api/Connection.h"
+#include "api/utils/LoadLibrary.h"
 
 namespace dxfeed {
   void dxfeed::DxFeed::initJavaVM(const char* javaHome) {
-    dxfeed::DxFeed::loadVm(javaHome);
-  }
-
-  // todo: add dispose!!!!!!!!!!!!!
-  void disposeJavaVM() {
-    javaVM->DestroyJavaVM();
+    dxfeed::internal::loadJavaVM(javaHome);
   }
 
   DxFeed& dxfeed::DxFeed::getInstance() {
@@ -18,18 +14,18 @@ namespace dxfeed {
   }
 
   DxFeed::DxFeed() :
-      env_{jniEnv},
-      timeAndSalesMapper_{env_, onClose},
-      listMapper_{env_, onClose},
-      javaHelperClass{jniEnv->FindClass("Lcom/dxfeed/api/JniTest;")},
-      addEventListenerHelperMethodId{jniEnv->GetStaticMethodID(javaHelperClass, "addEventListener",
-                                                               "(Lcom/dxfeed/api/DXFeedSubscription;J)V")} {
+    env_{jniEnv},
+    timeAndSalesMapper_{env_, onClose},
+    listMapper_{env_, onClose},
+    javaHelperClass{jniEnv->FindClass("Lcom/dxfeed/api/JniTest;")},
+    addEventListenerHelperMethodId{jniEnv->GetStaticMethodID(javaHelperClass, "addEventListener",
+                                                             "(Lcom/dxfeed/api/DXFeedSubscription;J)V")} {
 //    auto path = "D:\\work\\graal-native-test\\native\\cmake-build-debug\\native_jni.dll";
-      auto path = "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/cmake-build-debug/native_jni.dylib";
-    loadLibrary(path);
+    auto path = "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/cmake-build-debug/native_jni.dylib";
+    loadJNILibrary(path);
   }
 
-  void DxFeed::loadLibrary(const char* path) {
+  void DxFeed::loadJNILibrary(const char* path) {
     jmethodID methodId = jniEnv->GetStaticMethodID(javaHelperClass, "loadJNILib", "(Ljava/lang/String;)V");
     jstring pJstring = jniEnv->NewStringUTF(path);
     jniEnv->CallStaticVoidMethod(javaHelperClass, methodId, pJstring);

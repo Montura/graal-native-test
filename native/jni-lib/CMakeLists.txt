@@ -42,9 +42,10 @@ set(SOURCE_FILES
         src/DxFeed.cpp
         src/Connection.cpp
         src/Subscription.cpp
-        src/windows_jvm.cpp
         src/utils/StringUtils.cpp
         src/utils/TimeAndSaleFormatter.cpp
+        src/LoadLibrary.cpp
+        src/LoadJavaVm.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
