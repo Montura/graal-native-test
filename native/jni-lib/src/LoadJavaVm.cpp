@@ -20,9 +20,7 @@ namespace dxfeed {
       "qds-tools-3.313.jar"
     };
 
-    std::string buildClassPath() {
-      auto runtimePath = fs::current_path();
-      std::cout << "APP_RUNTIME_PATH: " <<  runtimePath << std::endl;
+    std::string buildClassPath(const std::filesystem::path& runtimePath) {
       auto jarPath = runtimePath.parent_path().parent_path().string() + "/target/";
       auto jarDxFeedPath = jarPath + "/libs/";
       std::cout << "Custom JAR path: " <<  jarPath << std::endl;
@@ -32,16 +30,29 @@ namespace dxfeed {
       for (const auto jar : JARS) {
         result += jarDxFeedPath + jar + PATH_SEPARATOR;
       }
-      auto path = "-Djava.class.path=" + result;
+      auto path = "-Djava.class.path=" + result.substr(0, result.size() - 1);
       std::cout << "classpath: " << path;
       return path;
+    }
+
+    void loadJNILibrary(const char* path) {
+      jclass pJclass = jniEnv->FindClass("Ljava/lang/System;");
+      std::cout << "java.lang.System: " << pJclass << "\n";
+      jmethodID methodId = jniEnv->GetStaticMethodID(pJclass, "load", "(Ljava/lang/String;)V");
+      std::cout << "void System::load(String path): " << methodId << "\n";
+
+      jstring pJstring = jniEnv->NewStringUTF(path);
+      jniEnv->CallStaticVoidMethod(pJclass, methodId, pJstring);
     }
 
     void loadJavaVM(const char* javaHome) {
       internal::loadJVMLibrary(javaHome);
 
+      auto runtimePath = fs::current_path();
+      std::cout << "APP_RUNTIME_PATH: " <<  runtimePath << std::endl;
+
       JavaVMOption options[1];
-      std::string string = buildClassPath();
+      std::string string = buildClassPath(runtimePath);
       options[0].optionString = string.data();
 
       JavaVMInitArgs vmArgs;
@@ -55,6 +66,9 @@ namespace dxfeed {
       if (flag == JNI_ERR) {
         throw std::runtime_error("Error creating VM. Exiting...n");
       }
+
+      auto path = runtimePath.string() + "/native_jni.dylib";
+      loadJNILibrary(path.c_str());
     }
 
     // todo: add dispose!!!!!!!!!!!!!

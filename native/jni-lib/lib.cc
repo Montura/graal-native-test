@@ -1,11 +1,41 @@
 #include <jni.h>
 #include <vector>
+#include <iostream>
 
 #include "api/DxFeed.h"
 #include "api/jni_wrapper/TimeAndSaleMapper.h"
 #include "api/Subscription.h"
 
+extern "C" JNIEXPORT void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListener(JNIEnv* env, jclass, jint size,
+                                                               jobject eventList, jlong userCallback);
+
+static JNINativeMethod methods[] = {
+  {"nOnQuoteEventListener", "(ILjava/util/List;J)V", (void*) &Java_com_dxfeed_api_JniTest_nOnQuoteEventListener },
+};
+
 extern "C" {
+
+// https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/invocation.html#JNJI_OnLoad
+// -> register native method in created JNEEnv of VM when JNI lib is loaded
+JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+  JNIEnv* env;
+  jint flag = vm->GetEnv((void**)&env, JNI_VERSION_1_8);
+  if (flag == JNI_ERR) {
+    throw std::runtime_error("Error getting JNIEnv. Exiting...n");
+  }
+  std::cout << "JNI_OnLoad" << std::endl;
+  jclass clazz = env->FindClass("Lcom/dxfeed/api/JniTest;");
+  std::cout << "clazz: " << clazz << std::endl;
+
+  jint res = env->RegisterNatives(clazz, methods, sizeof(methods)/sizeof(methods[0]));
+  std::cout << "res: " << res << std::endl;
+
+  return JNI_VERSION_1_8;
+}
+
+void JNI_OnUnload(JavaVM *vm, void *reserved) {
+  std::cout << "JNI_OnUnload" << std::endl;
+}
 
 JNIEXPORT
 jlong JNICALL Java_com_dxfeed_api_JniTest_nCreateDxFeedSubscription(JNIEnv*, jclass, jobject dxFeedSub) {

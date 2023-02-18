@@ -19,17 +19,8 @@ namespace dxfeed {
     listMapper_{env_, onClose},
     javaHelperClass{jniEnv->FindClass("Lcom/dxfeed/api/JniTest;")},
     addEventListenerHelperMethodId{jniEnv->GetStaticMethodID(javaHelperClass, "addEventListener",
-                                                             "(Lcom/dxfeed/api/DXFeedSubscription;J)V")} {
-//    auto path = "D:\\work\\graal-native-test\\native\\cmake-build-debug\\native_jni.dll";
-    auto path = "/Users/Andrey.Mikhalev/Documents/work/graal-native-test/native/cmake-build-debug/native_jni.dylib";
-    loadJNILibrary(path);
-  }
-
-  void DxFeed::loadJNILibrary(const char* path) {
-    jmethodID methodId = jniEnv->GetStaticMethodID(javaHelperClass, "loadJNILib", "(Ljava/lang/String;)V");
-    jstring pJstring = jniEnv->NewStringUTF(path);
-    jniEnv->CallStaticVoidMethod(javaHelperClass, methodId, pJstring);
-  }
+                                                             "(Lcom/dxfeed/api/DXFeedSubscription;J)V")}
+ {}
 
   jclass DxFeed::helperClass() {
     return javaHelperClass;
