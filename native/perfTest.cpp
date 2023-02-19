@@ -1,0 +1,59 @@
+#include <iostream>
+#include <memory>
+
+#include "diagnostic.h"
+
+namespace dxfeed::perf {
+  void Diagnostic::TimerCallback() {
+    auto eventsPerSec = GetEventsPerSec();
+    auto listenerCallsPerSec = GetListenerCallsPerSec();
+
+    std::cout << "\n";
+    std::cout << diagnosticHeader << "\n";
+    std::cout << "----------------------------------------------" << "\n";
+    std::cout << "  Events                   : " << eventsPerSec << " (per/sec)" << "\n";
+    std::cout << "  Listener Calls           : " << listenerCallsPerSec << " (per/sec)" << "\n";
+    std::cout << "  Average Number of Events : " << eventsPerSec / listenerCallsPerSec << "\n";
+    std::cout << "  Running Time           : " << _runningDiff.elapsedInSeconds() << "\n";
+
+    _timerDiff.restart();
+  }
+
+  int64_t Diagnostic::GetAndResetEventCounter() {
+    return _eventCounter.exchange(0);
+  }
+
+  int64_t Diagnostic::GetAndResetListenerCounter() {
+    return _listenerCounter.exchange(0);
+  }
+
+  double Diagnostic::GetEventsPerSec() {
+    return (double) GetAndResetEventCounter() / (double) _timerDiff.elapsedInSeconds();
+  }
+
+  double Diagnostic::GetListenerCallsPerSec() {
+    return (double) GetAndResetListenerCounter() / (double) _timerDiff.elapsedInSeconds();
+  }
+
+  Diagnostic::Diagnostic(int64_t measurementPeriodInSeconds) {
+    _timerDiff.restart();
+    _runningDiff.restart();
+    _timer = std::make_unique <Timer>(&Diagnostic::TimerCallback, measurementPeriodInSeconds);
+  }
+
+  void Diagnostic::AddEventCounter(int64_t value) {
+    _eventCounter += value;
+  }
+
+  void Diagnostic::AddListenerCounter(int64_t value) {
+    _listenerCounter += value;
+  }
+
+  void Diagnostic::Dispose() {
+    _timer->dispose();
+  }
+}
+
+int main(int argc, char** argv) {
+  dxfeed::perf::Diagnostic;
+}
