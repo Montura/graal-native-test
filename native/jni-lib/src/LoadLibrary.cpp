@@ -8,24 +8,25 @@
 #include <Windows.h>
 #include <codecvt>
 
-const wchar_t JAVA_DLL_NAME[] = L"java.dll";
-const wchar_t JVM_DLL_NAME[] = L"jvm.dll";
+const wchar_t JAVA_DLL_NAME[] = L"\\bin\\java.dll";
+const wchar_t JVM_DLL_NAME[] = L"\\bin\\server\\jvm.dll";
+const wchar_t ERROR_MESSAGE[] = L"File don't exist: ";
 
 std::wstring utf8_decode(const char* str) {
     return std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(str);
 }
 
-std::wstring javaLibraryPath(const char* javaHome) {
+auto javaLibraryPath(const char* javaHome) {
   auto java_home = utf8_decode(javaHome);
-  return java_home + JAVA_DLL_NAME;
+  return fs::path(java_home + JAVA_DLL_NAME);
 }
 
-std::string jvmLibraryPath(const char* javaHome) {
+auto jvmLibraryPath(const char* javaHome) {
   auto java_home = utf8_decode(javaHome);
-  return java_home + JVM_DLL_NAME;
+  return fs::path(java_home + JVM_DLL_NAME);
 }
 
-HINSTANCE openLib(const char* path) {
+HINSTANCE openLib(const wchar_t* path) {
   HINSTANCE libraryHandle = LoadLibraryW(path);
   if (!libraryHandle) {
     std::cerr << "Can't load lib from: " << path << "\n";
@@ -34,7 +35,7 @@ HINSTANCE openLib(const char* path) {
   return libraryHandle;
 }
 
-template <typename SymbolType, typename Handle>
+template <typename SymbolType>
 SymbolType loadSymbol(HINSTANCE libraryHandle, const char* symbolName) {
   auto symbol = (SymbolType) GetProcAddress(libraryHandle, symbolName);
   if (!symbol) {
@@ -48,13 +49,9 @@ SymbolType loadSymbol(HINSTANCE libraryHandle, const char* symbolName) {
 #include <dlfcn.h>
 #include <string>
 
-template <class TargetType, class InitialType>
-constexpr inline TargetType r_cast(InitialType arg) {
-  return reinterpret_cast<TargetType>(arg);
-}
-
 const char JAVA_DLL_NAME[] = "/lib/libjava.dylib";
 const char JVM_DLL_NAME[] = "/lib/server/libjvm.dylib";
+const char ERROR_MESSAGE[] = "File don't exist: ";
 
 std::string javaLibraryPath(const char* javaHome) {
   std::string java_home(javaHome);
@@ -89,6 +86,11 @@ SymbolType loadSymbol(void* libraryHandle, const char* symbolName) {
 
 #endif
 
+template <class TargetType, class InitialType>
+constexpr inline TargetType r_cast(InitialType arg) {
+  return reinterpret_cast<TargetType>(arg);
+}
+
 namespace dxfeed::internal {
   CreateJavaVM_t createJavaVM = nullptr;
 
@@ -97,7 +99,7 @@ namespace dxfeed::internal {
     bool file_exists = fs::exists(javaDllPath);
     auto size = file_exists && fs::is_regular_file(javaDllPath) ? static_cast<int64_t>(fs::file_size(javaDllPath)) : 0;
     if (!size) {
-      throw std::runtime_error("File don't exist: " + javaDllPath);
+      throw std::runtime_error(javaDllPath.string() + "doesn't exits");
     }
 
     auto jvmDllPath = jvmLibraryPath(javaHome);

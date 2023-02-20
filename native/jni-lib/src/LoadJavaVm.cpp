@@ -9,7 +9,15 @@ namespace dxfeed {
   JavaVM* javaVM = nullptr;
 
   namespace internal {
-    constexpr char PATH_SEPARATOR = ':';
+#if _MSC_VER && !__INTEL_COMPILER
+    constexpr char JAR_SEPARATOR = ';';
+    const char PATH_SEPARATOR = '\\';
+    const char JNI_LIB_NAME[] = "native_jni.dll";
+#else
+    constexpr char JAR_SEPARATOR = ':';
+    constexpr char PATH_SEPARATOR = '/';
+    const char JNI_LIB_NAME[] = "native_jni.dylib";
+#endif
     const char MY_JAR[] = "graal-tutorial-1.1-SNAPSHOT.jar";
     const char* JARS[] = {
       "auther-api-442.jar",
@@ -21,16 +29,16 @@ namespace dxfeed {
     };
 
     std::string buildClassPath(const std::filesystem::path& runtimePath) {
-      auto jarPath = runtimePath.parent_path().parent_path().string() + "/target/";
-      auto jarDxFeedPath = jarPath + "/libs/";
+      auto jarPath = runtimePath.parent_path().parent_path().append("target");
+      auto jarDxFeedPath = absolute(jarPath).append("libs").string();
       std::cout << "Custom JAR path: " <<  jarPath << std::endl;
-      std::cout << "DxFeed JAR path: " <<  jarPath << std::endl;
+      std::cout << "DxFeed JAR path: " <<  jarDxFeedPath << std::endl;
 
-      std::string result = jarPath + MY_JAR + PATH_SEPARATOR;
+      std::filesystem::path result = jarPath.string() + PATH_SEPARATOR + MY_JAR;
       for (const auto jar : JARS) {
-        result += jarDxFeedPath + jar + PATH_SEPARATOR;
+        result +=  JAR_SEPARATOR + jarDxFeedPath + jar;
       }
-      auto path = "-Djava.class.path=" + result.substr(0, result.size() - 1);
+      auto path = "-Djava.class.path=" + result.string();
       std::cout << "classpath: " << path;
       return path;
     }
@@ -67,7 +75,7 @@ namespace dxfeed {
         throw std::runtime_error("Error creating VM. Exiting...n");
       }
 
-      auto path = runtimePath.string() + "/native_jni.dylib";
+      auto path = runtimePath.string() + PATH_SEPARATOR + JNI_LIB_NAME;
       loadJNILibrary(path.c_str());
     }
 
