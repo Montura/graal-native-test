@@ -5,8 +5,30 @@
 #include <vector>
 
 #include "EventTypes.h"
+#include "utils/diagnostic.h"
+#include "utils/TimeAndSaleFormatter.hpp"
 
 namespace dxfeed {
+  namespace perf {
+    struct DiagnosticListener {
+      explicit DiagnosticListener(Diagnostic* diagnostic) :
+          _diagnostic(diagnostic) {}
+
+      void operator()(const void* events, std::size_t count) const {
+        auto timeAndSaleList = reinterpret_cast<const TimeAndSale*>(events);
+        _diagnostic->AddListenerCounter(1);
+        _diagnostic->AddEventCounter(count);
+        for (int i = 0; i < count; ++i) {
+          auto quote = std::make_shared<TimeAndSale>(timeAndSaleList[i]);
+          std::cout << dxfeed::TimeAndSaleFormatter::toString(quote.get()) << std::endl;
+        }
+      }
+
+    private:
+      Diagnostic* _diagnostic;
+    };
+  }
+
   struct Subscription final {
     typedef void(Listener)(const void* events, std::size_t count);
 

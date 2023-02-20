@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 
-#include "diagnostic.h"
+#include "api/utils/diagnostic.h"
 
 namespace dxfeed::perf {
   void Diagnostic::TimerCallback() {

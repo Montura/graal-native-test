@@ -16,7 +16,7 @@ inline std::string getStringFromJava(JNIEnv* env, jobject object, jmethodID jmet
 
 struct TimeAndSaleMapper {
   TimeAndSaleMapper(JNIEnv_* env, dxfeed::OnCloseHandler handler) {
-    clazz_ = reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("com/dxfeed/event/market/TimeAndSale")));
+    clazz_ = reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("Lcom/dxfeed/event/market/TimeAndSale;")));
     onClose_ = handler;
     idGetEventSymbol_ = env->GetMethodID(clazz_, "getEventSymbol", "()Ljava/lang/String;");
     idGetEventTime_ = env->GetMethodID(clazz_, "getEventTime", "()J");

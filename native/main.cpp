@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "include/api/TimeAndSale.h"
 #include "include/api/Api.h"
 #include "include/api/Subscription.h"
+#include "include/api/TimeAndSale.h"
 #include "include/api/utils/TimeAndSaleFormatter.hpp"
-#include "diagnostic.h"
+#include "include/api/utils/diagnostic.h"
 
 void hello() {
   std::cout << "Hello world" << std::endl;
@@ -27,9 +27,9 @@ int main(int argc, char** argv) {
   std::cout << "dx subscription jobject: " << static_cast<dxfeed::Subscription*>(subscription)->getSub() << std::endl;
 
   dxfeed::perf::Diagnostic diagnostic { 2 };
-  dxfeed::perf::Listener listener { &diagnostic };
+  dxfeed::perf::DiagnosticListener listener { &diagnostic };
 
-  long diagnostic_listener = reinterpret_cast<long>(&listener);
+  auto diagnostic_listener = reinterpret_cast<int64_t>(&listener);
   dxfeed_add_diagnostic_listener(subscription, diagnostic_listener);
 //  dxfeed_add_listener(subscription, [](const void *events, int count) {
 //    auto timeAndSaleList = reinterpret_cast<const TimeAndSale*>(events);

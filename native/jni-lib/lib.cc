@@ -72,6 +72,7 @@ void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListener(JNIEnv* env, jcla
   for (std::size_t i = 0; i < size; ++i) {
     events.emplace_back(timeAndSaleMapper.toNative(env, listMapping.get(env, eventList, i)));
   }
-  reinterpret_cast<dxfeed::Subscription::Listener *>(userCallback)(events.data(), size);
+  const auto pListener = reinterpret_cast<dxfeed::perf::DiagnosticListener*>(userCallback);
+  pListener->operator()(events.data(), size);
 }
 }

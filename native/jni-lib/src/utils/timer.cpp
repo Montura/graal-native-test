@@ -1,4 +1,4 @@
-#include "diagnostic.h"
+#include "api/utils/diagnostic.h"
 
 namespace dxfeed::perf {
   Timer::Timer(TimerCallback callback, int64_t measurementInSeconds):

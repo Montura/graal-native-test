@@ -4,9 +4,6 @@
 #include <thread>
 #include <iostream>
 
-#include "include/api/TimeAndSale.h"
-#include "include/api/utils/TimeAndSaleFormatter.hpp"
-
 namespace dxfeed::perf {
   class Diagnostic;
   typedef void(Diagnostic::*TimerCallback)();
@@ -50,22 +47,5 @@ namespace dxfeed::perf {
     void AddEventCounter(int64_t value);
     void AddListenerCounter(int64_t value);
     void Dispose();
-  };
-
-
-  struct Listener {
-    explicit Listener(const Diagnostic* diagnostic):
-      _diagnostic(diagnostic)
-    {}
-
-    void operator()(const void* events, std::size_t count) const {
-      auto timeAndSaleList = reinterpret_cast<const TimeAndSale*>(events);
-      for (int i = 0; i < count; ++i) {
-        auto quote = std::make_shared<TimeAndSale>(timeAndSaleList[i]);
-        std::cout << dxfeed::TimeAndSaleFormatter::toString(quote.get()) << std::endl;
-      }
-    }
-  private:
-    const Diagnostic* _diagnostic;
   };
 }

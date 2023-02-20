@@ -15,5 +15,5 @@ include_directories(${PROJECT_NAME} INTERFACE ${JNI_INCLUDE})
 include_directories(${PROJECT_NAME} INTERFACE ${API_INCLUDE})
 include_directories(${PROJECT_NAME} INTERFACE jni-lib)
 
-add_executable(${PROJECT_NAME} main.cpp perfTest.cpp timer.cpp)
+add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries(${PROJECT_NAME} native_jni)
