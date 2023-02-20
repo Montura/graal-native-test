@@ -21,6 +21,9 @@ namespace dxfeed {
 //    void addSymbols(const std::vector <std::string>& symbols) const;
     jobject getSub();
 
+
+    // diagnostic
+    void addDiagnosticListener(int64_t listener) const;
   private:
     jobject subscription_;
     JNIEnv* env_;

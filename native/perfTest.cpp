@@ -35,10 +35,11 @@ namespace dxfeed::perf {
     return (double) GetAndResetListenerCounter() / (double) _timerDiff.elapsedInSeconds();
   }
 
-  Diagnostic::Diagnostic(int64_t measurementPeriodInSeconds) {
+  Diagnostic::Diagnostic(int64_t measurementPeriodInSeconds):
+    _timer(new Timer(&Diagnostic::TimerCallback, measurementPeriodInSeconds))
+  {
     _timerDiff.restart();
     _runningDiff.restart();
-    _timer = std::make_unique <Timer>(&Diagnostic::TimerCallback, measurementPeriodInSeconds);
   }
 
   void Diagnostic::AddEventCounter(int64_t value) {
@@ -51,9 +52,6 @@ namespace dxfeed::perf {
 
   void Diagnostic::Dispose() {
     _timer->dispose();
+    delete _timer;
   }
-}
-
-int main(int argc, char** argv) {
-  dxfeed::perf::Diagnostic;
 }

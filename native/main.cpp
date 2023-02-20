@@ -4,6 +4,11 @@
 #include "include/api/Api.h"
 #include "include/api/Subscription.h"
 #include "include/api/utils/TimeAndSaleFormatter.hpp"
+#include "diagnostic.h"
+
+void hello() {
+  std::cout << "Hello world" << std::endl;
+}
 
 // D:\Tools\labsjdk-ce-17.0.6-jvmci-22.3-b13 demo.dxfeed.com:7300 ETH/USD:GDAX
 int main(int argc, char** argv) {
@@ -21,13 +26,18 @@ int main(int argc, char** argv) {
   std::cout << "dx subscription wrapper: " << static_cast<dxfeed::Subscription*>(subscription) << std::endl;
   std::cout << "dx subscription jobject: " << static_cast<dxfeed::Subscription*>(subscription)->getSub() << std::endl;
 
-  dxfeed_add_listener(subscription, [](const void *events, int count) {
-    auto timeAndSaleList = reinterpret_cast<const TimeAndSale*>(events);
-    for (int i = 0; i < count; ++i) {
-      auto quote = std::make_shared<TimeAndSale>(timeAndSaleList[i]);
-      std::cout << dxfeed::TimeAndSaleFormatter::toString(quote.get()) << std::endl;
-    }
-  });
+  dxfeed::perf::Diagnostic diagnostic { 2 };
+  dxfeed::perf::Listener listener { &diagnostic };
+
+  long diagnostic_listener = reinterpret_cast<long>(&listener);
+  dxfeed_add_diagnostic_listener(subscription, diagnostic_listener);
+//  dxfeed_add_listener(subscription, [](const void *events, int count) {
+//    auto timeAndSaleList = reinterpret_cast<const TimeAndSale*>(events);
+//    for (int i = 0; i < count; ++i) {
+//      auto quote = std::make_shared<TimeAndSale>(timeAndSaleList[i]);
+//      std::cout << dxfeed::TimeAndSaleFormatter::toString(quote.get()) << std::endl;
+//    }
+//  });
   dxfeed_add_symbol(subscription, symbol);
   std::cout << "Subscribe to symbol:" << symbol << std::endl;
   while (true) {}
