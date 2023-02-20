@@ -29,8 +29,6 @@ namespace dxfeed {
   private:
     DxFeed();
 
-    void loadJNILibrary(const char* path);
-
     JNIEnv* env_;
     const TimeAndSaleMapper timeAndSalesMapper_;
     const ListMapper listMapper_;
