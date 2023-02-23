@@ -53,14 +53,14 @@ const char JAVA_DLL_NAME[] = "/lib/libjava.dylib";
 const char JVM_DLL_NAME[] = "/lib/server/libjvm.dylib";
 const char ERROR_MESSAGE[] = "File don't exist: ";
 
-std::string javaLibraryPath(const char* javaHome) {
+auto javaLibraryPath(const char* javaHome) {
   std::string java_home(javaHome);
-  return java_home + JAVA_DLL_NAME;
+  return fs::path(java_home + JAVA_DLL_NAME);
 }
 
-std::string jvmLibraryPath(const char* javaHome) {
+auto jvmLibraryPath(const char* javaHome) {
   std::string java_home(javaHome);
-  return java_home + JVM_DLL_NAME;
+  return fs::path(java_home + JVM_DLL_NAME);
 }
 
 void* openLib(const char* path) {
