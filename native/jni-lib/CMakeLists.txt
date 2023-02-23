@@ -44,7 +44,7 @@ set(SOURCE_FILES
         src/Subscription.cpp
         src/utils/StringUtils.cpp
         src/utils/TimeAndSaleFormatter.cpp
-        src/utils/diagnostic.cpp
+        src/utils/Diagnostic.cpp
         src/utils/timer.cpp
         src/LoadLibrary.cpp
         src/LoadJavaVm.cpp

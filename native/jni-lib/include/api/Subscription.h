@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "EventTypes.h"
-#include "utils/diagnostic.h"
+#include "utils/Diagnostic.h"
 #include "utils/TimeAndSaleFormatter.hpp"
 
 namespace dxfeed {

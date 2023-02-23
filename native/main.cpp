@@ -4,7 +4,7 @@
 #include "include/api/Subscription.h"
 #include "include/api/TimeAndSale.h"
 #include "include/api/utils/TimeAndSaleFormatter.hpp"
-#include "include/api/utils/diagnostic.h"
+#include "include/api/utils/Diagnostic.h"
 
 void hello() {
   std::cout << "Hello world" << std::endl;

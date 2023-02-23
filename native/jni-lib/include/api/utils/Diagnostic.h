@@ -4,6 +4,8 @@
 #include <thread>
 #include <iostream>
 
+#include "StopWatch.h"
+
 namespace dxfeed::perf {
   class Diagnostic;
   typedef void(Diagnostic::*TimerCallback)();
@@ -22,18 +24,12 @@ namespace dxfeed::perf {
     bool m_running = false;       // Status if timer is running
   };
 
-  struct TimerDiff {
-    void restart() {}
-
-    int64_t elapsedInSeconds() { return 1; }; // todo: calculate
-  };
-
   class Diagnostic {
     const std::string diagnosticHeader = "SystemInfo";
     /* readonly Timer */  Timer* _timer;
 
-    /* readonly Stopwatch */ TimerDiff _timerDiff;   // todo: replace TimerDiff with Stopwatch
-    /* readonly Stopwatch */ TimerDiff _runningDiff; // todo: replace TimerDiff with Stopwatch
+    /* readonly Stopwatch */ Stopwatch _timerDiff;   // todo: replace TimerDiff with Stopwatch
+    /* readonly Stopwatch */ Stopwatch _runningDiff; // todo: replace TimerDiff with Stopwatch
 
     /* long */ std::atomic <int64_t> _eventCounter;
     /* long */ std::atomic <int64_t> _listenerCounter;
