@@ -32,8 +32,8 @@ namespace dxfeed::perf {
     const std::string diagnosticHeader = "SystemInfo";
     /* readonly Timer */  Timer* _timer;
 
-    /* readonly Stopwatch */ TimerDiff _timerDiff;
-    /* readonly Stopwatch */ TimerDiff _runningDiff;
+    /* readonly Stopwatch */ TimerDiff _timerDiff;   // todo: replace TimerDiff with Stopwatch
+    /* readonly Stopwatch */ TimerDiff _runningDiff; // todo: replace TimerDiff with Stopwatch
 
     /* long */ std::atomic <int64_t> _eventCounter;
     /* long */ std::atomic <int64_t> _listenerCounter;

@@ -48,7 +48,7 @@ set(SOURCE_FILES
         src/utils/timer.cpp
         src/LoadLibrary.cpp
         src/LoadJavaVm.cpp
-)
+        src/utils/StopWatch.cpp)
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
