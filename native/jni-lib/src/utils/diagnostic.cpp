@@ -36,7 +36,7 @@ namespace dxfeed::perf {
   }
 
   Diagnostic::Diagnostic(int64_t measurementPeriodInSeconds):
-    _timer(new Timer(&Diagnostic::TimerCallback, measurementPeriodInSeconds))
+    _timer(new Timer(this, &Diagnostic::TimerCallback, measurementPeriodInSeconds))
   {
     _timerDiff.restart();
     _runningDiff.restart();

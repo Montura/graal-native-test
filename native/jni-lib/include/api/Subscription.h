@@ -20,7 +20,7 @@ namespace dxfeed {
         _diagnostic->AddEventCounter(count);
         for (int i = 0; i < count; ++i) {
           auto quote = std::make_shared<TimeAndSale>(timeAndSaleList[i]);
-          std::cout << dxfeed::TimeAndSaleFormatter::toString(quote.get()) << std::endl;
+//          std::cout << dxfeed::TimeAndSaleFormatter::toString(quote.get()) << std::endl;
         }
       }
 

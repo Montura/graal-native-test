@@ -1,10 +1,13 @@
 #include "api/utils/diagnostic.h"
 
 namespace dxfeed::perf {
-  Timer::Timer(TimerCallback callback, int64_t measurementInSeconds):
+  Timer::Timer(Diagnostic* diagnostic, TimerCallback callback, int64_t measurementInSeconds):
+    _diagnostic(diagnostic),
     m_func(callback),
     m_interval(measurementInSeconds)
-  {}
+  {
+    start();
+  }
 
   /**
  * Starting the timer.
@@ -14,7 +17,7 @@ namespace dxfeed::perf {
     m_thread = std::thread([&]() {
       while (m_running) {
         auto delta = std::chrono::steady_clock::now() + std::chrono::seconds(m_interval);
-//        m_func();
+        (_diagnostic->*m_func)();
         std::this_thread::sleep_until(delta);
       }
     });

@@ -9,13 +9,14 @@ namespace dxfeed::perf {
   typedef void(Diagnostic::*TimerCallback)();
 
   struct Timer {
-    Timer(TimerCallback callback, int64_t measurementInSeconds);
+    Timer(Diagnostic* diagnostic, TimerCallback callback, int64_t measurementInSeconds);
     void start();
     void restart();
     void stop();
     void dispose();
   private:
-    const TimerCallback m_func;   // Function to be executed fater interval
+    Diagnostic* _diagnostic;
+    const TimerCallback m_func;   // Function to be executed after interval
     const long m_interval;        // Timer interval in milliseconds
     std::thread m_thread;         // Thread timer is running into
     bool m_running = false;       // Status if timer is running
@@ -24,7 +25,7 @@ namespace dxfeed::perf {
   struct TimerDiff {
     void restart() {}
 
-    int64_t elapsedInSeconds() { return 0; };
+    int64_t elapsedInSeconds() { return 1; }; // todo: calculate
   };
 
   class Diagnostic {
