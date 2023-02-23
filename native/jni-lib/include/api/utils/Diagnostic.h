@@ -31,8 +31,8 @@ namespace dxfeed::perf {
     /* readonly Stopwatch */ Stopwatch _timerDiff;   // todo: replace TimerDiff with Stopwatch
     /* readonly Stopwatch */ Stopwatch _runningDiff; // todo: replace TimerDiff with Stopwatch
 
-    /* long */ std::atomic <int64_t> _eventCounter;
-    /* long */ std::atomic <int64_t> _listenerCounter;
+    /* long */ std::atomic<int64_t> _eventCounter {0};
+    /* long */ std::atomic<int64_t> _listenerCounter {0};
 
     void TimerCallback();
     int64_t GetAndResetEventCounter();

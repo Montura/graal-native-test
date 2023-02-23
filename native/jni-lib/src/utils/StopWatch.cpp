@@ -1,4 +1,7 @@
 #include <cstdint>
+#include <chrono>
+#include <iostream>
+
 #include "api/utils/StopWatch.h"
 
 // This class uses high-resolution performance counter if the installed
@@ -7,7 +10,11 @@
 
 namespace dxfeed::perf {
 
-  Stopwatch::Stopwatch() {
+  Stopwatch::Stopwatch() :
+    _isRunning(false),
+    _elapsed(0),
+    _startTimeStamp(0)
+  {
     reset();
   }
 
@@ -58,26 +65,30 @@ namespace dxfeed::perf {
     _isRunning = true;
   }
 
-  bool Stopwatch::isRunning() const {
-    return _isRunning;
-  }
+//  bool Stopwatch::isRunning() const {
+//    return _isRunning;
+//  }
 
   int64_t Stopwatch::elapsedInSeconds() const {
     return getElapsedDateTimeTicks() / TicksPerSecond;
   }
+//
+//  double Stopwatch::elapsedMilliseconds() {
+//    return getElapsedDateTimeTicks() / TicksPerMillisecond;
+//  }
+//
+//
+//  int64_t Stopwatch::elapsedTicks() {
+//    return getRawElapsedTicks();
+//  }
 
-  int64_t Stopwatch::elapsedMilliseconds() {
-    return getElapsedDateTimeTicks() / TicksPerMillisecond;
-  }
-
-
-  int64_t Stopwatch::elapsedTicks() {
-    return getRawElapsedTicks();
-  }
-
-  long Stopwatch::getTimestamp() {
+  int64_t Stopwatch::getTimestamp() {
 //      Debug.Assert(IsHighResolution);
-    return 1; // todo: replace (long) Interop.Sys.GetTimestamp();
+    // todo: replace (long) Interop.Sys.GetTimestamp();
+    const auto point = std::chrono::steady_clock::now();
+    long long int count = std::chrono::duration_cast <std::chrono::seconds>(point.time_since_epoch()).count();
+    std::cout << "getTimestamp(): " << count << std::endl;
+    return count;
   }
 
   // Get the elapsed ticks.
@@ -98,7 +109,12 @@ namespace dxfeed::perf {
   int64_t Stopwatch::getElapsedDateTimeTicks() const {
     // Debug.Assert(IsHighResolution);
     // convert high resolution perf counter to DateTime ticks
-    return (reinterpret_cast<int64_t>(getRawElapsedTicks()) * s_tickFrequency);
+    int64_t i = getRawElapsedTicks();
+    double d = i * s_tickFrequency;
+    std::cout << "getElapsedDateTimeTicks():getRawElapsedTicks = " << i << std::endl;
+    std::cout << "getElapsedDateTimeTicks():s_tickFrequency = " << s_tickFrequency << std::endl;
+    std::cout << "getElapsedDateTimeTicks():d = " << d << std::endl;
+    return d;
   }
 
 }

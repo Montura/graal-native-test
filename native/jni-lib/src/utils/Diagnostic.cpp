@@ -14,7 +14,7 @@ namespace dxfeed::perf {
     std::cout << "  Events                   : " << eventsPerSec << " (per/sec)" << "\n";
     std::cout << "  Listener Calls           : " << listenerCallsPerSec << " (per/sec)" << "\n";
     std::cout << "  Average Number of Events : " << eventsPerSec / listenerCallsPerSec << "\n";
-    std::cout << "  Running Time           : " << _runningDiff.elapsedInSeconds() << "\n";
+    std::cout << "  Running Time             : " << _runningDiff.elapsedInSeconds() << "\n";
 
     _timerDiff.restart();
   }

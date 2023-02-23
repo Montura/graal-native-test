@@ -30,11 +30,11 @@ namespace dxfeed::perf {
     void reset();
     void restart();
 
-    bool isRunning() const;
+//    bool isRunning() const;
     int64_t elapsedInSeconds() const;
-    int64_t elapsedMilliseconds();
-    int64_t elapsedTicks();
-    static long getTimestamp();
+//    double elapsedMilliseconds();
+//    int64_t elapsedTicks();
+    static int64_t getTimestamp();
 
   private:
     int64_t getRawElapsedTicks() const;
