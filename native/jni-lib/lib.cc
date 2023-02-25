@@ -25,10 +25,11 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
   }
   std::cout << "JNI_OnLoad" << std::endl;
   jclass clazz = env->FindClass("Lcom/dxfeed/api/JniTest;");
-  std::cout << "clazz: " << clazz << std::endl;
+  std::cout << "\tclazz com/dxfeed/api/JniTest: " << clazz << std::endl;
 
   jint res = env->RegisterNatives(clazz, methods, sizeof(methods)/sizeof(methods[0]));
-  std::cout << "res: " << res << std::endl;
+  auto msg = (res == JNI_OK) ? "JNI_OK" : "Failed";
+  std::cout << "\tRegisterNatives result: " << msg << "(" << res << ")" << std::endl;
 
   return JNI_VERSION_1_8;
 }

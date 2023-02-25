@@ -39,7 +39,7 @@ namespace dxfeed {
         result +=  JAR_SEPARATOR + jarDxFeedPath + jar;
       }
       auto path = "-Djava.class.path=" + result.string();
-      std::cout << "classpath: " << path;
+      std::cout << "classpath: " << path << std::endl;
       return path;
     }
 
