@@ -5,13 +5,21 @@
 
 #if _MSC_VER && !__INTEL_COMPILER
 #include <Windows.h>
-#include <codecvt>
 
 const wchar_t JAVA_DLL_NAME[] = L"java.dll";
 const wchar_t JVM_DLL_NAME[] = L"jvm.dll";
 
+static inline std::unique_ptr<WCHAR[]> multibyteStrToUtf16(const char *s) {
+  DWORD size = MultiByteToWideChar(CP_UTF8, 0, s, -1, nullptr, 0);
+  std::unique_ptr<WCHAR[]> wideStr(new wchar_t[size]);
+  MultiByteToWideChar(CP_UTF8, 0, s, -1, wideStr.get(), static_cast<int32_t>(size));
+  return wideStr;
+}
+
 std::wstring utf8ToPlatformString(const char* str) {
-    return std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(str);
+  const auto& buffer = multibyteStrToUtf16(str);
+  std::wstring w(buffer.get());
+  return w;
 }
 
 template <typename SymbolType>
@@ -85,7 +93,6 @@ namespace dxfeed::internal {
 
   void loadJVMLibrary(const char* java_home_utf8) {
     auto javaHome = utf8ToPlatformString(java_home_utf8);
-
     auto javaDllPath = recursivelyLookUpLibraryByName(javaHome, JAVA_DLL_NAME);
     bool file_exists = fs::exists(javaDllPath);
     auto size = file_exists && fs::is_regular_file(javaDllPath) ? static_cast<int64_t>(fs::file_size(javaDllPath)) : 0;
