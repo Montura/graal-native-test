@@ -16,33 +16,13 @@ std::wstring utf8_decode(const char* str) {
     return std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(str);
 }
 
-auto javaLibraryPath(const char* javaHome) {
-  auto java_home = utf8_decode(javaHome);
-  return fs::path(java_home + JAVA_DLL_NAME);
-}
-
-auto jvmLibraryPath(const char* javaHome) {
-  auto java_home = utf8_decode(javaHome);
-  return fs::path(java_home + JVM_DLL_NAME);
-}
-
-HINSTANCE openLib(const wchar_t* path) {
-  HINSTANCE libraryHandle = LoadLibraryW(path);
-  if (!libraryHandle) {
-    std::cerr << "Can't load lib from: " << path << "\n";
-  }
-  std::cout << "Loaded library: " << path << "\n";
-  return libraryHandle;
-}
-
 template <typename SymbolType>
-SymbolType loadSymbol(HINSTANCE libraryHandle, const char* symbolName) {
-  auto symbol = (SymbolType) GetProcAddress(libraryHandle, symbolName);
-  if (!symbol) {
-    std::string errMsg("Can't load lib from: ");
-    throw std::runtime_error(errMsg + symbolName);
-  }
-  return symbol;
+SymbolType loadSymbolPlatform(HINSTANCE libraryHandle, const char* symbolName) {
+  return (SymbolType) GetProcAddress(libraryHandle, symbolName);
+}
+
+auto loadLibraryPlatform(const wchar_t* symbolName) {
+  return LoadLibraryW(symbolName);
 }
 #else
 
@@ -53,35 +33,17 @@ const char JAVA_DLL_NAME[] = "/lib/libjava.dylib";
 const char JVM_DLL_NAME[] = "/lib/server/libjvm.dylib";
 const char ERROR_MESSAGE[] = "File don't exist: ";
 
-auto javaLibraryPath(const char* javaHome) {
-  std::string java_home(javaHome);
-  return fs::path(java_home + JAVA_DLL_NAME);
+std::string utf8_decode(const char* str) {
+  return std::string { str };
 }
 
-auto jvmLibraryPath(const char* javaHome) {
-  std::string java_home(javaHome);
-  return fs::path(java_home + JVM_DLL_NAME);
-}
-
-void* openLib(const char* path) {
-  void* libraryHandle = dlopen(path, RTLD_LAZY);
-  if (!libraryHandle) {
-    std::string errMsg("Can't load lib from: ");
-    throw std::runtime_error(errMsg + path);
-  }
-  std::cout << "Loaded library: " << path << "\n";
-  return libraryHandle;
+auto loadLibraryPlatform(const char* path) {
+  return dlopen(path, RTLD_LAZY);
 }
 
 template <typename SymbolType>
-SymbolType loadSymbol(void* libraryHandle, const char* symbolName) {
-  auto symbol = (SymbolType) dlsym(libraryHandle, symbolName);
-  if (!symbol) {
-    std::stringstream ss{};
-    ss << "Can't load symbol" << symbolName << " from library:" << libraryHandle;
-    throw std::runtime_error(ss.str());
-  }
-  return symbol;
+SymbolType loadSymbolPlatform(void* libraryHandle, const char* symbolName) {
+  return (SymbolType) dlsym(libraryHandle, symbolName);
 }
 
 #endif
@@ -91,19 +53,41 @@ constexpr inline TargetType r_cast(InitialType arg) {
   return reinterpret_cast<TargetType>(arg);
 }
 
+auto loadLibrary(const fs::path& path) {
+  auto libraryHandle = loadLibraryPlatform(path.c_str());
+  if (!libraryHandle) {
+    std::string errMsg("Can't load lib from: ");
+    throw std::runtime_error(errMsg + path.string());
+  }
+  std::cout << "Loaded library: " << path << "\n";
+  return libraryHandle;
+}
+
+template<typename SymbolType, typename HandleT>
+SymbolType loadSymbol(HandleT libraryHandle, const char* symbolName) {
+  auto symbol = loadSymbolPlatform<SymbolType>(libraryHandle, symbolName);
+  if (!symbol) {
+    std::string errMsg("Can't load symbol: ");
+    throw std::runtime_error(errMsg + symbolName);
+  }
+  return symbol;
+}
+
 namespace dxfeed::internal {
   CreateJavaVM_t createJavaVM = nullptr;
 
-  void loadJVMLibrary(const char* javaHome) {
-    auto javaDllPath = javaLibraryPath(javaHome);
+  void loadJVMLibrary(const char* java_home_utf8) {
+    auto javaHome = utf8_decode(java_home_utf8);
+
+    auto javaDllPath = fs::path(javaHome + JAVA_DLL_NAME);
     bool file_exists = fs::exists(javaDllPath);
     auto size = file_exists && fs::is_regular_file(javaDllPath) ? static_cast<int64_t>(fs::file_size(javaDllPath)) : 0;
     if (!size) {
       throw std::runtime_error(javaDllPath.string() + "doesn't exits");
     }
 
-    auto jvmDllPath = jvmLibraryPath(javaHome);
-    auto JVM_DLL = openLib(jvmDllPath.c_str());
+    auto jvmDllPath = fs::path(javaHome + JVM_DLL_NAME);
+    auto JVM_DLL = loadLibrary(jvmDllPath.c_str());
     createJavaVM = loadSymbol<CreateJavaVM_t>(JVM_DLL, "JNI_CreateJavaVM");
     auto findBootClass = loadSymbol<FindClassFromBootLoader_t>(JVM_DLL, "JVM_FindClassFromBootLoader");
     if (createJavaVM == nullptr || findBootClass == nullptr) {

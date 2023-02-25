@@ -17,16 +17,16 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${OUTPUT_PATH})
 message("JNI_COMMON_INCLUDE: ${JNI_COMMON_INCLUDE}")
 
 if (WIN32)
-    # Set the DLLEXPORT variable to export symbols
-    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-    set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/win32)
-    set(JNI_INCLUDE ${JNI_INCLUDE} PARENT_SCOPE)
+  # Set the DLLEXPORT variable to export symbols
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+  set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/win32)
+  set(JNI_INCLUDE ${JNI_INCLUDE} PARENT_SCOPE)
 elseif (APPLE)
-    set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/darwin)
-    set(JNI_INCLUDE ${JNI_INCLUDE} PARENT_SCOPE)
+  set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/darwin)
+  set(JNI_INCLUDE ${JNI_INCLUDE} PARENT_SCOPE)
 elseif (UNIX)
-    set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/linux)
-    set(JNI_INCLUDE ${JNI_INCLUDE} PARENT_SCOPE)
+  set(JNI_INCLUDE ${JNI_COMMON_INCLUDE} ${JNI_COMMON_INCLUDE}/linux)
+  set(JNI_INCLUDE ${JNI_INCLUDE} PARENT_SCOPE)
 endif ()
 
 message("JNI_COMMON_INCLUDE: ${JNI_INCLUDE}")
@@ -63,15 +63,15 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(FetchContent)
 
 FetchContent_Declare(date
-        GIT_REPOSITORY https://github.com/HowardHinnant/date.git
-        GIT_TAG v3.0.1
-        )
+    GIT_REPOSITORY https://github.com/HowardHinnant/date.git
+    GIT_TAG v3.0.1
+    )
 FetchContent_MakeAvailable(date)
 
 target_link_libraries(${PROJECT_NAME} date)
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
-elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
-    target_compile_options(${PROJECT_NAME} PRIVATE /EHsc /MTd /W2 /c)
-endif()
+  target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
+elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
+  target_compile_options(${PROJECT_NAME} PRIVATE /EHsc /MTd /W2 /c)
+endif ()
