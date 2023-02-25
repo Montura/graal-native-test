@@ -28,9 +28,7 @@ namespace dxfeed::perf {
   }
 
   double Diagnostic::GetEventsPerSec() {
-    auto d = static_cast<double>(GetAndResetEventCounter());
-    auto seconds = _timerDiff.elapsedInSeconds();
-    return d / seconds;
+    return static_cast<double>(GetAndResetEventCounter()) / _timerDiff.elapsedInSeconds();
   }
 
   double Diagnostic::GetListenerCallsPerSec() {

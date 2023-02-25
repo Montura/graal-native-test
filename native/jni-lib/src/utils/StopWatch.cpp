@@ -1,12 +1,7 @@
 #include <cstdint>
 #include <chrono>
-#include <iostream>
 
 #include "api/utils/StopWatch.h"
-
-// This class uses high-resolution performance counter if the installed
-// hardware supports it. Otherwise, the class will fall back to DateTime
-// and uses ticks as a measurement.
 
 namespace dxfeed::perf {
 
@@ -60,9 +55,7 @@ namespace dxfeed::perf {
   }
 
   double Stopwatch::elapsedInSeconds() const {
-    auto i = static_cast<double>(getElapsedTimeInNanos());
-    auto nanosToSecond = static_cast<double>(NanosPerSecond);
-    return i / nanosToSecond;
+    return static_cast<double>(getElapsedTimeInNanos()) / static_cast<double>(NanosPerSecond);
   }
 
   int64_t Stopwatch::getTimeStampInNanos() {
@@ -75,8 +68,7 @@ namespace dxfeed::perf {
     int64_t timeElapsed = _elapsed;
 
     if (_isRunning) {
-      // If the Stopwatch is running, add elapsed time since
-      // the Stopwatch is started last time.
+      // If the Stopwatch is running, add elapsed time since the Stopwatch is started last time.
       int64_t currentTimeStamp = getTimeStampInNanos();
       int64_t elapsedUntilNow = currentTimeStamp - _startTimeStamp;
       timeElapsed += elapsedUntilNow;
