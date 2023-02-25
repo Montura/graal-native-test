@@ -28,11 +28,13 @@ namespace dxfeed::perf {
   }
 
   double Diagnostic::GetEventsPerSec() {
-    return (double) GetAndResetEventCounter() / (double) _timerDiff.elapsedInSeconds();
+    auto d = static_cast<double>(GetAndResetEventCounter());
+    auto seconds = _timerDiff.elapsedInSeconds();
+    return d / seconds;
   }
 
   double Diagnostic::GetListenerCallsPerSec() {
-    return (double) GetAndResetListenerCounter() / (double) _timerDiff.elapsedInSeconds();
+    return static_cast<double>(GetAndResetListenerCounter()) / _timerDiff.elapsedInSeconds();
   }
 
   Diagnostic::Diagnostic(int64_t measurementPeriodInSeconds):
