@@ -10,7 +10,7 @@
 const wchar_t JAVA_DLL_NAME[] = L"java.dll";
 const wchar_t JVM_DLL_NAME[] = L"jvm.dll";
 
-std::wstring utf8_decode(const char* str) {
+std::wstring utf8ToPlatformString(const char* str) {
     return std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(str);
 }
 
@@ -30,7 +30,7 @@ auto loadLibraryPlatform(const wchar_t* symbolName) {
 const char JAVA_DLL_NAME[] = "java";
 const char JVM_DLL_NAME[] = "libjvm.dylib";
 
-std::string utf8_decode(const char* str) {
+std::string utf8ToPlatformString(const char* str) {
   return std::string { str };
 }
 
@@ -50,41 +50,41 @@ constexpr inline TargetType r_cast(InitialType arg) {
   return reinterpret_cast<TargetType>(arg);
 }
 
-template <typename CharT>
-fs::path recursivelyLookUpLibraryByName(const fs::path& path, CharT libName) {
-  for (const auto& dirOrFile : fs::recursive_directory_iterator(path)) {
-    if (dirOrFile.is_regular_file() && dirOrFile.path().filename() == libName) {
-      return dirOrFile.path();
-    }
-  }
-  throw std::runtime_error("NO_PATH");
-}
-
-auto loadLibrary(const fs::path& path) {
-  auto libraryHandle = loadLibraryPlatform(path.c_str());
-  if (!libraryHandle) {
-    std::string errMsg("Can't load lib from: ");
-    throw std::runtime_error(errMsg + path.string());
-  }
-  std::cout << "Loaded library: " << path << "\n";
-  return libraryHandle;
-}
-
-template<typename SymbolType, typename HandleT>
-SymbolType loadSymbol(HandleT libraryHandle, const char* symbolName) {
-  auto symbol = loadSymbolPlatform<SymbolType>(libraryHandle, symbolName);
-  if (!symbol) {
-    std::string errMsg("Can't load symbol: ");
-    throw std::runtime_error(errMsg + symbolName);
-  }
-  return symbol;
-}
-
 namespace dxfeed::internal {
   CreateJavaVM_t createJavaVM = nullptr;
 
+  template <typename CharT>
+  fs::path recursivelyLookUpLibraryByName(const fs::path& path, CharT libName) {
+    for (const auto& dirOrFile : fs::recursive_directory_iterator(path)) {
+      if (dirOrFile.is_regular_file() && dirOrFile.path().filename() == libName) {
+        return dirOrFile.path();
+      }
+    }
+    throw std::runtime_error("NO_PATH");
+  }
+
+  auto loadLibrary(const fs::path& path) {
+    auto libraryHandle = loadLibraryPlatform(path.c_str());
+    if (!libraryHandle) {
+      std::string errMsg("Can't load lib from: ");
+      throw std::runtime_error(errMsg + path.string());
+    }
+    std::cout << "Loaded library: " << path << "\n";
+    return libraryHandle;
+  }
+
+  template<typename SymbolType, typename HandleT>
+  SymbolType loadSymbol(HandleT libraryHandle, const char* symbolName) {
+    auto symbol = loadSymbolPlatform<SymbolType>(libraryHandle, symbolName);
+    if (!symbol) {
+      std::string errMsg("Can't load symbol: ");
+      throw std::runtime_error(errMsg + symbolName);
+    }
+    return symbol;
+  }
+
   void loadJVMLibrary(const char* java_home_utf8) {
-    auto javaHome = utf8_decode(java_home_utf8);
+    auto javaHome = utf8ToPlatformString(java_home_utf8);
 
     auto javaDllPath = recursivelyLookUpLibraryByName(javaHome, JAVA_DLL_NAME);
     bool file_exists = fs::exists(javaDllPath);
