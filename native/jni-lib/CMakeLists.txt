@@ -39,16 +39,18 @@ message("-- Linking native_lib")
 set(SOURCE_FILES
         lib.cc
         src/Api.cpp
-        src/DxFeed.cpp
         src/Connection.cpp
+        src/DxFeed.cpp
+        src/JavaProperty.cpp
+        src/LoadJavaVm.cpp
+        src/LoadLibrary.cpp
         src/Subscription.cpp
         src/utils/StringUtils.cpp
         src/utils/TimeAndSaleFormatter.cpp
         src/utils/Diagnostic.cpp
         src/utils/Timer.cpp
-        src/LoadLibrary.cpp
-        src/LoadJavaVm.cpp
-        src/utils/StopWatch.cpp)
+        src/utils/StopWatch.cpp
+)
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")

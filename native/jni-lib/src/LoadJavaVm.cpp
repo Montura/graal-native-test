@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "api/utils/LoadLibrary.h"
+#include "api/utils/JavaProperty.h"
 
 namespace dxfeed {
   JNIEnv* jniEnv = nullptr;
@@ -43,14 +44,34 @@ namespace dxfeed {
       return path;
     }
 
-    void loadJNILibrary(const char* path) {
-      jclass pJclass = jniEnv->FindClass("Ljava/lang/System;");
-      std::cout << "java.lang.System: " << pJclass << "\n";
-      jmethodID methodId = jniEnv->GetStaticMethodID(pJclass, "load", "(Ljava/lang/String;)V");
-      std::cout << "void System::load(String path): " << methodId << "\n";
+    void dumpJavaInfo(jclass pJclass, jmethodID methodId) {
+      auto vendor = JavaProperty { pJclass, methodId, "java.vendor"};
+      auto version = JavaProperty { pJclass, methodId, "java.version"};
+      auto versionDate = JavaProperty { pJclass, methodId, "java.version.date"};
+      auto runtimeName = JavaProperty { pJclass, methodId, "java.runtime.name"};
+      auto runtimeVersion = JavaProperty { pJclass, methodId, "java.runtime.version"};
+      auto vmName = JavaProperty { pJclass, methodId, "java.vm.name"};
+      auto vmVendor = JavaProperty { pJclass, methodId, "java.vm.vendor"};
+      auto vmVersion = JavaProperty { pJclass, methodId, "java.vm.version"};
+      auto vmInfo = JavaProperty { pJclass, methodId, "java.vm.info"};
 
+      std::cout << "JAVA_HOME info:" << std::endl;
+      std::cout << "\t" << vendor << " version \"" << version << "\" " << versionDate << std::endl;
+      std::cout << "\t" << runtimeName << " (build " << runtimeVersion << ")" << std::endl;
+      std::cout << "\t" << vmName << " " << vmVendor << " (build" << vmVersion << ", " << vmInfo << ")" << std::endl;
+    }
+
+    void loadJNILibrary(const char* path) {
+      jclass javaLangSystemClazz = jniEnv->FindClass("Ljava/lang/System;");
+      std::cout << "java.lang.System: " << javaLangSystemClazz << "\n";
+      jmethodID loadMethodId = jniEnv->GetStaticMethodID(javaLangSystemClazz, "load", "(Ljava/lang/String;)V");
+      std::cout << "void System::load(String path): " << loadMethodId << "\n";
       jstring pJstring = jniEnv->NewStringUTF(path);
-      jniEnv->CallStaticVoidMethod(pJclass, methodId, pJstring);
+      jniEnv->CallStaticVoidMethod(javaLangSystemClazz, loadMethodId, pJstring);
+
+      jmethodID getPropMethodId = jniEnv->GetStaticMethodID(javaLangSystemClazz, "getProperty", "(Ljava/lang/String;)Ljava/lang/String;");
+      std::cout << "void System::getProperty(String path): " << getPropMethodId << "\n";
+      dumpJavaInfo(javaLangSystemClazz, getPropMethodId);
     }
 
     void loadJavaVM(const char* javaHome) {
