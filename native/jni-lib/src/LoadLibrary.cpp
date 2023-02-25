@@ -1,6 +1,5 @@
 #include <sstream>
 #include <iostream>
-#include <jni.h>
 
 #include "api/utils/LoadLibrary.h"
 
@@ -8,9 +7,8 @@
 #include <Windows.h>
 #include <codecvt>
 
-const wchar_t JAVA_DLL_NAME[] = L"\\bin\\java.dll";
-const wchar_t JVM_DLL_NAME[] = L"\\bin\\server\\jvm.dll";
-const wchar_t ERROR_MESSAGE[] = L"File don't exist: ";
+const wchar_t JAVA_DLL_NAME[] = L"java.dll";
+const wchar_t JVM_DLL_NAME[] = L"jvm.dll";
 
 std::wstring utf8_decode(const char* str) {
     return std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(str);
@@ -29,9 +27,8 @@ auto loadLibraryPlatform(const wchar_t* symbolName) {
 #include <dlfcn.h>
 #include <string>
 
-const char JAVA_DLL_NAME[] = "/lib/libjava.dylib";
-const char JVM_DLL_NAME[] = "/lib/server/libjvm.dylib";
-const char ERROR_MESSAGE[] = "File don't exist: ";
+const char JAVA_DLL_NAME[] = "libjava.dylib";
+const char JVM_DLL_NAME[] = "libjvm.dylib";
 
 std::string utf8_decode(const char* str) {
   return std::string { str };
@@ -51,6 +48,24 @@ SymbolType loadSymbolPlatform(void* libraryHandle, const char* symbolName) {
 template <class TargetType, class InitialType>
 constexpr inline TargetType r_cast(InitialType arg) {
   return reinterpret_cast<TargetType>(arg);
+}
+
+template <typename CharT>
+fs::path recursivelyLookUpLibraryByName(const fs::path& path, CharT libName) {
+  for (const auto& dirOrFile : fs::directory_iterator(path)) {
+    if (dirOrFile.is_directory()) {
+      for (const auto& file : fs::directory_iterator(dirOrFile)) {
+        if (file.is_regular_file() && file.path().filename() == libName) {
+          return file.path();
+        } else if (file.is_directory()) {
+          return recursivelyLookUpLibraryByName(file, libName);
+        }
+      }
+    } else if (dirOrFile.is_regular_file() && dirOrFile.path().filename() == libName) {
+      return dirOrFile.path();
+    }
+  }
+  return fs::path {"NO_PATH"};
 }
 
 auto loadLibrary(const fs::path& path) {
@@ -79,14 +94,14 @@ namespace dxfeed::internal {
   void loadJVMLibrary(const char* java_home_utf8) {
     auto javaHome = utf8_decode(java_home_utf8);
 
-    auto javaDllPath = fs::path(javaHome + JAVA_DLL_NAME);
+    auto javaDllPath = recursivelyLookUpLibraryByName(javaHome, JAVA_DLL_NAME);
     bool file_exists = fs::exists(javaDllPath);
     auto size = file_exists && fs::is_regular_file(javaDllPath) ? static_cast<int64_t>(fs::file_size(javaDllPath)) : 0;
     if (!size) {
       throw std::runtime_error(javaDllPath.string() + "doesn't exits");
     }
 
-    auto jvmDllPath = fs::path(javaHome + JVM_DLL_NAME);
+    auto jvmDllPath = recursivelyLookUpLibraryByName(javaHome, JVM_DLL_NAME);
     auto JVM_DLL = loadLibrary(jvmDllPath.c_str());
     createJavaVM = loadSymbol<CreateJavaVM_t>(JVM_DLL, "JNI_CreateJavaVM");
     auto findBootClass = loadSymbol<FindClassFromBootLoader_t>(JVM_DLL, "JVM_FindClassFromBootLoader");
