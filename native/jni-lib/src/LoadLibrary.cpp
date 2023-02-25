@@ -27,7 +27,7 @@ auto loadLibraryPlatform(const wchar_t* symbolName) {
 #include <dlfcn.h>
 #include <string>
 
-const char JAVA_DLL_NAME[] = "libjava.dylib";
+const char JAVA_DLL_NAME[] = "java";
 const char JVM_DLL_NAME[] = "libjvm.dylib";
 
 std::string utf8_decode(const char* str) {
@@ -52,20 +52,12 @@ constexpr inline TargetType r_cast(InitialType arg) {
 
 template <typename CharT>
 fs::path recursivelyLookUpLibraryByName(const fs::path& path, CharT libName) {
-  for (const auto& dirOrFile : fs::directory_iterator(path)) {
-    if (dirOrFile.is_directory()) {
-      for (const auto& file : fs::directory_iterator(dirOrFile)) {
-        if (file.is_regular_file() && file.path().filename() == libName) {
-          return file.path();
-        } else if (file.is_directory()) {
-          return recursivelyLookUpLibraryByName(file, libName);
-        }
-      }
-    } else if (dirOrFile.is_regular_file() && dirOrFile.path().filename() == libName) {
+  for (const auto& dirOrFile : fs::recursive_directory_iterator(path)) {
+    if (dirOrFile.is_regular_file() && dirOrFile.path().filename() == libName) {
       return dirOrFile.path();
     }
   }
-  return fs::path {"NO_PATH"};
+  throw std::runtime_error("NO_PATH");
 }
 
 auto loadLibrary(const fs::path& path) {
