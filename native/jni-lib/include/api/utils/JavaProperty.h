@@ -11,11 +11,13 @@ namespace dxfeed::internal {
     ~JavaProperty();
 
     friend std::ostream& operator<<(std::ostream& os, const JavaProperty& prop) {
-      os << prop._cstr;
+      if (prop._cstr) {
+        os << prop._cstr;
+      }
       return os;
     }
   private:
-    const char* _cstr;
+    const char* _cstr = nullptr;
     jstring _str;
   };
 }
