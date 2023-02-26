@@ -72,6 +72,13 @@ namespace dxfeed {
       jmethodID getPropMethodId = jniEnv->GetStaticMethodID(javaLangSystemClazz, "getProperty", "(Ljava/lang/String;)Ljava/lang/String;");
       std::cout << "void System::getProperty(String path): " << getPropMethodId << "\n";
       dumpJavaInfo(javaLangSystemClazz, getPropMethodId);
+
+      jclass clazz = jniEnv->FindClass("com/dxfeed/api/JniTest");
+      std::cout << "\tclazz com/dxfeed/api/JniTest: " << clazz << std::endl;
+
+      jint res = jniEnv->RegisterNatives(clazz, methods, sizeof(methods)/sizeof(methods[0]));
+      auto msg = (res == JNI_OK) ? "JNI_OK" : "Failed";
+      std::cout << "\tRegisterNatives result: " << msg << "(" << res << ")" << std::endl;
     }
 
     void loadJavaVM(const char* javaHome) {

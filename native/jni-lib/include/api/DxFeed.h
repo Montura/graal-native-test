@@ -6,11 +6,18 @@
 #include "api/jni_wrapper/TimeAndSaleMapper.h"
 #include "api/jni_wrapper/ListMapper.h"
 
+extern "C" JNIEXPORT void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListener(JNIEnv* env, jclass, jint size,
+                                                                                    jobject eventList, jlong userCallback);
+
 namespace dxfeed {
   struct Connection; // forward declaration
 
   extern JNIEnv* jniEnv;
   extern JavaVM* javaVM;
+
+  static JNINativeMethod methods[] = {
+    {"nOnQuoteEventListener", "(ILjava/util/List;J)V", (void*) &Java_com_dxfeed_api_JniTest_nOnQuoteEventListener },
+  };
 
   struct DxFeed final {
     static void initJavaVM(const char* javaHome);

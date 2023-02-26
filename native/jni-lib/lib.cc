@@ -6,13 +6,6 @@
 #include "api/jni_wrapper/TimeAndSaleMapper.h"
 #include "api/Subscription.h"
 
-extern "C" JNIEXPORT void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListener(JNIEnv* env, jclass, jint size,
-                                                               jobject eventList, jlong userCallback);
-
-static JNINativeMethod methods[] = {
-  {"nOnQuoteEventListener", "(ILjava/util/List;J)V", (void*) &Java_com_dxfeed_api_JniTest_nOnQuoteEventListener },
-};
-
 extern "C" {
 
 // https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/invocation.html#JNJI_OnLoad
@@ -23,14 +16,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
   if (flag == JNI_ERR) {
     throw std::runtime_error("Error getting JNIEnv. Exiting...n");
   }
-  std::cout << "JNI_OnLoad" << std::endl;
-  jclass clazz = env->FindClass("Lcom/dxfeed/api/JniTest;");
-  std::cout << "\tclazz com/dxfeed/api/JniTest: " << clazz << std::endl;
-
-  jint res = env->RegisterNatives(clazz, methods, sizeof(methods)/sizeof(methods[0]));
-  auto msg = (res == JNI_OK) ? "JNI_OK" : "Failed";
-  std::cout << "\tRegisterNatives result: " << msg << "(" << res << ")" << std::endl;
-
+  std::cout << "JNI_OnLoad, env = " << env << ", res = " << flag << std::endl;
   return JNI_VERSION_1_8;
 }
 
