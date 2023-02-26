@@ -7,7 +7,7 @@
 #include "api/jni_wrapper/ListMapper.h"
 
 extern "C" JNIEXPORT void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListener(JNIEnv* env, jclass, jint size,
-                                                                                    jobject eventList, jlong userCallback);
+                                                                                    jobjectArray eventList, jlong userCallback);
 
 namespace dxfeed {
   struct Connection; // forward declaration
@@ -16,7 +16,7 @@ namespace dxfeed {
   extern JavaVM* javaVM;
 
   static JNINativeMethod methods[] = {
-    {"nOnQuoteEventListener", "(ILjava/util/List;J)V", (void*) &Java_com_dxfeed_api_JniTest_nOnQuoteEventListener },
+    {"nOnQuoteEventListener", "(I[Lcom/dxfeed/event/market/TimeAndSale;J)V", (void*) &Java_com_dxfeed_api_JniTest_nOnQuoteEventListener },
   };
 
   struct DxFeed final {
@@ -37,7 +37,7 @@ namespace dxfeed {
     DxFeed();
 
     JNIEnv* env_;
-    const TimeAndSaleMapper timeAndSalesMapper_;
+    TimeAndSaleMapper timeAndSalesMapper_;
     const ListMapper listMapper_;
     jclass javaHelperClass;
     jmethodID addEventListenerHelperMethodId;

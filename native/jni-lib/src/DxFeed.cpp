@@ -15,12 +15,13 @@ namespace dxfeed {
 
   DxFeed::DxFeed() :
     env_{jniEnv},
-    timeAndSalesMapper_{env_, onClose},
-    listMapper_{env_, onClose},
     javaHelperClass{jniEnv->FindClass("Lcom/dxfeed/api/JniTest;")},
-    addEventListenerHelperMethodId{jniEnv->GetStaticMethodID(javaHelperClass, "addEventListener",
-                                                             "(Lcom/dxfeed/api/DXFeedSubscription;J)V")}
- {}
+    listMapper_{env_, onClose}
+ {
+   timeAndSalesMapper_ = {env_, javaHelperClass, onClose};
+   addEventListenerHelperMethodId = jniEnv->GetStaticMethodID(javaHelperClass, "addEventListener",
+                                                            "(Lcom/dxfeed/api/DXFeedSubscription;J)V");
+ }
 
   jclass DxFeed::helperClass() {
     return javaHelperClass;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "api/TimeAndSale.h"
 #include "jniUtils.h"
 
@@ -15,7 +17,12 @@ inline std::string getStringFromJava(JNIEnv* env, jobject object, jmethodID jmet
 }
 
 struct TimeAndSaleMapper {
-  TimeAndSaleMapper(JNIEnv_* env, dxfeed::OnCloseHandler handler) {
+  explicit TimeAndSaleMapper() {}
+
+  TimeAndSaleMapper(JNIEnv_* env, jclass helperClazz, dxfeed::OnCloseHandler handler) {
+    helperClazz_ = helperClazz;
+    idGetToNative_ = env->GetStaticMethodID(helperClazz, "toNative", "(Lcom/dxfeed/event/market/TimeAndSale;)[B");
+
     clazz_ = reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("Lcom/dxfeed/event/market/TimeAndSale;")));
     onClose_ = handler;
     idGetEventSymbol_ = env->GetMethodID(clazz_, "getEventSymbol", "()Ljava/lang/String;");
@@ -42,22 +49,21 @@ struct TimeAndSaleMapper {
 
   TimeAndSale toNative(JNIEnv_* env, jobject object) const {
     TimeAndSale quote{};
-    quote.event_symbol = getEventSymbol(env, object);
-    quote.event_time = getEventTime(env, object);
-    quote.index = getIndex(env, object);
-    quote.event_flags = getEventFlags(env, object);
-//    quote.time = getTime(env, object);
-//    quote.timeNanos = getTimeNanos(env, object);
-    quote.time_nano_part = getTimeNanoPart(env, object);
-    quote.exchange_code = getExchangeCode(env, object);
-    quote.price = getPrice(env, object);
-    quote.size = getSize(env, object);
-    quote.bid_price = getBidPrice(env, object);
-    quote.ask_price = getAskPrice(env, object);
-    quote.exchangeSaleConditions = getExchangeSaleConditions(env, object);
-    quote.flags = getFlags(env, object);
-    quote.buyer = getBuyer(env, object);
-    quote.seller = getSeller(env, object);
+    auto pJobject = reinterpret_cast<jbyteArray>(env->CallStaticObjectMethod(helperClazz_, idGetToNative_, object));
+//    std::cout << "pJobject = " << pJobject << std::endl;
+//    quote.event_symbol = getEventSymbol(env, object);
+//    quote.event_time = getEventTime(env, object);
+//    quote.index = getIndex(env, object);
+//    quote.event_flags = getEventFlags(env, object);
+//    quote.time_nano_part = getTimeNanoPart(env, object);
+//    quote.exchange_code = getExchangeCode(env, object);
+//    quote.price = getPrice(env, object);
+//    quote.size = getSize(env, object);
+//    quote.bid_price = getBidPrice(env, object);
+//    quote.ask_price = getAskPrice(env, object);
+//    quote.exchangeSaleConditions = getExchangeSaleConditions(env, object);
+//    quote.buyer = getBuyer(env, object);
+//    quote.seller = getSeller(env, object);
     return quote;
   }
 
@@ -129,6 +135,7 @@ struct TimeAndSaleMapper {
 
 private:
   jclass clazz_;
+  jclass helperClazz_;
   jmethodID idGetEventSymbol_;
   jmethodID idGetIndex_;
   jmethodID idGetEventTime_;
@@ -145,5 +152,6 @@ private:
   jmethodID idGetFlags_;
   jmethodID idGetBuyer_;
   jmethodID idGetSeller_;
+  jmethodID idGetToNative_;
   dxfeed::OnCloseHandler onClose_;
 };

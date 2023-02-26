@@ -35,31 +35,47 @@ void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListenerOld(JNIEnv* env, j
                                                                jobject eventList, jlong userCallback)
 {
 //  std::cout << "Java_com_dxfeed_api_JniTest_nOnQuoteEventListener" << std::endl;
-  dxfeed::DxFeed& feed = dxfeed::DxFeed::getInstance();
-  auto& listMapping = feed.getListMapper();
-  auto& timeAndSaleMapper = feed.getTimeAndSaleMapper();
-  std::vector<TimeAndSale> events;
-  events.reserve(size);
-  for (std::size_t i = 0; i < size; ++i) {
-    events.emplace_back(timeAndSaleMapper.toNative(env, listMapping.get(env, eventList, i)));
-  }
-  reinterpret_cast<dxfeed::Subscription::Listener *>(userCallback)(events.data(), size);
+//  dxfeed::DxFeed& feed = dxfeed::DxFeed::getInstance();
+//  auto& listMapping = feed.getListMapper();
+//  auto& timeAndSaleMapper = feed.getTimeAndSaleMapper();
+//  std::vector<TimeAndSale> events;
+//  events.reserve(size);
+//  for (std::size_t i = 0; i < size; ++i) {
+//    events.emplace_back(timeAndSaleMapper.toNative(env, listMapping.get(eventList, i)));
+//  }
+//  reinterpret_cast<dxfeed::Subscription::Listener *>(userCallback)(events.data(), size);
 }
 
 JNIEXPORT
 void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListener(JNIEnv* env, jclass, jint size,
-                                                               jobject eventList, jlong userCallback)
+                                                               jobjectArray eventList, jlong userCallback)
 {
-//  std::cout << "Java_com_dxfeed_api_JniTest_nOnQuoteEventListener" << std::endl;
   dxfeed::DxFeed& feed = dxfeed::DxFeed::getInstance();
   auto& listMapping = feed.getListMapper();
   auto& timeAndSaleMapper = feed.getTimeAndSaleMapper();
   std::vector<TimeAndSale> events;
   events.reserve(size);
   for (std::size_t i = 0; i < size; ++i) {
-    events.emplace_back(timeAndSaleMapper.toNative(env, listMapping.get(env, eventList, i)));
+    events.emplace_back(timeAndSaleMapper.toNative(env, env->GetObjectArrayElement(eventList, i)));
   }
   const auto pListener = reinterpret_cast<dxfeed::perf::DiagnosticListener*>(userCallback);
   pListener->operator()(events.data(), size);
 }
+
+//JNIEXPORT
+//void JNICALL JavaCritical_com_dxfeed_api_JniTest_nOnQuoteEventListener(jint size, jbyte* eventList, jlong userCallback) {
+//  std::cout << "JavaCritical_com_dxfeed_api_JniTest_nOnQuoteEventListener" << std::endl;
+//  dxfeed::DxFeed& feed = dxfeed::DxFeed::getInstance();
+//  JNIEnv* env = nullptr;
+//  int flag = dxfeed::javaVM->GetEnv((void**)&env, JNI_VERSION_1_8);
+//  auto& listMapping = feed.getListMapper(env);
+//  auto& timeAndSaleMapper = feed.getTimeAndSaleMapper(env);
+//  std::vector<TimeAndSale> events;
+//  events.reserve(size);
+//  for (std::size_t i = 0; i < size; ++i) {
+//    events.emplace_back(timeAndSaleMapper.toNative( listMapping.get((jobject)eventList, i)));
+//  }
+//  const auto pListener = reinterpret_cast<dxfeed::perf::DiagnosticListener*>(userCallback);
+//  pListener->operator()(events.data(), size);
+//}
 }
