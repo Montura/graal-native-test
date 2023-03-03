@@ -31,13 +31,13 @@ namespace dxfeed {
 
     std::string buildClassPath(const std::filesystem::path& runtimePath) {
       auto jarPath = runtimePath.parent_path().parent_path().append("target");
-      auto jarDxFeedPath = absolute(jarPath).append("libs").string();
+      auto jarDxFeedPath = absolute(jarPath).append("libs").string() + PATH_SEPARATOR;
       std::cout << "Custom JAR path: " <<  jarPath << std::endl;
       std::cout << "DxFeed JAR path: " <<  jarDxFeedPath << std::endl;
 
       std::filesystem::path result = jarPath.string() + PATH_SEPARATOR + MY_JAR;
       for (const auto jar : JARS) {
-        result +=  JAR_SEPARATOR + jarDxFeedPath + jar;
+        result +=  JAR_SEPARATOR + jarDxFeedPath +  jar;
       }
       auto path = "-Djava.class.path=" + result.string();
       std::cout << "classpath: " << path << std::endl;
