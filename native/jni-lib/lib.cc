@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 
+#include "headers/com_dxfeed_api_JniTest.h"
 #include "api/DxFeed.h"
 #include "api/jni_wrapper/TimeAndSaleMapper.h"
 #include "api/Subscription.h"
@@ -9,6 +10,7 @@
 int8_t readByte(char** pData);
 int32_t readInt(char** pData);
 int64_t readLong(char** pData);
+double readDouble(double** pData);
 
 extern "C" {
 
@@ -52,31 +54,51 @@ void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListenerOld(JNIEnv* env, j
 
 JNIEXPORT
 void JNICALL Java_com_dxfeed_api_JniTest_nOnQuoteEventListener(JNIEnv* env, jclass, jint size,
-                                                               jbyteArray eventList, jlong userCallback)
+                                                               jbyteArray jBytes, jdoubleArray jDoubles, jlong userCallback)
 {
   dxfeed::DxFeed& feed = dxfeed::DxFeed::getInstance();
   auto& listMapping = feed.getListMapper();
   auto& timeAndSaleMapper = feed.getTimeAndSaleMapper();
   std::vector<TimeAndSale> events;
   events.reserve(size);
-  auto pData = (char *)env->GetPrimitiveArrayCritical(eventList, nullptr);
+  auto pByteData = (char *)env->GetPrimitiveArrayCritical(jBytes, nullptr);
+  auto pDoubleData = (double *)env->GetPrimitiveArrayCritical(jDoubles, nullptr);
 
-  for (std::size_t i = 0; i < size; ++i) {
+  for (int i = 0; i < size; ++i) {
     TimeAndSale quote{};
-    int strSize = readByte(&pData);
-    quote.event_symbol = pData;
-    pData += strSize;
-    quote.event_time = readLong(&pData);
-    quote.index = readLong(&pData);
-    quote.event_flags = readInt(&pData);
-    quote.time_nano_part = readInt(&pData);
-    quote.exchange_code = readByte(&pData);
+    int strSize = readByte(&pByteData);
+    quote.event_symbol = pByteData;
+    pByteData += strSize;
+    quote.event_time = readLong(&pByteData);
+    quote.index = readLong(&pByteData);
+    quote.event_flags = readInt(&pByteData);
+    quote.time_nano_part = readInt(&pByteData);
+    quote.exchange_code = readByte(&pByteData);
+    quote.size = readLong(&pByteData);
+
+    strSize = readByte(&pByteData);
+    quote.exchangeSaleConditions = pByteData;
+    pByteData += strSize;
+
+    strSize = readByte(&pByteData);
+    quote.buyer = pByteData;
+    pByteData += strSize;
+
+    strSize = readByte(&pByteData);
+    quote.seller = pByteData;
+    pByteData += strSize;
+
+    quote.price = readDouble(&pDoubleData);
+    quote.bid_price = readDouble(&pDoubleData);
+    quote.ask_price = readDouble(&pDoubleData);
+
     events.emplace_back(quote);
   }
 
-  env->ReleasePrimitiveArrayCritical(eventList, pData, 0);
   const auto pListener = reinterpret_cast<dxfeed::perf::DiagnosticListener*>(userCallback);
   pListener->operator()(events.data(), size);
+  env->ReleasePrimitiveArrayCritical(jDoubles, pDoubleData, 0);
+  env->ReleasePrimitiveArrayCritical(jBytes, pByteData, 0);
 }
 
 //JNIEXPORT

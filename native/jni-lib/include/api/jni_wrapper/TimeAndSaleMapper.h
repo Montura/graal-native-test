@@ -40,6 +40,13 @@ inline int64_t readLong(char** pData) {
   return value;
 }
 
+inline double readDouble(double** pData) {
+  double value = 0;
+  value = **pData;
+  ++(*pData);
+  return value;
+}
+
 struct TimeAndSaleMapper {
   explicit TimeAndSaleMapper() {}
 

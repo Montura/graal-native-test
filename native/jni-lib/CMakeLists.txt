@@ -33,7 +33,8 @@ message("JNI_COMMON_INCLUDE: ${JNI_INCLUDE}")
 include_directories(${PROJECT_NAME} INTERFACE ${JNI_INCLUDE})
 set(API_INCLUDE include)
 set(API_INCLUDE ${API_INCLUDE} PARENT_SCOPE)
-include_directories(${PROJECT_NAME} INTERFACE ${API_INCLUDE})
+set(JNI_HEADERS_INCLUDE ../../target)
+include_directories(${PROJECT_NAME} INTERFACE ${API_INCLUDE} ${JNI_HEADERS_INCLUDE})
 
 message("-- Linking native_lib")
 set(SOURCE_FILES

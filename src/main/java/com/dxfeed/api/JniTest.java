@@ -8,12 +8,23 @@ import java.util.List;
 public class JniTest {
 
     private static class TimeAndSalesNative {
-        private final int totalBytes = 46 * 3000;
-        private final byte[] pBytes = new byte[totalBytes];
+        // 3000 quotes -> max
+        private final int totalBytes = 46 * 2000;
+        private final int totalDoubleBytes = 24 * 2000;
+        private final byte[] pByteData = new byte[totalBytes];
+        private final double[] pDobuleData = new double[totalDoubleBytes];
 
         private static int writeBytes(byte[] data, int pos, byte[] value) {
             System.arraycopy(value, 0, data, pos, value.length);
             return pos + value.length;
+        }
+
+        private static int writeString(byte[] data, int pos, String value) {
+            boolean isValidStr = value != null;
+            byte length = isValidStr ? (byte) value.length() : 0;
+            pos = writeByte(data, pos, length);
+            pos = isValidStr ? writeBytes(data, pos, value.getBytes(StandardCharsets.UTF_8)) : 0;
+            return pos;
         }
 
         private static int writeByte(byte[] data, int pos, byte value) {
@@ -38,26 +49,49 @@ public class JniTest {
             return pos;
         }
 
+        private static int writeDouble(double[] data, int pos, double value) {
+            data[pos++] = value;
+            return pos;
+        }
+
+
         TimeAndSalesNative(List<TimeAndSale> quoteList) {
-            int size = quoteList.size();
+            int quoteCount = quoteList.size();
             int pos = 0;
-            for (int i = 0; i < size; ++i) {
+            for (int i = 0; i < quoteCount; ++i) {
                 TimeAndSale quote = quoteList.get(i);
                 String eventSymbol = quote.getEventSymbol();
-                byte eventSymbolLength = (byte) eventSymbol.length();
                 long eventTime = quote.getEventTime();                                   // 8
                 long index = quote.getIndex();                                           // 8
                 int event_flags = quote.getEventFlags();                                 // 4
-                int time_nano_part = quote.getTimeNanoPart();                           // 4
-                byte exchange_code = (byte) quote.getExchangeCode();
+                int time_nano_part = quote.getTimeNanoPart();                            // 4
+                byte exchange_code = (byte) quote.getExchangeCode();                     // 1
+                long quoteSize = quote.getSize();                                        // 8
 
-                pos = writeByte(pBytes, pos, eventSymbolLength);
-                pos = writeBytes(pBytes, pos, eventSymbol.getBytes(StandardCharsets.UTF_8));
-                pos = writeLong(pBytes, pos, eventTime);
-                pos = writeLong(pBytes, pos, index);
-                pos = writeInt(pBytes, pos, event_flags);
-                pos = writeInt(pBytes, pos, time_nano_part);
-                pos = writeByte(pBytes, pos, exchange_code);
+                String exchangeSaleConditions = quote.getExchangeSaleConditions();
+                String buyer = quote.getBuyer();
+                String seller = quote.getSeller();
+
+                pos = writeString(pByteData, pos, eventSymbol);             // 1 + eventSymbolLength
+                pos = writeLong(pByteData, pos, eventTime);                 // 8
+                pos = writeLong(pByteData, pos, index);                     // 8
+                pos = writeInt(pByteData, pos, event_flags);                // 4
+                pos = writeInt(pByteData, pos, time_nano_part);             // 4
+                pos = writeByte(pByteData, pos, exchange_code);             // 1
+                pos = writeLong(pByteData, pos, quoteSize);                 // 8
+                pos = writeString(pByteData, pos, exchangeSaleConditions);  // 1 + exchangeSaleConditionsLength
+                pos = writeString(pByteData, pos, buyer);                   // 1 +  buyerLength
+                pos = writeString(pByteData, pos, seller);                  // 1 +  sellerLength
+                pos = 0;
+
+                // DOUBLE DATA
+                double price = quote.getPrice();                                         // 8
+                double bid_price = quote.getBidPrice();                                  // 8
+                double ask_price = quote.getAskPrice();                                  // 8
+                pos = writeDouble(pDobuleData, pos, price);
+                pos = writeDouble(pDobuleData, pos, bid_price);
+                pos = writeDouble(pDobuleData, pos, ask_price);
+                pos = 0;
             }
         }
     }
@@ -82,10 +116,10 @@ public class JniTest {
         System.out.println("addEventListener, dxFeedSub = " + sub + "; userCallback = " + userCallback);
 
         sub.addEventListener(eventList -> {
-            TimeAndSalesNative timeAndSalesNative = new TimeAndSalesNative(eventList);
-            nOnQuoteEventListener(eventList.size(), timeAndSalesNative.pBytes, userCallback);
+            TimeAndSalesNative nativeTS = new TimeAndSalesNative(eventList);
+            nOnQuoteEventListener(eventList.size(), nativeTS.pByteData, nativeTS.pDobuleData, userCallback);
         });
     }
 
-    private static native void nOnQuoteEventListener(int size, byte[] eventList, long userCallback);
+    private static native void nOnQuoteEventListener(int size, byte[] byteData, double[] doubleData, long userCallback);
 }
