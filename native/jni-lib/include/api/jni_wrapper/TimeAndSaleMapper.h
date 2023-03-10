@@ -16,6 +16,30 @@ inline std::string getStringFromJava(JNIEnv* env, jobject object, jmethodID jmet
   return "";
 }
 
+inline int8_t readByte(char** pData) {
+  int8_t value = **pData;
+  ++(*pData);
+  return value;
+}
+
+inline int32_t readInt(char** pData) {
+  int32_t value = 0;
+  for (int n = 0; n < sizeof(int32_t); ++n) {
+    value = (value << 8) + **pData;
+    ++(*pData);
+  }
+  return value;
+}
+
+inline int64_t readLong(char** pData) {
+  int64_t value = 0;
+  for (int n = 0; n < sizeof(int64_t); ++n) {
+    value = (value << 8) + **pData;
+    ++(*pData);
+  }
+  return value;
+}
+
 struct TimeAndSaleMapper {
   explicit TimeAndSaleMapper() {}
 
@@ -49,8 +73,19 @@ struct TimeAndSaleMapper {
 
   TimeAndSale toNative(JNIEnv_* env, jobject object) const {
     TimeAndSale quote{};
-    auto pJobject = reinterpret_cast<jbyteArray>(env->CallStaticObjectMethod(helperClazz_, idGetToNative_, object));
-//    std::cout << "pJobject = " << pJobject << std::endl;
+    auto pJobject = (jbyteArray) env->CallStaticObjectMethod(helperClazz_, idGetToNative_, object);
+    if (pJobject) {
+      auto pData = (char*) env->GetPrimitiveArrayCritical(pJobject, nullptr);
+      int size = readByte(&pData);
+      quote.event_symbol = pData;
+      pData += size;
+      quote.event_time = readLong(&pData);
+      quote.index = readLong(&pData);
+      quote.event_flags = readInt(&pData);
+      quote.time_nano_part = readInt(&pData);
+      quote.exchange_code = readByte(&pData);
+      env->ReleasePrimitiveArrayCritical(pJobject, pData, 0);
+    }
 //    quote.event_symbol = getEventSymbol(env, object);
 //    quote.event_time = getEventTime(env, object);
 //    quote.index = getIndex(env, object);
