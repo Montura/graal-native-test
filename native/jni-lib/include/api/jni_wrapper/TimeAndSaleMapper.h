@@ -45,7 +45,7 @@ struct TimeAndSaleMapper {
 
   TimeAndSaleMapper(JNIEnv_* env, jclass helperClazz, dxfeed::OnCloseHandler handler) {
     helperClazz_ = helperClazz;
-    idGetToNative_ = env->GetStaticMethodID(helperClazz, "toNative", "(Lcom/dxfeed/event/market/TimeAndSale;)[B");
+//    idGetToNative_ = env->GetStaticMethodID(helperClazz, "toNative", "(Lcom/dxfeed/event/market/TimeAndSale;)[B");
 
     clazz_ = reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("Lcom/dxfeed/event/market/TimeAndSale;")));
     onClose_ = handler;
@@ -71,21 +71,21 @@ struct TimeAndSaleMapper {
     onClose_(clazz_);
   }
 
-  TimeAndSale toNative(JNIEnv_* env, jobject object) const {
-    TimeAndSale quote{};
-    auto pJobject = (jbyteArray) env->CallStaticObjectMethod(helperClazz_, idGetToNative_, object);
-    if (pJobject) {
-      auto pData = (char*) env->GetPrimitiveArrayCritical(pJobject, nullptr);
-      int size = readByte(&pData);
-      quote.event_symbol = pData;
-      pData += size;
-      quote.event_time = readLong(&pData);
-      quote.index = readLong(&pData);
-      quote.event_flags = readInt(&pData);
-      quote.time_nano_part = readInt(&pData);
-      quote.exchange_code = readByte(&pData);
-      env->ReleasePrimitiveArrayCritical(pJobject, pData, 0);
-    }
+//  TimeAndSale toNative(JNIEnv_* env, jobject object) const {
+//    TimeAndSale quote{};
+//    auto pJobject = (jbyteArray) env->CallStaticObjectMethod(helperClazz_, idGetToNative_, object);
+//    if (pJobject) {
+//      auto pData = (char*) env->GetPrimitiveArrayCritical(pJobject, nullptr);
+//      int size = readByte(&pData);
+//      quote.event_symbol = pData;
+//      pData += size;
+//      quote.event_time = readLong(&pData);
+//      quote.index = readLong(&pData);
+//      quote.event_flags = readInt(&pData);
+//      quote.time_nano_part = readInt(&pData);
+//      quote.exchange_code = readByte(&pData);
+//      env->ReleasePrimitiveArrayCritical(pJobject, pData, 0);
+//    }
 //    quote.event_symbol = getEventSymbol(env, object);
 //    quote.event_time = getEventTime(env, object);
 //    quote.index = getIndex(env, object);
@@ -99,8 +99,8 @@ struct TimeAndSaleMapper {
 //    quote.exchangeSaleConditions = getExchangeSaleConditions(env, object);
 //    quote.buyer = getBuyer(env, object);
 //    quote.seller = getSeller(env, object);
-    return quote;
-  }
+//    return quote;
+//  }
 
   std::string getEventSymbol(JNIEnv_* env, jobject object) const {
     return getStringFromJava(env, object, idGetEventSymbol_);
@@ -187,6 +187,6 @@ private:
   jmethodID idGetFlags_;
   jmethodID idGetBuyer_;
   jmethodID idGetSeller_;
-  jmethodID idGetToNative_;
+//  jmethodID idGetToNative_;
   dxfeed::OnCloseHandler onClose_;
 };
