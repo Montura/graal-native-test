@@ -8,7 +8,7 @@ struct TimeAndSale {
   int64_t index;
   int64_t event_flags;
   int32_t time_nano_part;
-  uint16_t exchange_code;
+  int8_t exchange_code;
   double price;
   int64_t size;
   double bid_price;
